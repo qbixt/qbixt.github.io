@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html>
 <head>
   <meta charset="UTF-8">
-  <title>BGC App</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <style>
+  <title>BGC App</title>  <!-- WAJIB BIAR NORMAL DI HP -->  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- TELEGRAM -->  <script src="https://telegram.org/js/telegram-web-app.js"></script>  <style>
     body {
       margin: 0;
       font-family: Arial;
@@ -15,6 +11,7 @@
 
     .container {
       padding: 15px;
+      padding-bottom: 80px;
     }
 
     .card {
@@ -25,7 +22,6 @@
     }
 
     .btn {
-      display: block;
       width: 100%;
       padding: 12px;
       margin-top: 10px;
@@ -34,10 +30,6 @@
       background: #3b82f6;
       color: white;
       font-size: 16px;
-    }
-
-    .btn:active {
-      opacity: 0.8;
     }
 
     .nav {
@@ -60,91 +52,72 @@
     .hidden {
       display: none;
     }
-  </style>
-</head>
+  </style></head><body><div class="container">  <!-- HOME -->  <div id="home">
+    <div class="card">
+      <h2>BGC Dashboard</h2>
+      <p>Balance: <span id="balance">0</span> BGC</p>
+      <p>Level: 1</p>
+    </div><div class="card">
+  <button class="btn" onclick="claimDaily()">🎁 Claim Daily (+30)</button>
+  <button class="btn" onclick="showPage('tasks')">🚀 Start Mission</button>
+</div>
 
-<body>
-  <div class="container">
-
-    <!-- DASHBOARD -->
-    <div id="home">
-      <div class="card">
-        <h2>BGC Dashboard</h2>
-        <p>Balance: <span id="balance">0</span> BGC</p>
-        <p>Level: 1</p>
-      </div>
-
-      <div class="card">
-        <button class="btn" onclick="claimDaily()">🎁 Claim Daily (+30)</button>
-        <button class="btn" onclick="showPage('tasks')">🚀 Start Mission</button>
-      </div>
+  </div>  <!-- TASK -->  <div id="tasks" class="hidden">
+    <div class="card">
+      <h3>Mission</h3>
+      <button class="btn" onclick="addBalance(50)">Join Channel (+50)</button>
+      <button class="btn" onclick="addBalance(20)">Visit Website (+20)</button>
     </div>
-
-    <!-- TASK -->
-    <div id="tasks" class="hidden">
-      <div class="card">
-        <h3>Mission</h3>
-        <button class="btn" onclick="addBalance(50)">Join Channel (+50)</button>
-        <button class="btn" onclick="addBalance(20)">Visit Website (+20)</button>
-      </div>
+  </div>  <!-- INVITE -->  <div id="invite" class="hidden">
+    <div class="card">
+      <h3>Invite Friends</h3>
+      <p>Invite = +200 BGC</p>
+      <button class="btn" onclick="invite()">Copy Link</button>
     </div>
+  </div></div><!-- NAVBAR --><div class="nav">
+  <button onclick="showPage('home')">Home</button>
+  <button onclick="showPage('tasks')">Tasks</button>
+  <button onclick="showPage('invite')">Invite</button>
+</div><script>
+  const tg = window.Telegram.WebApp;
+  tg.ready();
+  tg.expand();
 
-    <!-- INVITE -->
-    <div id="invite" class="hidden">
-      <div class="card">
-        <h3>Invite Friends</h3>
-        <p>Invite = +200 BGC</p>
-        <button class="btn" onclick="invite()">Copy Link</button>
-      </div>
-    </div>
+  // SIMPAN BALANCE BIAR GAK RESET
+  let balance = localStorage.getItem("bgc") || 0;
 
-  </div>
+  function updateUI() {
+    document.getElementById("balance").innerText = balance;
+  }
 
-  <!-- NAVBAR -->
-  <div class="nav">
-    <button onclick="showPage('home')">Home</button>
-    <button onclick="showPage('tasks')">Tasks</button>
-    <button onclick="showPage('invite')">Invite</button>
-  </div>
-
-  <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-
-    let balance = 0;
-
-    function updateUI() {
-      document.getElementById("balance").innerText = balance;
-    }
-
-    function addBalance(amount) {
-      balance += amount;
-      updateUI();
-      alert("You earned " + amount + " BGC!");
-    }
-
-    function claimDaily() {
-      balance += 30;
-      updateUI();
-      alert("Daily reward claimed!");
-    }
-
-    function invite() {
-      const link = "https://t.me/bgc7_bot";
-      navigator.clipboard.writeText(link);
-      alert("Invite link copied!");
-    }
-
-    function showPage(page) {
-      document.getElementById("home").classList.add("hidden");
-      document.getElementById("tasks").classList.add("hidden");
-      document.getElementById("invite").classList.add("hidden");
-
-      document.getElementById(page).classList.remove("hidden");
-    }
-
+  function addBalance(amount) {
+    balance = Number(balance) + amount;
+    localStorage.setItem("bgc", balance);
     updateUI();
-  </script>
+    alert("+" + amount + " BGC");
+  }
 
-</body>
+  function claimDaily() {
+    balance = Number(balance) + 30;
+    localStorage.setItem("bgc", balance);
+    updateUI();
+    alert("Daily claimed!");
+  }
+
+  function invite() {
+    const link = "https://t.me/bgc7_bot";
+    navigator.clipboard.writeText(link);
+    alert("Link copied!");
+  }
+
+  function showPage(page) {
+    document.getElementById("home").classList.add("hidden");
+    document.getElementById("tasks").classList.add("hidden");
+    document.getElementById("invite").classList.add("hidden");
+
+    document.getElementById(page).classList.remove("hidden");
+  }
+
+  updateUI();
+</script></body>
 </html>
