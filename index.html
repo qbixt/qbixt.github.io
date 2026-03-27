@@ -2,74 +2,149 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Mini App Cuan</title>
+  <title>BGC App</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
     body {
+      margin: 0;
       font-family: Arial;
-      text-align: center;
-      background: #111;
+      background: #0f172a;
       color: white;
     }
 
-    .box {
-      margin-top: 80px;
+    .container {
+      padding: 15px;
     }
 
-    h2 {
-      color: orange;
+    .card {
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
     }
 
-    button {
-      padding: 15px 25px;
-      background: orange;
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
       border: none;
       border-radius: 10px;
+      background: #3b82f6;
+      color: white;
       font-size: 16px;
-      color: black;
     }
 
-    #ads {
-      margin-top: 30px;
-      padding: 20px;
-      background: #222;
-      border-radius: 10px;
+    .btn:active {
+      opacity: 0.8;
+    }
+
+    .nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #1e293b;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+
+    .nav button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 
 <body>
+  <div class="container">
 
-<div class="box">
-  <h2>Mini App Cuan 🚀</h2>
-  <p>Klik tombol di bawah untuk lihat iklan</p>
+    <!-- DASHBOARD -->
+    <div id="home">
+      <div class="card">
+        <h2>BGC Dashboard</h2>
+        <p>Balance: <span id="balance">0</span> BGC</p>
+        <p>Level: 1</p>
+      </div>
 
-  <button onclick="showAd()">Tampilkan Iklan</button>
+      <div class="card">
+        <button class="btn" onclick="claimDaily()">🎁 Claim Daily (+30)</button>
+        <button class="btn" onclick="showPage('tasks')">🚀 Start Mission</button>
+      </div>
+    </div>
 
-  <div id="ads"></div>
-</div>
+    <!-- TASK -->
+    <div id="tasks" class="hidden">
+      <div class="card">
+        <h3>Mission</h3>
+        <button class="btn" onclick="addBalance(50)">Join Channel (+50)</button>
+        <button class="btn" onclick="addBalance(20)">Visit Website (+20)</button>
+      </div>
+    </div>
 
-<script>
-  function showAd() {
-    document.getElementById("ads").innerHTML = `
-      
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '5685535',
-          'format' : 'iframe',
-          'height' : 50,
-          'width' : 320
-        };
-      <\/script>
-      <script src="//www.topcreativeformat.com/5685535/invoke.js"><\/script>
+    <!-- INVITE -->
+    <div id="invite" class="hidden">
+      <div class="card">
+        <h3>Invite Friends</h3>
+        <p>Invite = +200 BGC</p>
+        <button class="btn" onclick="invite()">Copy Link</button>
+      </div>
+    </div>
 
-    `;
-  }
+  </div>
 
-  let tg = window.Telegram.WebApp;
-  tg.expand();
-</script>
+  <!-- NAVBAR -->
+  <div class="nav">
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('tasks')">Tasks</button>
+    <button onclick="showPage('invite')">Invite</button>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    let balance = 0;
+
+    function updateUI() {
+      document.getElementById("balance").innerText = balance;
+    }
+
+    function addBalance(amount) {
+      balance += amount;
+      updateUI();
+      alert("You earned " + amount + " BGC!");
+    }
+
+    function claimDaily() {
+      balance += 30;
+      updateUI();
+      alert("Daily reward claimed!");
+    }
+
+    function invite() {
+      const link = "https://t.me/bgc7_bot";
+      navigator.clipboard.writeText(link);
+      alert("Invite link copied!");
+    }
+
+    function showPage(page) {
+      document.getElementById("home").classList.add("hidden");
+      document.getElementById("tasks").classList.add("hidden");
+      document.getElementById("invite").classList.add("hidden");
+
+      document.getElementById(page).classList.remove("hidden");
+    }
+
+    updateUI();
+  </script>
 
 </body>
 </html>
