@@ -1,123 +1,203 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>BGC App</title>  <!-- WAJIB BIAR NORMAL DI HP -->  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- TELEGRAM -->  <script src="https://telegram.org/js/telegram-web-app.js"></script>  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: #0f172a;
-      color: white;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BGC App</title>
 
-    .container {
-      padding: 15px;
-      padding-bottom: 80px;
-    }
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#020617;
+color:white;
+}
 
-    .card {
-      background: #1e293b;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-    }
+.hidden{display:none;}
 
-    .btn {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 10px;
-      background: #3b82f6;
-      color: white;
-      font-size: 16px;
-    }
+.card{
+background:#0f172a;
+padding:15px;
+margin:10px;
+border-radius:15px;
+}
 
-    .nav {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #1e293b;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-    }
+.btn{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:#3b82f6;
+color:white;
+font-weight:bold;
+}
 
-    .nav button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 14px;
-    }
+.tap{
+width:180px;
+height:180px;
+border-radius:50%;
+display:block;
+margin:20px auto;
+box-shadow:0 0 40px #9333ea;
+}
 
-    .hidden {
-      display: none;
-    }
-  </style></head><body><div class="container">  <!-- HOME -->  <div id="home">
-    <div class="card">
-      <h2>BGC Dashboard</h2>
-      <p>Balance: <span id="balance">0</span> BGC</p>
-      <p>Level: 1</p>
-    </div><div class="card">
-  <button class="btn" onclick="claimDaily()">🎁 Claim Daily (+30)</button>
-  <button class="btn" onclick="showPage('tasks')">🚀 Start Mission</button>
+.nav{
+position:fixed;
+bottom:0;
+width:100%;
+background:#020617;
+display:flex;
+justify-content:space-around;
+padding:10px;
+}
+
+.nav button{
+background:none;
+color:white;
+border:none;
+}
+
+.center{text-align:center;}
+</style>
+</head>
+
+<body>
+
+<!-- START SCREEN -->
+<div id="startScreen" class="center">
+<h1>BGC PROJECT 🚀</h1>
+
+<img src="https://i.imgur.com/8Km9tLL.png" width="120">
+
+<br><br>
+
+<button class="btn" onclick="startApp()">START BOT</button>
+
+<a href="https://t.me/BGC7COMMUNITY">
+<button class="btn">JOIN CHANNEL</button>
+</a>
 </div>
 
-  </div>  <!-- TASK -->  <div id="tasks" class="hidden">
-    <div class="card">
-      <h3>Mission</h3>
-      <button class="btn" onclick="addBalance(50)">Join Channel (+50)</button>
-      <button class="btn" onclick="addBalance(20)">Visit Website (+20)</button>
-    </div>
-  </div>  <!-- INVITE -->  <div id="invite" class="hidden">
-    <div class="card">
-      <h3>Invite Friends</h3>
-      <p>Invite = +200 BGC</p>
-      <button class="btn" onclick="invite()">Copy Link</button>
-    </div>
-  </div></div><!-- NAVBAR --><div class="nav">
-  <button onclick="showPage('home')">Home</button>
-  <button onclick="showPage('tasks')">Tasks</button>
-  <button onclick="showPage('invite')">Invite</button>
-</div><script>
-  const tg = window.Telegram.WebApp;
-  tg.ready();
-  tg.expand();
+<!-- APP -->
+<div id="app" class="hidden">
 
-  // SIMPAN BALANCE BIAR GAK RESET
-  let balance = localStorage.getItem("bgc") || 0;
+<!-- HOME -->
+<div id="home">
 
-  function updateUI() {
-    document.getElementById("balance").innerText = balance;
-  }
+<div class="card">
+<h2>BGC DASHBOARD</h2>
+<p>Player: <span id="username">User</span></p>
+<p>Balance: <span id="balance">0</span> BGC</p>
+<p>Tap Left: <span id="tapLeft">50</span></p>
+<p>Reset: <span id="timer">12 Jam</span></p>
+</div>
 
-  function addBalance(amount) {
-    balance = Number(balance) + amount;
-    localStorage.setItem("bgc", balance);
-    updateUI();
-    alert("+" + amount + " BGC");
-  }
+<img src="https://i.imgur.com/8Km9tLL.png" class="tap" onclick="tap()">
 
-  function claimDaily() {
-    balance = Number(balance) + 30;
-    localStorage.setItem("bgc", balance);
-    updateUI();
-    alert("Daily claimed!");
-  }
+<button class="btn" onclick="watchAds()">🎥 Start Mission (Watch Ads)</button>
 
-  function invite() {
-    const link = "https://t.me/bgc7_bot";
-    navigator.clipboard.writeText(link);
-    alert("Link copied!");
-  }
+</div>
 
-  function showPage(page) {
-    document.getElementById("home").classList.add("hidden");
-    document.getElementById("tasks").classList.add("hidden");
-    document.getElementById("invite").classList.add("hidden");
+<!-- TASK -->
+<div id="task" class="hidden">
+<div class="card">
+<h3>Tasks</h3>
 
-    document.getElementById(page).classList.remove("hidden");
-  }
+<a href="https://t.me/BGC7COMMUNITY">
+<button class="btn">Join Channel (+10 BGC)</button>
+</a>
 
-  updateUI();
-</script></body>
+</div>
+
+<div class="card">
+<h3>Invite</h3>
+<p>1 Invite = 5 BGC</p>
+<p>3 Invite = 18 BGC</p>
+<p>10 Invite = 80 BGC</p>
+</div>
+</div>
+
+<!-- WALLET -->
+<div id="wallet" class="hidden">
+<div class="card">
+<h3>Exchange</h3>
+<p>500 BGC = 1 TON</p>
+</div>
+</div>
+
+</div>
+
+<!-- NAV -->
+<div class="nav hidden" id="nav">
+<button onclick="showPage('home')">Home</button>
+<button onclick="showPage('task')">Tasks</button>
+<button onclick="showPage('wallet')">Wallet</button>
+</div>
+
+<script>
+
+let balance = Number(localStorage.getItem("bal")) || 0;
+let tapLimit = Number(localStorage.getItem("tapLimit")) || 50;
+let tapUsed = Number(localStorage.getItem("tapUsed")) || 0;
+let lastReset = Number(localStorage.getItem("reset")) || Date.now();
+
+function startApp(){
+document.getElementById("startScreen").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+document.getElementById("nav").classList.remove("hidden");
+updateUI();
+}
+
+function save(){
+localStorage.setItem("bal",balance);
+localStorage.setItem("tapUsed",tapUsed);
+localStorage.setItem("reset",lastReset);
+}
+
+function updateUI(){
+document.getElementById("balance").innerText = balance;
+document.getElementById("tapLeft").innerText = tapLimit - tapUsed;
+}
+
+function tap(){
+resetCheck();
+
+if(tapUsed >= tapLimit){
+alert("Tap habis, tunggu 12 jam");
+return;
+}
+
+balance += 1;
+tapUsed++;
+
+save();
+updateUI();
+}
+
+function resetCheck(){
+let now = Date.now();
+if(now - lastReset > 43200000){ // 12 jam
+tapUsed = 0;
+lastReset = now;
+}
+}
+
+function watchAds(){
+alert("Iklan ditonton +5 BGC");
+balance += 5;
+save();
+updateUI();
+}
+
+function showPage(p){
+document.querySelectorAll("#home,#task,#wallet").forEach(el=>el.classList.add("hidden"));
+document.getElementById(p).classList.remove("hidden");
+}
+
+updateUI();
+
+</script>
+
+</body>
 </html>
