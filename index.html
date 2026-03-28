@@ -13,27 +13,25 @@ background: radial-gradient(circle at top,#0f172a,#020617);
 color:white;
 }
 
-/* HEADER */
 .header{
 display:flex;
 align-items:center;
 gap:10px;
 padding:10px;
 }
+
 .avatar{
 width:40px;
 height:40px;
 border-radius:50%;
-background:#444;
+background:#333;
 }
 
-/* CONTAINER */
 .container{
 padding:15px;
 padding-bottom:100px;
 }
 
-/* CARD */
 .card{
 background:rgba(255,255,255,0.05);
 padding:15px;
@@ -41,7 +39,6 @@ border-radius:15px;
 margin-bottom:10px;
 }
 
-/* TAP */
 .tap{
 width:180px;
 height:180px;
@@ -54,16 +51,17 @@ padding:10px;
 animation:glow 2s infinite;
 transition:0.1s;
 }
+
 .tap:active{
 transform:scale(0.9) rotate(10deg);
 }
+
 @keyframes glow{
 0%{box-shadow:0 0 20px #9333ea;}
 50%{box-shadow:0 0 60px #00f0ff;}
 100%{box-shadow:0 0 20px #9333ea;}
 }
 
-/* BUTTON */
 .btn{
 width:100%;
 padding:12px;
@@ -75,7 +73,6 @@ color:white;
 font-weight:bold;
 }
 
-/* NAV */
 .nav{
 position:fixed;
 bottom:15px;
@@ -89,6 +86,7 @@ display:flex;
 justify-content:space-around;
 padding:10px;
 }
+
 .nav button{
 background:none;
 border:none;
@@ -96,7 +94,8 @@ color:white;
 font-size:18px;
 }
 
-/* COIN */
+.hidden{display:none;}
+
 .coin{
 display:flex;
 justify-content:space-between;
@@ -104,12 +103,11 @@ padding:10px;
 border-bottom:1px solid rgba(255,255,255,0.1);
 }
 
-/* NFT CARD */
 .nft-box{
 display:flex;
 gap:10px;
-margin-top:10px;
 }
+
 .nft{
 flex:1;
 background:#111;
@@ -118,19 +116,15 @@ border-radius:10px;
 text-align:center;
 }
 
-/* ANIMATION */
 @keyframes fly{
 0%{opacity:1;transform:translateY(0);}
 100%{opacity:0;transform:translateY(-60px);}
 }
-
-.hidden{display:none;}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
 <div class="avatar"></div>
 <div id="username">User</div>
@@ -141,11 +135,11 @@ text-align:center;
 <!-- HOME -->
 <div id="home">
 <div class="card">
-<h3>Balance: <span id="balance">0</span> BGC</h3>
-<p>Tap Left: <span id="tapLeft">50</span></p>
+<h3 id="balanceText">Balance: <span id="balance">0</span> BGC</h3>
+<p id="tapText">Tap Left: <span id="tapLeft">50</span></p>
 </div>
 
-<button class="btn" onclick="spin()">🎁 Spin Reward</button>
+<button class="btn" id="spinText" onclick="spin()">🎁 Spin Reward</button>
 
 <img src="https://i.imgur.com/t2O7FMa.png" class="tap" onclick="tap(event)">
 </div>
@@ -153,9 +147,7 @@ text-align:center;
 <!-- TASK -->
 <div id="task" class="hidden">
 <div class="card">
-<h3 id="balanceText">Balance</h3>
-<p id="tapText">Tap Left</p>
-<button id="spinText">🎁 Spin Reward</button>
+<h3>📋 Tasks</h3>
 <button class="btn" onclick="window.open('https://t.me/BGC7COMMUNITY')">
 Join Channel (+10)
 </button>
@@ -169,7 +161,6 @@ Join Channel (+10)
 <p>1 = 5 BGC</p>
 <p>3 = 18 BGC</p>
 <p>10 = 80 BGC</p>
-<button class="btn">Copy Link</button>
 </div>
 </div>
 
@@ -177,12 +168,10 @@ Join Channel (+10)
 <div id="nft" class="hidden">
 <div class="card">
 <h3>💎 NFT Market</h3>
-
 <div class="nft-box">
-<div class="nft">NFT #1<br>🔥 Rare</div>
-<div class="nft">NFT #2<br>💎 Epic</div>
+<div class="nft">NFT #1 🔥</div>
+<div class="nft">NFT #2 💎</div>
 </div>
-
 <button class="btn">Mint NFT</button>
 </div>
 </div>
@@ -192,22 +181,21 @@ Join Channel (+10)
 
 <div class="card">
 <h3>💳 Wallet</h3>
-<p><b id="balance">0</b> BGC</p>
+<p><b id="balance2">0</b> BGC</p>
 </div>
 
 <div class="card">
 <h3>💱 Market</h3>
-<div class="coin">BTC <span>$65,200 📈</span></div>
-<div class="coin">ETH <span>$3,200 📉</span></div>
+<div class="coin">BTC <span>$65,200</span></div>
+<div class="coin">ETH <span>$3,200</span></div>
 <div class="coin">USDT <span>$1.00</span></div>
-<div class="coin">TON <span>$5.2 📈</span></div>
-<div class="coin">BNB <span>$580 📈</span></div>
-<div class="coin">SOLANA <span>$68 📈</span></div>
+<div class="coin">TON <span>$5.2</span></div>
+<div class="coin">BNB <span>$580</span></div>
 </div>
 
 <div class="card">
-<p>800 BGC = 1 TON</p>
-<p style="opacity:0.5;">Withdraw Coming Soon 🚀</p>
+<p>500 BGC = 1 TON</p>
+<p style="opacity:0.5;">Withdraw Coming Soon</p>
 </div>
 
 </div>
@@ -224,26 +212,56 @@ Join Channel (+10)
 </div>
 
 <script>
-<h3 id="balanceText">Balance</h3>
-<p id="tapText">Tap Left</p>
-<button id="spinText">🎁 Spin Reward</button>
 
+// ===== TELEGRAM USER =====
+let tg = window.Telegram.WebApp;
+let userData = tg && tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
+
+let name = "Guest";
+let userLang = "en";
+
+if(userData){
+name = userData.username ? userData.username : userData.first_name;
+userLang = userData.language_code || "en";
+}
+
+// ===== LANGUAGE =====
+let text = {
+en:{
+balance:"Balance",
+tap:"Tap Left",
+spin:"Spin Reward"
+},
+id:{
+balance:"Saldo",
+tap:"Sisa Tap",
+spin:"Putar Hadiah"
+}
+};
+
+let lang = text[userLang] || text["en"];
+
+// ===== DATA =====
 let balance = Number(localStorage.getItem("bal"))||0;
 let used = Number(localStorage.getItem("used"))||0;
 let last = Number(localStorage.getItem("last"))||0;
 let limit = 50;
 
+// ===== SAVE =====
 function save(){
 localStorage.setItem("bal",balance);
 localStorage.setItem("used",used);
 localStorage.setItem("last",last);
 }
 
+// ===== UPDATE UI =====
 function update(){
 document.getElementById("balance").innerText=balance;
+document.getElementById("balance2").innerText=balance;
 document.getElementById("tapLeft").innerText=limit-used;
 }
 
+// ===== TAP =====
 function tap(e){
 
 if(Date.now()-last>43200000){
@@ -259,10 +277,7 @@ return;
 balance++;
 used++;
 
-let x=e.clientX;
-let y=e.clientY;
-
-spawn(x,y);
+spawn(e.clientX,e.clientY);
 
 navigator.vibrate(30);
 
@@ -270,6 +285,7 @@ save();
 update();
 }
 
+// ===== EFFECT =====
 function spawn(x,y){
 let el=document.createElement("div");
 el.innerText="+1";
@@ -283,6 +299,7 @@ document.body.appendChild(el);
 setTimeout(()=>el.remove(),1000);
 }
 
+// ===== SPIN =====
 function spin(){
 let r=Math.floor(Math.random()*50)+10;
 balance+=r;
@@ -291,44 +308,26 @@ save();
 update();
 }
 
+// ===== NAV =====
 function showPage(p){
-document.querySelectorAll("#home,#task,#invite,#nft,#wallet,#profil").forEach(el=>el.classList.add("hidden"));
+document.querySelectorAll("#home,#task,#invite,#nft,#wallet").forEach(el=>el.classList.add("hidden"));
 document.getElementById(p).classList.remove("hidden");
 }
 
-document.getElementById("username").innerText = name;
-document.getElementById("balanceText").innerText = lang.balance;
-document.getElementById("tapText").innerText = lang.tap;
-document.getElementById("spinText").innerText = "🎁 " + lang.spin;
+// ===== LOAD =====
+window.onload=function(){
+
+document.getElementById("username").innerText=name;
+
+document.getElementById("balanceText").innerText=lang.balance+": "+balance+" BGC";
+document.getElementById("tapText").innerText=lang.tap+": "+(limit-used);
+document.getElementById("spinText").innerText="🎁 "+lang.spin;
 
 update();
-let tg = window.Telegram.WebApp;
 
-// ambil data user
-let userData = tg && tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
-
-// USERNAME
-let name = "Guest";
-if (userData) {
-  name = userData.username ? userData.username : userData.first_name;
-}
-
-// BAHASA
-let userLang = userData && userData.language_code ? userData.language_code : "en";
-</script>
-let text = {
-  en: {
-    balance: "Balance",
-    tap: "Tap Left",
-    spin: "Spin Reward"
-  },
-  id: {
-    balance: "Saldo",
-    tap: "Sisa Tap",
-    spin: "Putar Hadiah"
-  }
 };
 
-let lang = text[userLang] || text["en"];
+</script>
+
 </body>
-  </html>
+</html>
