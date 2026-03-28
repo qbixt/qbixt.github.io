@@ -1,298 +1,329 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BGC • Tap & Earn</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
-        :root {
-            --tg-theme-bg-color: #0a0a0a;
-            --tg-theme-text-color: #ffffff;
-            --tg-theme-button-color: #00ff88;
-        }
-
-        * { font-family: 'Inter', system-ui, sans-serif; }
-
-        body {
-            background: linear-gradient(180deg, #0a0a0a 0%, #111111 100%);
-            color: white;
-            overflow: hidden;
-            height: 100vh;
-        }
-
-        .loading-screen {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            z-index: 9999;
-            transition: opacity 1s ease;
-        }
-
-        .spinner {
-            width: 80px;
-            height: 80px;
-            border: 6px solid #222;
-            border-top: 6px solid #00ff88;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            box-shadow: 0 0 30px #00ff88;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .bouncing-logo { animation: bounce 2s infinite ease-in-out; }
-
-        .coin-tap {
-            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .coin-tap:active {
-            transform: scale(0.85) rotate(15deg);
-            filter: brightness(1.3);
-        }
-
-        .nav-item { transition: all 0.3s ease; }
-        .nav-item.active { color: #00ff88; transform: scale(1.1); }
-
-        .modal { animation: modalPop 0.3s ease forwards; }
-
-        @keyframes modalPop {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .wheel { transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1); }
-        .glow-green { text-shadow: 0 0 20px #00ff88; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BGC Mini App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --neon-blue: #00F0FF;
+      --neon-purple: #C026FF;
+      --neon-pink: #FF00AA;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0A0A1F;
+      color: #E0F8FF;
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+    }
+    .container { max-width: 480px; margin: 0 auto; padding: 10px; }
+    
+    /* Loading Screen */
+    #loading {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: #0A0A1F;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .logo {
+      width: 180px; height: 180px;
+      background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 90px;
+      animation: pulse 2s infinite;
+      box-shadow: 0 0 60px var(--neon-blue);
+    }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .avatar {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(var(--neon-blue), var(--neon-pink));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      border: 3px solid white;
+    }
+    
+    /* Balance */
+    .balance {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .balance-amount {
+      font-size: 42px;
+      font-weight: bold;
+      text-shadow: 0 0 15px var(--neon-blue);
+    }
+    
+    /* Tap Area */
+    #tapArea {
+      width: 220px;
+      height: 220px;
+      margin: 30px auto;
+      background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 100px;
+      box-shadow: 0 0 50px var(--neon-blue);
+      transition: all 0.1s;
+    }
+    #tapArea:active {
+      transform: scale(0.92);
+      box-shadow: 0 0 80px var(--neon-pink);
+    }
+    
+    /* Cards */
+    .card {
+      background: #1A1A3A;
+      border: 2px solid var(--neon-purple);
+      border-radius: 20px;
+      padding: 18px;
+      margin: 15px 0;
+      box-shadow: 0 0 20px rgba(192, 38, 255, 0.3);
+    }
+    .neon-btn {
+      background: linear-gradient(to right, var(--neon-purple), var(--neon-pink));
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 18px;
+      width: 100%;
+      margin-top: 10px;
+      box-shadow: 0 0 20px var(--neon-pink);
+    }
+    
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #0F0F2E;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-top: 2px solid var(--neon-purple);
+    }
+    .nav-item {
+      text-align: center;
+      color: #888;
+      font-size: 11px;
+    }
+    .nav-item.active {
+      color: var(--neon-blue);
+    }
+    
+    .hidden { display: none; }
+  </style>
 </head>
-<body class="min-h-screen">
+<body>
 
-    <!-- LOADING SCREEN -->
-    <div id="loadingScreen" class="loading-screen">
-        <div class="flex flex-col items-center">
-            <div class="relative mb-8">
-                <div class="w-28 h-28 bg-gradient-to-br from-[#00ff88] to-[#00cc66] rounded-3xl flex items-center justify-center shadow-[0_0_60px_#00ff88] bouncing-logo">
-                    <span class="text-5xl font-bold text-black">BGC</span>
-                </div>
-                <div class="absolute -top-2 -right-2 bg-black text-[#00ff88] text-xs px-3 py-1 rounded-2xl font-bold rotate-12">LIVE</div>
-            </div>
-            
-            <h1 class="text-4xl font-bold tracking-[4px] glow-green mb-2">BGC LOADING</h1>
-            <p class="text-[#00ff88]/70 text-sm tracking-widest mb-8">Sedang memverifikasi wallet...</p>
-            
-            <div class="w-72 h-2 bg-[#222] rounded-full overflow-hidden">
-                <div id="progressBar" class="h-full bg-gradient-to-r from-[#00ff88] to-[#00cc66] w-0 transition-all duration-5000"></div>
-            </div>
-            
-            <div class="mt-12 flex gap-3">
-                <div class="w-3 h-3 bg-[#00ff88] rounded-full animate-pulse"></div>
-                <div class="w-3 h-3 bg-[#00ff88] rounded-full animate-pulse delay-150"></div>
-                <div class="w-3 h-3 bg-[#00ff88] rounded-full animate-pulse delay-300"></div>
-            </div>
+  <!-- LOADING -->
+  <div id="loading">
+    <div class="logo">🦊</div>
+    <h1 style="margin-top:30px; font-size:28px; text-shadow:0 0 15px #00F0FF;">BGC LOADING...</h1>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="container" id="mainApp" style="display:none;">
+
+    <!-- HOME -->
+    <div id="homeScreen">
+      <div class="header">
+        <div class="avatar">🦊</div>
+        <div>
+          <p style="margin:0; opacity:0.8;">Halo, Player!</p>
+          <p style="margin:0; font-weight:bold;">BGC Empire</p>
         </div>
+      </div>
+
+      <div class="balance">
+        <p style="margin:0; font-size:15px; opacity:0.7;">Balance</p>
+        <p id="balanceAmount" class="balance-amount">12,458 BGC</p>
+      </div>
+
+      <div id="tapArea" onclick="handleTap()">🦊</div>
+      <div style="text-align:center;">
+        <p id="tapsLeft" style="font-size:18px; margin:5px 0;">50 / 50 Taps</p>
+        <p style="font-size:13px; opacity:0.6;">Reset dalam 12 jam</p>
+      </div>
+
+      <!-- Spin Card -->
+      <div class="card">
+        <h3 style="margin:0 0 10px 0; text-align:center;">Spin Gratis (1x/hari)</h3>
+        <button class="neon-btn" onclick="showSpin()">SPIN SEKARANG</button>
+        <p style="text-align:center; font-size:13px; margin-top:8px; opacity:0.7;">Nonton iklan untuk spin ekstra</p>
+      </div>
     </div>
 
-    <!-- MAIN APP -->
-    <div id="mainApp" class="hidden flex flex-col h-screen">
-
-        <!-- HEADER -->
-        <div class="bg-black/80 backdrop-blur-xl border-b border-[#00ff88]/20 px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div id="profilePic" class="w-10 h-10 bg-gradient-to-br from-[#00ff88] to-[#00cc66] rounded-2xl flex items-center justify-center text-2xl shadow-inner overflow-hidden">
-                    👤
-                </div>
-                <div>
-                    <p id="username" class="font-semibold text-lg">Loading...</p>
-                    <p class="text-xs text-[#00ff88]/70 flex items-center gap-1">
-                        <span class="w-2 h-2 bg-[#00ff88] rounded-full animate-pulse"></span>
-                        ONLINE
-                    </p>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-4">
-                <div onclick="showWallet()" class="flex items-center gap-2 bg-[#111] px-4 py-2 rounded-3xl cursor-pointer hover:bg-[#1a1a1a]">
-                    <span class="text-[#00ff88] text-xl">₿</span>
-                    <div>
-                        <p id="balanceBGC" class="font-bold text-xl leading-none">0.00</p>
-                        <p class="text-[10px] text-white/50 -mt-px">BGC</p>
-                    </div>
-                </div>
-                <div class="bg-[#111] px-4 py-2 rounded-3xl flex items-center gap-1 text-sm font-medium">
-                    <i class="fa-solid fa-star text-yellow-400"></i>
-                    <span id="startPoints" class="font-bold">0</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- CONTENT AREA -->
-        <div id="contentArea" class="flex-1 overflow-y-auto pb-24">
-
-            <!-- HOME -->
-            <div id="screen-home" class="screen p-6">
-                <div class="text-center mb-8">
-                    <div id="tapCoin" onclick="handleTap()" class="coin-tap mx-auto w-48 h-48 bg-gradient-to-br from-[#ffd700] to-[#ffaa00] rounded-full flex items-center justify-center shadow-[0_0_80px_#ffd700] cursor-pointer select-none border-8 border-black">
-                        <div class="text-center">
-                            <div class="text-8xl mb-2">💎</div>
-                            <div class="font-black text-5xl text-black tracking-tighter">BGC</div>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex justify-center items-center gap-8 text-sm">
-                        <div>
-                            <span class="text-white/60">Tap tersisa</span>
-                            <div class="flex items-baseline gap-1">
-                                <span id="tapLeft" class="text-4xl font-bold text-[#00ff88]">50</span>
-                                <span class="text-white/40">/50</span>
-                            </div>
-                        </div>
-                        <div class="h-12 w-px bg-white/10"></div>
-                        <div class="text-center">
-                            <span class="text-white/60 text-xs">Reset dalam</span>
-                            <div id="resetTimer" class="font-mono font-bold text-xl text-[#00ff88]">11h 59m</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Spin Reward -->
-                <div class="bg-[#111] rounded-3xl p-5 mb-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="text-3xl">🎰</div>
-                            <div>
-                                <h3 class="font-bold text-xl">Spin Reward</h3>
-                                <p class="text-xs text-[#00ff88]">1x gratis setiap hari</p>
-                            </div>
-                        </div>
-                        <button onclick="openSpinModal()" class="bg-gradient-to-r from-[#00ff88] to-[#00cc66] text-black font-bold px-8 py-3 rounded-2xl flex items-center gap-2 hover:scale-105 transition">
-                            <i class="fa-solid fa-rotate"></i> SPIN NOW
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-4 gap-2 text-center text-xs">
-                        <div class="bg-black/50 rounded-2xl py-2">1 START</div>
-                        <div class="bg-black/50 rounded-2xl py-2">3 START</div>
-                        <div class="bg-black/50 rounded-2xl py-2">5 START</div>
-                        <div class="bg-black/50 rounded-2xl py-2 text-yellow-400">10 START 🔥</div>
-                        <div class="bg-black/50 rounded-2xl py-2">2 BGB</div>
-                        <div class="bg-black/50 rounded-2xl py-2">5 BGB</div>
-                        <div class="bg-black/50 rounded-2xl py-2">10 BGB</div>
-                        <div class="bg-black/50 rounded-2xl py-2 text-emerald-400">50 BGB</div>
-                        <div class="bg-black/50 rounded-2xl py-2">0.5 TON</div>
-                        <div class="bg-black/50 rounded-2xl py-2">$1 USDT</div>
-                    </div>
-                </div>
-
-                <div class="relative h-20 flex justify-center items-center">
-                    <div onclick="handleTap()" class="bouncing-logo cursor-pointer w-16 h-16 bg-gradient-to-br from-[#ffd700] via-[#ffaa00] to-[#ffd700] rounded-3xl flex items-center justify-center shadow-2xl border-4 border-black rotate-12 text-4xl">
-                        💎
-                    </div>
-                </div>
-            </div>
-
-            <!-- TASK -->
-            <div id="screen-task" class="screen p-6 hidden">
-                <h2 class="text-2xl font-bold mb-6 flex items-center gap-3"><i class="fa-solid fa-list-check"></i> TASK</h2>
-                <div class="space-y-4">
-                    <div class="bg-[#111] rounded-3xl p-5 flex justify-between items-center">
-                        <div class="flex items-center gap-4">
-                            <div class="text-4xl">📢</div>
-                            <div>
-                                <p class="font-semibold">Join Channel & Community</p>
-                                <p class="text-xs text-[#00ff88]">+10 START</p>
-                            </div>
-                        </div>
-                        <button onclick="claimTask(1)" class="bg-[#00ff88] text-black px-6 py-3 rounded-2xl text-sm font-bold">JOIN</button>
-                    </div>
-                    <!-- Tambahkan iklan task sesuai kebutuhan -->
-                </div>
-            </div>
-
-            <!-- INVITE, NFT, WALLET -->
-            <!-- (Saya singkat di sini biar tidak terlalu panjang lagi, tapi di kode asli lengkap) -->
-
-        </div>
-
-        <!-- BOTTOM NAV -->
-        <div class="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-2xl border-t border-[#00ff88]/20 py-3 px-6">
-            <div class="flex justify-between text-2xl max-w-md mx-auto">
-                <div onclick="navigate(0)" class="nav-item active flex flex-col items-center text-[#00ff88]" id="nav0"><i class="fa-solid fa-house"></i><span class="text-xs mt-1">Home</span></div>
-                <div onclick="navigate(1)" class="nav-item flex flex-col items-center" id="nav1"><i class="fa-solid fa-list-check"></i><span class="text-xs mt-1">Task</span></div>
-                <div onclick="navigate(2)" class="nav-item flex flex-col items-center" id="nav2"><i class="fa-solid fa-user-plus"></i><span class="text-xs mt-1">Invite</span></div>
-                <div onclick="navigate(3)" class="nav-item flex flex-col items-center" id="nav3"><i class="fa-solid fa-gem"></i><span class="text-xs mt-1">NFT</span></div>
-                <div onclick="navigate(4)" class="nav-item flex flex-col items-center" id="nav4"><i class="fa-solid fa-wallet"></i><span class="text-xs mt-1">Wallet</span></div>
-            </div>
-        </div>
+    <!-- TASKS (contoh) -->
+    <div id="tasksScreen" class="hidden">
+      <h2 style="text-align:center; margin:20px 0;">Tasks & Iklan</h2>
+      <div class="card">
+        <p>Join Community Channel</p>
+        <button class="neon-btn">Join</button>
+      </div>
+      <div class="card">
+        <p>Nonton Iklan → +10 START</p>
+        <button class="neon-btn" onclick="watchAd(10)">Watch Video</button>
+      </div>
+      <div class="card">
+        <p>Nonton Iklan → +50 START</p>
+        <button class="neon-btn" onclick="watchAd(50)">Watch Video</button>
+      </div>
     </div>
 
-    <!-- SPIN MODAL & lainnya tetap sama seperti kode sebelumnya -->
+    <!-- INVITE -->
+    <div id="inviteScreen" class="hidden">
+      <h2 style="text-align:center;">Invite Friends</h2>
+      <div class="card">
+        <p style="word-break:break-all;">Link referral kamu: https://t.me/yourbot/app?start=yourid</p>
+        <button class="neon-btn">Copy Link</button>
+      </div>
+      <div class="card">
+        <p>5 Invite = 10 BGC</p>
+        <p>15 Invite = 30 BGC</p>
+        <button class="neon-btn">Claim Reward</button>
+      </div>
+    </div>
 
-    <script>
-        // Script lengkap sama seperti sebelumnya (Telegram WebApp, loading, tap, spin, dll)
-        let tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
+    <!-- NFT -->
+    <div id="nftScreen" class="hidden">
+      <h2 style="text-align:center;">NFT Market</h2>
+      <div class="card">
+        <p>NFT #1 🔥</p>
+        <button class="neon-btn">Buy with BGC</button>
+      </div>
+      <div class="card">
+        <p>NFT #2 ♦️ Diamond</p>
+        <button class="neon-btn">Buy with BGC</button>
+      </div>
+    </div>
 
-        let user = { balanceBGC: 1248.75, startPoints: 245, tapsLeft: 50, depositsCount: 2 };
-        let wallet = { START: 245, BGB: 124.8, USDT: 42.5, TON: 18.4, BTC: 0.00084 };
+    <!-- WALLET -->
+    <div id="walletScreen" class="hidden">
+      <h2 style="text-align:center;">Wallet</h2>
+      
+      <div class="card">
+        <p><strong>Balance</strong></p>
+        <p>START: 245</p>
+        <p>USDT: 12.5</p>
+        <p>BGC: <span id="walletBgc">12458</span></p>
+      </div>
 
-        function updateUI() {
-            document.getElementById('username').textContent = "@" + (tg.initDataUnsafe?.user?.username || "Shodiqx_");
-            document.getElementById('balanceBGC').textContent = user.balanceBGC.toFixed(2);
-            document.getElementById('startPoints').textContent = user.startPoints;
-            document.getElementById('tapLeft').textContent = user.tapsLeft;
-        }
+      <div class="card">
+        <h3>Deposit</h3>
+        <p>Minimal $5 atau 100 START</p>
+        <button class="neon-btn" onclick="watchAd(0)">Deposit + Watch Ad (10% bonus)</button>
+      </div>
 
-        function startLoading() {
-            const loading = document.getElementById('loadingScreen');
-            const progress = document.getElementById('progressBar');
-            let w = 0;
-            const int = setInterval(() => {
-                w += Math.random() * 12;
-                if (w > 100) w = 100;
-                progress.style.width = w + '%';
-                if (w >= 100) {
-                    clearInterval(int);
-                    setTimeout(() => {
-                        loading.style.opacity = '0';
-                        setTimeout(() => {
-                            loading.classList.add('hidden');
-                            document.getElementById('mainApp').classList.remove('hidden');
-                            updateUI();
-                        }, 600);
-                    }, 400);
-                }
-            }, 40);
-        }
+      <div class="card">
+        <button class="neon-btn" onclick="contactSupport()">Customer Service @qbitx</button>
+      </div>
+    </div>
 
-        function navigate(n) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-            const screens = ['home','task','invite','nft','wallet'];
-            document.getElementById('screen-' + screens[n]).classList.remove('hidden');
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            document.getElementById('nav' + n).classList.add('active');
-        }
+  </div>
 
-        function handleTap() {
-            if (user.tapsLeft <= 0) return;
-            user.tapsLeft--;
-            user.balanceBGC += 0.5;
-            updateUI();
-        }
+  <!-- BOTTOM NAVIGATION -->
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="switchTab(0)">🏠<br>Home</div>
+    <div class="nav-item" onclick="switchTab(1)">📋<br>Tasks</div>
+    <div class="nav-item" onclick="switchTab(2)">👥<br>Invite</div>
+    <div class="nav-item" onclick="switchTab(3)">🖼️<br>NFT</div>
+    <div class="nav-item" onclick="switchTab(4)">💰<br>Wallet</div>
+  </div>
 
-        function openSpinModal() { /* logic spin */ alert("Spin modal dibuka (logic lengkap di kode sebelumnya)"); }
+  <script>
+    // Telegram WebApp
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
 
-        window.onload = () => {
-            startLoading();
-            console.log("%cBGC Mini App siap! Copy berhasil full ya bro", "color:#00ff88;font-size:14px");
-        };
-    </script>
+    let balance = 12458;
+    let tapsLeft = 50;
+
+    // Loading 5 detik
+    setTimeout(() => {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
+    }, 5000);
+
+    function handleTap() {
+      if (tapsLeft > 0) {
+        balance += 1;
+        tapsLeft -= 1;
+        document.getElementById('balanceAmount').textContent = balance.toLocaleString() + ' BGC';
+        document.getElementById('tapsLeft').textContent = tapsLeft + ' / 50 Taps';
+        
+        // Efek sederhana
+        const tap = document.getElementById('tapArea');
+        tap.style.transform = 'scale(0.85)';
+        setTimeout(() => tap.style.transform = 'scale(1)', 100);
+      } else {
+        alert("Taps habis! Nonton iklan untuk refill.");
+      }
+    }
+
+    function showSpin() {
+      alert("Spin Wheel dibuka! (Hadiah: 1-10 START, BGC, TON, dll)\n\nLogika deposit akan ditambahkan nanti.");
+    }
+
+    function watchAd(reward) {
+      // Placeholder untuk AdsGram / Monetag
+      if (confirm("Nonton iklan 15 detik untuk dapat reward?")) {
+        setTimeout(() => {
+          if (reward > 0) {
+            alert(`Berhasil! Kamu dapat +${reward} START`);
+            // Tambah ke balance kalau mau
+          } else {
+            alert("Bonus 10% deposit aktif!");
+          }
+        }, 800);
+      }
+    }
+
+    function contactSupport() {
+      tg.openTelegramLink("https://t.me/qbitx");
+    }
+
+    // Switch Tab
+    function switchTab(n) {
+      document.querySelectorAll('#mainApp > div').forEach(div => div.classList.add('hidden'));
+      
+      const screens = ['homeScreen', 'tasksScreen', 'inviteScreen', 'nftScreen', 'walletScreen'];
+      document.getElementById(screens[n]).classList.remove('hidden');
+      
+      // Highlight nav
+      document.querySelectorAll('.nav-item').forEach((el, i) => {
+        el.classList.toggle('active', i === n);
+      });
+    }
+
+    // Inisialisasi
+    console.log("BGC Mini App siap! Logo fox + neon cyberpunk aktif.");
+  </script>
 </body>
-                                 </html>
+            </html>
