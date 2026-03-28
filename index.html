@@ -3,54 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BGC APP</title>
+<title>BGC App</title>
 
 <style>
 body{
 margin:0;
 font-family:Arial;
-background:#020617;
+background: radial-gradient(circle,#0b1220,#020617);
 color:white;
 }
 
-.hidden{display:none;}
-
 .header{
-padding:15px;
-background:linear-gradient(90deg,#0f172a,#020617);
 display:flex;
 align-items:center;
 gap:10px;
+padding:10px;
 }
 
-.avatar{
+.header img{
 width:40px;
 height:40px;
 border-radius:50%;
-background:#555;
 }
 
-.name{font-weight:bold;}
+.container{
+padding:15px;
+padding-bottom:100px;
+}
 
 .card{
-background:#0f172a;
-margin:10px;
+background:rgba(255,255,255,0.05);
 padding:15px;
-border-radius:15px;
+border-radius:20px;
+margin-bottom:10px;
 }
 
-.tap{
+.tap-btn{
 width:180px;
 height:180px;
 border-radius:50%;
 display:block;
 margin:20px auto;
-box-shadow:0 0 40px #9333ea;
+animation:glow 2s infinite;
 transition:0.1s;
 }
 
-.tap:active{
-transform:scale(0.9) rotate(5deg);
+.tap-btn:active{
+transform:scale(0.9) rotate(10deg);
+}
+
+@keyframes glow{
+0%{box-shadow:0 0 20px #9333ea;}
+50%{box-shadow:0 0 60px #00f0ff;}
+100%{box-shadow:0 0 20px #9333ea;}
 }
 
 .btn{
@@ -58,33 +63,23 @@ width:100%;
 padding:12px;
 margin-top:10px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 background:#3b82f6;
 color:white;
+font-weight:bold;
 }
 
 .nav{
 position:fixed;
 bottom:0;
 width:100%;
+background:#020617;
 display:flex;
 justify-content:space-around;
-background:#020617;
 padding:10px;
 }
 
-.nav button{
-background:none;
-color:white;
-border:none;
-}
-
-.coin{
-display:flex;
-justify-content:space-between;
-padding:10px;
-border-bottom:1px solid #222;
-}
+.hidden{display:none;}
 
 @keyframes fly{
 0%{opacity:1;transform:translateY(0);}
@@ -95,167 +90,150 @@ border-bottom:1px solid #222;
 
 <body>
 
-<!-- START -->
-<div id="start" style="text-align:center;margin-top:100px;">
-<h1>BGC PROJECT 🚀</h1>
-<img src="https://i.imgur.com/8Km9tLL.png" width="120"><br><br>
-
-<button class="btn" onclick="startApp()">START BOT</button>
-
-<a href="https://t.me/BGC7COMMUNITY">
-<button class="btn">JOIN CHANNEL</button>
-</a>
-</div>
-
-<!-- APP -->
-<div id="app" class="hidden">
-
+<!-- HEADER -->
 <div class="header">
-<div class="avatar"></div>
-<div class="name" id="username">Player</div>
+<img src="https://i.imgur.com/YOURLOGO.png">
+<span id="username">Player</span>
 </div>
+
+<div class="container">
 
 <!-- HOME -->
 <div id="home">
-
 <div class="card">
-<h3>Balance: <span id="balance">0</span> BGC</h3>
-<p>Tap Left: <span id="tapLeft">50</span></p>
+<h2>BGC Dashboard</h2>
+<p>Balance: <span id="balance">0</span> BGC</p>
+<p>Limit: <span id="limit">50</span>/12h</p>
 </div>
 
-<img src="https://i.imgur.com/8Km9tLL.png" class="tap" onclick="tap(event)">
+<button class="btn" onclick="spin()">🎁 Spin Reward</button>
 
-<button class="btn" onclick="watchAds()">🎥 Mission (+5 BGC)</button>
+<img src="https://i.imgur.com/YOURLOGO.png" class="tap-btn" onclick="tap(event)">
 
 </div>
 
 <!-- TASK -->
 <div id="task" class="hidden">
-
 <div class="card">
-<h3>Tasks</h3>
-<a href="https://t.me/BGC7COMMUNITY">
-<button class="btn">Join Channel (+10)</button>
-</a>
-<button class="btn" onclick="daily()">Daily Reward (+30)</button>
+<h3>📋 Tasks</h3>
+<p>Join Channel</p>
+<button class="btn" onclick="window.open('https://t.me/BGC7COMMUNITY')">Join</button>
+</div>
 </div>
 
+<!-- INVITE -->
+<div id="invite" class="hidden">
 <div class="card">
-<h3>Invite</h3>
+<h3>👥 Invite</h3>
 <p>1 = 5 BGC</p>
 <p>3 = 18 BGC</p>
 <p>10 = 80 BGC</p>
+<button class="btn">Copy Link</button>
+</div>
 </div>
 
+<!-- NFT -->
+<div id="nft" class="hidden">
+<div class="card">
+<h3>💎 NFT Market</h3>
+<p>Coming Soon 🚀</p>
+<button class="btn">Mint NFT</button>
+</div>
 </div>
 
 <!-- WALLET -->
 <div id="wallet" class="hidden">
-
 <div class="card">
-<h3>Balance</h3>
-<p id="usd">$0</p>
-</div>
-
-<div class="card">
-<h3>Exchange</h3>
+<h3>💳 Wallet</h3>
+<p>BTC • ETH • USDT • TON • BNB</p>
 <p>500 BGC = 1 TON</p>
+<p style="opacity:0.5;">Withdraw Coming Soon</p>
 </div>
-
-<div class="card">
-<h3>Market</h3>
-
-<div class="coin">BTC <span>$68,000 📈</span></div>
-<div class="coin">ETH <span>$3,200 📉</span></div>
-<div class="coin">TON <span>$5.20 📈</span></div>
-<div class="coin">BNB <span>$400 📈</span></div>
-<div class="coin">USDT <span>$1.00</span></div>
-
-</div>
-
-<div class="card">
-🚫 Withdraw Coming Soon
-</div>
-
 </div>
 
 </div>
 
 <!-- NAV -->
-<div class="nav hidden" id="nav">
-<button onclick="showPage('home')">Home</button>
-<button onclick="showPage('task')">Tasks</button>
-<button onclick="showPage('wallet')">Wallet</button>
+<div class="nav">
+<button onclick="showPage('home')">🏠</button>
+<button onclick="showPage('task')">📋</button>
+<button onclick="showPage('invite')">👥</button>
+<button onclick="showPage('nft')">💎</button>
+<button onclick="showPage('wallet')">💳</button>
 </div>
 
 <script>
 
 let balance = Number(localStorage.getItem("bal"))||0;
-let tapUsed = Number(localStorage.getItem("tap"))||0;
-let last = Number(localStorage.getItem("time"))||Date.now();
-let limit = 50;
+let limit = Number(localStorage.getItem("limit"))||50;
+let used = Number(localStorage.getItem("used"))||0;
+let last = Number(localStorage.getItem("last"))||0;
 
-function startApp(){
-document.getElementById("start").classList.add("hidden");
-document.getElementById("app").classList.remove("hidden");
-document.getElementById("nav").classList.remove("hidden");
-update();
+function save(){
+localStorage.setItem("bal",balance);
+localStorage.setItem("limit",limit);
+localStorage.setItem("used",used);
+localStorage.setItem("last",last);
+}
+
+function update(){
+document.getElementById("balance").innerText = balance;
+document.getElementById("limit").innerText = limit-used;
 }
 
 function tap(e){
-if(Date.now()-last>43200000){tapUsed=0;last=Date.now();}
 
-if(tapUsed>=limit){
-alert("Limit habis");
+if(Date.now()-last>43200000){
+used=0;
+last=Date.now();
+}
+
+if(used>=limit){
+alert("Limit habis tunggu 12 jam");
 return;
 }
 
 balance++;
-tapUsed++;
+used++;
 
-spawn(e.clientX,e.clientY);
+let x = e.clientX;
+let y = e.clientY;
 
-save();update();
+spawn(x,y);
+
+navigator.vibrate(30);
+
+save();
+update();
 }
 
 function spawn(x,y){
-let el=document.createElement("div");
-el.innerText="+1";
-el.style.position="fixed";
-el.style.left=x+"px";
-el.style.top=y+"px";
-el.style.color="#22c55e";
-el.style.animation="fly 1s forwards";
-document.body.appendChild(el);
-setTimeout(()=>el.remove(),1000);
+let c=document.createElement("div");
+c.innerText="+1";
+c.style.position="fixed";
+c.style.left=x+"px";
+c.style.top=y+"px";
+c.style.color="#00ffcc";
+c.style.fontWeight="bold";
+c.style.animation="fly 1s forwards";
+document.body.appendChild(c);
+setTimeout(()=>c.remove(),1000);
 }
 
-function watchAds(){
-balance+=5;
-save();update();
-}
-
-function daily(){
-balance+=30;
-save();update();
-}
-
-function update(){
-document.getElementById("balance").innerText=balance;
-document.getElementById("tapLeft").innerText=limit-tapUsed;
-document.getElementById("usd").innerText="$"+(balance*0.002).toFixed(2);
-}
-
-function save(){
-localStorage.setItem("bal",balance);
-localStorage.setItem("tap",tapUsed);
-localStorage.setItem("time",last);
+function spin(){
+let r = Math.floor(Math.random()*50)+10;
+balance+=r;
+alert("Dapet "+r+" BGC 🎉");
+save();
+update();
 }
 
 function showPage(p){
-document.querySelectorAll("#home,#task,#wallet").forEach(e=>e.classList.add("hidden"));
+document.querySelectorAll("#home,#task,#invite,#nft,#wallet").forEach(el=>el.classList.add("hidden"));
 document.getElementById(p).classList.remove("hidden");
 }
+
+document.getElementById("username").innerText="User_"+Math.floor(Math.random()*9999);
 
 update();
 
