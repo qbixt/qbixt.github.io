@@ -2,175 +2,121 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BGC Premium App</title><style>
+<title>BGC ULTRA APP</title><style>
 *{box-sizing:border-box}
-body{
-margin:0;
-font-family:Arial, sans-serif;
-background:linear-gradient(180deg,#020617,#0f172a);
-color:#fff;
-}
+body{margin:0;font-family:Arial;background:#020617;color:#fff}
 
-.header{
-display:flex;
-align-items:center;
-gap:10px;
-padding:15px;
-}
+.header{display:flex;align-items:center;gap:10px;padding:12px}
+.avatar{width:45px;height:45px;border-radius:50%;border:2px solid #00f0ff}
 
-.avatar{
-width:45px;height:45px;border-radius:50%;border:2px solid #00f0ff;
-}
+.container{padding:15px;padding-bottom:110px}
+.card{background:#0f172a;padding:15px;border-radius:14px;margin-bottom:12px}
 
-.username{font-weight:bold}
-
-.container{padding:15px;padding-bottom:120px}
-
-.card{
-background:rgba(255,255,255,0.05);
-padding:15px;
-border-radius:16px;
-margin-bottom:12px;
-box-shadow:0 0 10px rgba(0,0,0,0.3);
-}
-
-.balance{
-font-size:22px;
-font-weight:bold;
-}
+.balance{font-size:22px;font-weight:bold}
 
 .tap{
 width:200px;height:200px;border-radius:50%;
 display:block;margin:20px auto;
-box-shadow:0 0 40px #00f0ff;
-transition:0.15s;
+box-shadow:0 0 30px #00f0ff;
+transition:.1s;
 }
-
-.tap:active{
-transform:scale(0.85);
-box-shadow:0 0 80px #9333ea;
-}
-
-.reward{
-position:fixed;
-animation:floatUp 1s forwards;
-font-size:20px;
-pointer-events:none;
-}
-
-@keyframes floatUp{
-0%{opacity:1;transform:scale(0.5)}
-100%{opacity:0;transform:translateY(-60px) scale(1.5)}
-}
+.tap:active{transform:scale(.85)}
 
 .btn{
-width:100%;
-padding:12px;
-border:none;
-border-radius:12px;
-margin-top:8px;
-background:linear-gradient(45deg,#3b82f6,#9333ea);
-color:white;
-font-weight:bold;
-box-shadow:0 0 10px rgba(147,51,234,0.5);
-}
-
-.btn:active{transform:scale(0.95)}
-
-.wheel{
-width:220px;height:220px;border-radius:50%;margin:auto;
-background:conic-gradient(#3b82f6,#9333ea,#00f0ff,#f59e0b,#10b981,#ef4444);
-box-shadow:0 0 40px rgba(0,240,255,0.5);
-transition:4s cubic-bezier(.17,.67,.83,.67);
+width:100%;padding:12px;border:none;border-radius:10px;margin-top:8px;
+background:#2563eb;color:#fff;font-weight:bold
 }
 
 .nav{
-position:fixed;
-bottom:10px;
-left:50%;
-transform:translateX(-50%);
-width:92%;
-display:flex;
-justify-content:space-around;
-padding:12px;
-border-radius:20px;
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(10px);
+position:fixed;bottom:10px;left:50%;transform:translateX(-50%);
+width:92%;display:flex;justify-content:space-around;
+padding:10px;background:#0f172a;border-radius:15px
 }
+.nav button{background:none;border:none;color:#fff;font-size:18px}
 
-.nav button{
-background:none;
-border:none;
-color:#fff;
-font-size:18px;
+.reward{position:fixed;font-size:20px;animation:up 1s forwards}
+@keyframes up{to{opacity:0;transform:translateY(-60px)}}
+
+.wheel{
+width:200px;height:200px;border-radius:50%;margin:auto;
+background:conic-gradient(#3b82f6,#9333ea,#00f0ff,#10b981,#f59e0b,#ef4444);
+transition:4s
 }
 
 .hidden{display:none}
-
 </style></head><body><div class="header">
 <img id="avatar" class="avatar" src="https://i.imgur.com/t2O7FMa.png">
-<div class="username" id="username">User</div>
+<div id="name">User</div>
 </div><div class="container"><!-- HOME --><div id="home">
 <div class="card">
 <div class="balance">💰 <span id="bal">0</span> BGC</div>
-<div>⚡ Tap Left: <span id="tapLeft">50</span></div>
+<div>Tap Left: <span id="tapLeft">50</span></div>
 </div><div class="card">
 <div id="wheel" class="wheel"></div>
-<button class="btn" onclick="spin()">🎡 Spin Reward</button>
+<button class="btn" onclick="spin()">SPIN</button>
 </div><img src="https://i.imgur.com/t2O7FMa.png" class="tap" onclick="tap(event)"><div class="card">
-<h3>⚡ Boost</h3>
-<button class="btn" onclick="boost(100,50)">100⭐ → +50 Tap</button>
-<button class="btn" onclick="boost(300,200)">300⭐ → +200 Tap</button>
-<button class="btn" onclick="boost(500,400)">500⭐ → +400 Tap</button>
-</div></div><!-- TASK --><div id="task" class="hidden">
+<h3>BOOST</h3>
+<button class="btn" onclick="boost(100,50)">100⭐ +50</button>
+<button class="btn" onclick="boost(300,200)">300⭐ +200</button>
+<button class="btn" onclick="boost(500,400)">500⭐ +400</button>
+</div>
+</div><!-- TASK --><div id="task" class="hidden">
 <div class="card">
-<h3>📋 Tasks</h3>
-<button class="btn" onclick="ads(5)">Watch Ads +5⭐</button>
-<button class="btn" onclick="ads(10)">Watch Ads +10⭐</button>
-<button class="btn" onclick="join()">Join Channel +10⭐</button>
+<button class="btn" onclick="ads(5)">Ads +5⭐</button>
+<button class="btn" onclick="ads(10)">Ads +10⭐</button>
 </div>
 </div><!-- WALLET --><div id="wallet" class="hidden">
 <div class="card">
-<h3>💳 Wallet</h3>
-<p>BGC: <span id="wbgc"></span></p>
-<p>STAR: <span id="wstar"></span></p>
-</div><div class="card">
-<button class="btn" onclick="convert()">Convert 100 BGC → 1 USDT</button>
+<p>BGC: <span id="w1"></span></p>
+<p>STAR: <span id="w2"></span></p>
 </div>
 </div></div><div class="nav">
 <button onclick="nav('home')">🏠</button>
 <button onclick="nav('task')">📋</button>
 <button onclick="nav('wallet')">💳</button>
 </div><script>
-let bal=0,star=0,used=0,limit=50,angle=0
+let bal=Number(localStorage.getItem('bal'))||0
+let star=Number(localStorage.getItem('star'))||0
+let used=Number(localStorage.getItem('used'))||0
+let limit=Number(localStorage.getItem('limit'))||50
+let angle=0
 
-// TELEGRAM USER
+// TELEGRAM
 if(window.Telegram){
-let user=window.Telegram.WebApp.initDataUnsafe.user
-if(user){
-document.getElementById('username').innerText=user.first_name
-if(user.photo_url) document.getElementById('avatar').src=user.photo_url
+let u=window.Telegram.WebApp.initDataUnsafe.user
+if(u){
+document.getElementById('name').innerText=u.first_name
+if(u.photo_url)document.getElementById('avatar').src=u.photo_url
 }
+}
+
+function save(){
+localStorage.setItem('bal',bal)
+localStorage.setItem('star',star)
+localStorage.setItem('used',used)
+localStorage.setItem('limit',limit)
 }
 
 function update(){
-document.getElementById('bal').innerText=bal
-document.getElementById('tapLeft').innerText=limit-used
-document.getElementById('wbgc').innerText=bal
-document.getElementById('wstar').innerText=star
+val('bal',bal)
+val('tapLeft',limit-used)
+val('w1',bal)
+val('w2',star)
 }
 
+function val(id,v){document.getElementById(id).innerText=v}
+
 function tap(e){
-if(used>=limit)return alert('Limit habis')
+if(used>=limit)return alert('limit habis')
 bal++;used++
 spawn(e.clientX,e.clientY)
-update()
+save();update()
 }
 
 function spawn(x,y){
 let el=document.createElement('div')
 el.className='reward'
-el.innerText='💎'
+el.innerText='+1'
 el.style.left=x+'px'
 el.style.top=y+'px'
 document.body.appendChild(el)
@@ -178,29 +124,27 @@ setTimeout(()=>el.remove(),1000)
 }
 
 function spin(){
-let wheel=document.getElementById('wheel')
-let rand=360*5 + Math.random()*360
-angle+=rand
-wheel.style.transform='rotate('+angle+'deg)'
+let w=document.getElementById('wheel')
+let r=360*5+Math.random()*360
+angle+=r
+w.style.transform='rotate('+angle+'deg)'
 
 setTimeout(()=>{
-let reward=Math.floor(Math.random()*100)+10
-bal+=reward
-alert('🎉 Dapat '+reward+' BGC')
-update()
+let win=Math.floor(Math.random()*50)+10
+bal+=win
+alert('WIN '+win)
+save();update()
 },4000)
 }
 
-function boost(cost,add){
-if(star<cost)return alert('Star kurang')
-star-=cost
-limit+=add
-update()
+function boost(c,a){
+if(star<c)return alert('star kurang')
+star-=c
+limit+=a
+save();update()
 }
 
-function ads(x){star+=x;update();alert('+ '+x+'⭐')}
-function join(){star+=10;update();alert('Join sukses')}
-function convert(){if(bal<100)return alert('kurang');bal-=100;alert('Convert sukses');update()}
+function ads(x){star+=x;save();update()}
 
 function nav(p){
 document.querySelectorAll('#home,#task,#wallet').forEach(e=>e.classList.add('hidden'))
