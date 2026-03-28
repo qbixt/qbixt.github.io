@@ -9,82 +9,122 @@
 body{
 margin:0;
 font-family:Arial;
-background: radial-gradient(circle,#0b1220,#020617);
+background: radial-gradient(circle at top,#0f172a,#020617);
 color:white;
 }
 
+/* HEADER */
 .header{
 display:flex;
 align-items:center;
 gap:10px;
 padding:10px;
 }
-
-.header img{
+.avatar{
 width:40px;
 height:40px;
 border-radius:50%;
+background:#444;
 }
 
+/* CONTAINER */
 .container{
 padding:15px;
 padding-bottom:100px;
 }
 
+/* CARD */
 .card{
 background:rgba(255,255,255,0.05);
 padding:15px;
-border-radius:20px;
+border-radius:15px;
 margin-bottom:10px;
 }
 
-.tap-btn{
+/* TAP */
+.tap{
 width:180px;
 height:180px;
 border-radius:50%;
 display:block;
 margin:20px auto;
+object-fit:cover;
+background:#000;
+padding:10px;
 animation:glow 2s infinite;
 transition:0.1s;
 }
-
-.tap-btn:active{
+.tap:active{
 transform:scale(0.9) rotate(10deg);
 }
-
 @keyframes glow{
 0%{box-shadow:0 0 20px #9333ea;}
 50%{box-shadow:0 0 60px #00f0ff;}
 100%{box-shadow:0 0 20px #9333ea;}
 }
 
+/* BUTTON */
 .btn{
 width:100%;
 padding:12px;
 margin-top:10px;
 border:none;
-border-radius:12px;
+border-radius:10px;
 background:#3b82f6;
 color:white;
 font-weight:bold;
 }
 
+/* NAV */
 .nav{
 position:fixed;
-bottom:0;
-width:100%;
-background:#020617;
+bottom:15px;
+left:50%;
+transform:translateX(-50%);
+width:90%;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
+border-radius:20px;
 display:flex;
 justify-content:space-around;
 padding:10px;
 }
+.nav button{
+background:none;
+border:none;
+color:white;
+font-size:18px;
+}
 
-.hidden{display:none;}
+/* COIN */
+.coin{
+display:flex;
+justify-content:space-between;
+padding:10px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
 
+/* NFT CARD */
+.nft-box{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+.nft{
+flex:1;
+background:#111;
+padding:10px;
+border-radius:10px;
+text-align:center;
+}
+
+/* ANIMATION */
 @keyframes fly{
 0%{opacity:1;transform:translateY(0);}
-100%{opacity:0;transform:translateY(-50px);}
+100%{opacity:0;transform:translateY(-60px);}
 }
+
+.hidden{display:none;}
 </style>
 </head>
 
@@ -92,8 +132,8 @@ padding:10px;
 
 <!-- HEADER -->
 <div class="header">
-<img src="https://i.imgur.com/YOURLOGO.png">
-<span id="username">Player</span>
+<div class="avatar"></div>
+<div id="username">User</div>
 </div>
 
 <div class="container">
@@ -101,23 +141,22 @@ padding:10px;
 <!-- HOME -->
 <div id="home">
 <div class="card">
-<h2>BGC Dashboard</h2>
-<p>Balance: <span id="balance">0</span> BGC</p>
-<p>Limit: <span id="limit">50</span>/12h</p>
+<h3>Balance: <span id="balance">0</span> BGC</h3>
+<p>Tap Left: <span id="tapLeft">50</span></p>
 </div>
 
 <button class="btn" onclick="spin()">🎁 Spin Reward</button>
 
-<img src="https://i.imgur.com/YOURLOGO.png" class="tap-btn" onclick="tap(event)">
-
+<img src="https://i.imgur.com/t2O7FMa.png" class="tap" onclick="tap(event)">
 </div>
 
 <!-- TASK -->
 <div id="task" class="hidden">
 <div class="card">
 <h3>📋 Tasks</h3>
-<p>Join Channel</p>
-<button class="btn" onclick="window.open('https://t.me/BGC7COMMUNITY')">Join</button>
+<button class="btn" onclick="window.open('https://t.me/BGC7COMMUNITY')">
+Join Channel (+10)
+</button>
 </div>
 </div>
 
@@ -136,19 +175,38 @@ padding:10px;
 <div id="nft" class="hidden">
 <div class="card">
 <h3>💎 NFT Market</h3>
-<p>Coming Soon 🚀</p>
+
+<div class="nft-box">
+<div class="nft">NFT #1<br>🔥 Rare</div>
+<div class="nft">NFT #2<br>💎 Epic</div>
+</div>
+
 <button class="btn">Mint NFT</button>
 </div>
 </div>
 
 <!-- WALLET -->
 <div id="wallet" class="hidden">
+
 <div class="card">
 <h3>💳 Wallet</h3>
-<p>BTC • ETH • USDT • TON • BNB</p>
-<p>500 BGC = 1 TON</p>
-<p style="opacity:0.5;">Withdraw Coming Soon</p>
+<p><b id="balance">0</b> BGC</p>
 </div>
+
+<div class="card">
+<h3>💱 Market</h3>
+<div class="coin">BTC <span>$65,200 📈</span></div>
+<div class="coin">ETH <span>$3,200 📉</span></div>
+<div class="coin">USDT <span>$1.00</span></div>
+<div class="coin">TON <span>$5.2 📈</span></div>
+<div class="coin">BNB <span>$580 📈</span></div>
+</div>
+
+<div class="card">
+<p>500 BGC = 1 TON</p>
+<p style="opacity:0.5;">Withdraw Coming Soon 🚀</p>
+</div>
+
 </div>
 
 </div>
@@ -165,20 +223,19 @@ padding:10px;
 <script>
 
 let balance = Number(localStorage.getItem("bal"))||0;
-let limit = Number(localStorage.getItem("limit"))||50;
 let used = Number(localStorage.getItem("used"))||0;
 let last = Number(localStorage.getItem("last"))||0;
+let limit = 50;
 
 function save(){
 localStorage.setItem("bal",balance);
-localStorage.setItem("limit",limit);
 localStorage.setItem("used",used);
 localStorage.setItem("last",last);
 }
 
 function update(){
-document.getElementById("balance").innerText = balance;
-document.getElementById("limit").innerText = limit-used;
+document.getElementById("balance").innerText=balance;
+document.getElementById("tapLeft").innerText=limit-used;
 }
 
 function tap(e){
@@ -189,15 +246,15 @@ last=Date.now();
 }
 
 if(used>=limit){
-alert("Limit habis tunggu 12 jam");
+alert("Limit habis 12 jam");
 return;
 }
 
 balance++;
 used++;
 
-let x = e.clientX;
-let y = e.clientY;
+let x=e.clientX;
+let y=e.clientY;
 
 spawn(x,y);
 
@@ -208,20 +265,20 @@ update();
 }
 
 function spawn(x,y){
-let c=document.createElement("div");
-c.innerText="+1";
-c.style.position="fixed";
-c.style.left=x+"px";
-c.style.top=y+"px";
-c.style.color="#00ffcc";
-c.style.fontWeight="bold";
-c.style.animation="fly 1s forwards";
-document.body.appendChild(c);
-setTimeout(()=>c.remove(),1000);
+let el=document.createElement("div");
+el.innerText="+1";
+el.style.position="fixed";
+el.style.left=x+"px";
+el.style.top=y+"px";
+el.style.color="#00f0ff";
+el.style.fontWeight="bold";
+el.style.animation="fly 1s forwards";
+document.body.appendChild(el);
+setTimeout(()=>el.remove(),1000);
 }
 
 function spin(){
-let r = Math.floor(Math.random()*50)+10;
+let r=Math.floor(Math.random()*50)+10;
 balance+=r;
 alert("Dapet "+r+" BGC 🎉");
 save();
