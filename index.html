@@ -2,115 +2,125 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BGC ULTRA APP</title><style>
-*{box-sizing:border-box}
+<title>BGC MINI APP FINAL</title><style>
 body{margin:0;font-family:Arial;background:#020617;color:#fff}
+.hidden{display:none}
 
-.header{display:flex;align-items:center;gap:10px;padding:12px}
-.avatar{width:45px;height:45px;border-radius:50%;border:2px solid #00f0ff}
+/* LOADING */
+#loading{position:fixed;width:100%;height:100%;background:#020617;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:999}
+.loader{width:80px;height:80px;border:6px solid #333;border-top:6px solid #00f0ff;border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.header{display:flex;gap:10px;padding:12px;align-items:center}
+.avatar{width:45px;height:45px;border-radius:50%;background:#333}
 
 .container{padding:15px;padding-bottom:110px}
-.card{background:#0f172a;padding:15px;border-radius:14px;margin-bottom:12px}
+.card{background:#0f172a;padding:15px;border-radius:12px;margin-bottom:12px}
 
-.balance{font-size:22px;font-weight:bold}
-
-.tap{
-width:200px;height:200px;border-radius:50%;
-display:block;margin:20px auto;
-box-shadow:0 0 30px #00f0ff;
-transition:.1s;
-}
+.tap{width:180px;height:180px;border-radius:50%;display:block;margin:20px auto;box-shadow:0 0 30px #00f0ff}
 .tap:active{transform:scale(.85)}
 
-.btn{
-width:100%;padding:12px;border:none;border-radius:10px;margin-top:8px;
-background:#2563eb;color:#fff;font-weight:bold
-}
+.btn{width:100%;padding:12px;border:none;border-radius:10px;margin-top:8px;background:#2563eb;color:#fff}
 
-.nav{
-position:fixed;bottom:10px;left:50%;transform:translateX(-50%);
-width:92%;display:flex;justify-content:space-around;
-padding:10px;background:#0f172a;border-radius:15px
-}
-.nav button{background:none;border:none;color:#fff;font-size:18px}
+.nav{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);width:90%;display:flex;justify-content:space-around;background:#0f172a;padding:10px;border-radius:15px}
+.nav button{background:none;border:none;color:white}
 
-.reward{position:fixed;font-size:20px;animation:up 1s forwards}
-@keyframes up{to{opacity:0;transform:translateY(-60px)}}
+.reward{position:fixed;font-size:18px;animation:up 1s forwards}
+@keyframes up{to{opacity:0;transform:translateY(-50px)}}
 
-.wheel{
-width:200px;height:200px;border-radius:50%;margin:auto;
-background:conic-gradient(#3b82f6,#9333ea,#00f0ff,#10b981,#f59e0b,#ef4444);
-transition:4s
-}
-
-.hidden{display:none}
-</style></head><body><div class="header">
-<img id="avatar" class="avatar" src="https://i.imgur.com/t2O7FMa.png">
+/* SPIN */
+.pointer{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:20px solid #fff;margin:auto}
+.wheel{width:240px;height:240px;border-radius:50%;margin:auto;border:6px solid #fff;
+background:conic-gradient(
+#3b82f6 0 30deg,#9333ea 30 60deg,#00f0ff 60 90deg,#10b981 90 120deg,
+#f59e0b 120 150deg,#ef4444 150 180deg,#3b82f6 180 210deg,#9333ea 210 240deg,
+#00f0ff 240 270deg,#10b981 270 300deg,#f59e0b 300 330deg,#ef4444 330 360deg);
+transition:transform 4s ease-out}
+</style></head><body><div id="loading">
+<div class="loader"></div>
+<h2>BGC LOADING...</h2>
+</div><div class="header">
+<img id="avatar" class="avatar">
 <div id="name">User</div>
 </div><div class="container"><!-- HOME --><div id="home">
 <div class="card">
-<div class="balance">💰 <span id="bal">0</span> BGC</div>
-<div>Tap Left: <span id="tapLeft">50</span></div>
+<h3>Balance: <span id="bal">0</span> BGC</h3>
+<p>Tap Left: <span id="tapLeft">50</span></p>
 </div><div class="card">
+<div class="pointer"></div>
 <div id="wheel" class="wheel"></div>
-<button class="btn" onclick="spin()">SPIN</button>
+<button class="btn" onclick="spin()">SPIN (1x sehari)</button>
 </div><img src="https://i.imgur.com/t2O7FMa.png" class="tap" onclick="tap(event)"><div class="card">
 <h3>BOOST</h3>
 <button class="btn" onclick="boost(100,50)">100⭐ +50</button>
 <button class="btn" onclick="boost(300,200)">300⭐ +200</button>
 <button class="btn" onclick="boost(500,400)">500⭐ +400</button>
+<button class="btn" onclick="boost(1000,1200)">1000⭐ +1200</button>
 </div>
 </div><!-- TASK --><div id="task" class="hidden">
 <div class="card">
-<button class="btn" onclick="ads(5)">Ads +5⭐</button>
-<button class="btn" onclick="ads(10)">Ads +10⭐</button>
+<button class="btn" onclick="ads(5)">Ads 10 → +5⭐</button>
+<button class="btn" onclick="ads(13)">Ads 20 → +13⭐</button>
+<button class="btn" onclick="ads(35)">Ads 50 → +35⭐</button>
+<button class="btn" onclick="ads(90)">Ads 100 → +90⭐</button>
+<button class="btn" onclick="join()">Join +10⭐</button>
+</div>
+</div><!-- INVITE --><div id="invite" class="hidden">
+<div class="card">
+<p>5 = 10 BGC</p>
+<p>15 = 30 BGC</p>
+<p>30 = 75 BGC</p>
+<p>50 = 130 BGC</p>
+<button class="btn" onclick="claimInvite()">CLAIM</button>
+</div>
+</div><!-- NFT --><div id="nft" class="hidden">
+<div class="card">
+<p>NFT #1 🔥</p>
+<p>NFT #2 💎</p>
 </div>
 </div><!-- WALLET --><div id="wallet" class="hidden">
 <div class="card">
-<p>BGC: <span id="w1"></span></p>
-<p>STAR: <span id="w2"></span></p>
+<p>BGC: <span id="wbgc"></span></p>
+<p>STAR: <span id="wstar"></span></p>
+<p>USDT: <span id="wusdt"></span></p>
+<p>TON: <span id="wton"></span></p>
+</div><div class="card">
+<button class="btn" onclick="convert()">Convert 100 BGC → $1</button>
+</div><div class="card">
+<button class="btn" onclick="window.open('https://t.me/qbitx')">Customer Service</button>
 </div>
 </div></div><div class="nav">
 <button onclick="nav('home')">🏠</button>
 <button onclick="nav('task')">📋</button>
+<button onclick="nav('invite')">👥</button>
+<button onclick="nav('nft')">💎</button>
 <button onclick="nav('wallet')">💳</button>
 </div><script>
-let bal=Number(localStorage.getItem('bal'))||0
-let star=Number(localStorage.getItem('star'))||0
-let used=Number(localStorage.getItem('used'))||0
-let limit=Number(localStorage.getItem('limit'))||50
-let angle=0
+let bal=0,star=0,usdt=0,ton=0,invite=0
+let used=0,lastTap=0,lastSpin=0,limit=50,angle=0
 
-// TELEGRAM
 if(window.Telegram){
 let u=window.Telegram.WebApp.initDataUnsafe.user
-if(u){
-document.getElementById('name').innerText=u.first_name
-if(u.photo_url)document.getElementById('avatar').src=u.photo_url
-}
-}
-
-function save(){
-localStorage.setItem('bal',bal)
-localStorage.setItem('star',star)
-localStorage.setItem('used',used)
-localStorage.setItem('limit',limit)
+if(u){document.getElementById('name').innerText=u.first_name
+if(u.photo_url)document.getElementById('avatar').src=u.photo_url}
 }
 
 function update(){
-val('bal',bal)
-val('tapLeft',limit-used)
-val('w1',bal)
-val('w2',star)
+d('bal',bal)
+d('tapLeft',limit-used)
+d('wbgc',bal)
+d('wstar',star)
+d('wusdt',usdt)
+d('wton',ton)
 }
-
-function val(id,v){document.getElementById(id).innerText=v}
+function d(id,v){document.getElementById(id).innerText=v}
 
 function tap(e){
+if(Date.now()-lastTap>43200000){used=0;lastTap=Date.now()}
 if(used>=limit)return alert('limit habis')
 bal++;used++
 spawn(e.clientX,e.clientY)
-save();update()
+update()
 }
 
 function spawn(x,y){
@@ -124,33 +134,41 @@ setTimeout(()=>el.remove(),1000)
 }
 
 function spin(){
-let w=document.getElementById('wheel')
-let r=360*5+Math.random()*360
-angle+=r
-w.style.transform='rotate('+angle+'deg)'
-
+if(Date.now()-lastSpin<86400000)return alert('1x sehari')
+let rewards=["1⭐","3⭐","5⭐","10⭐","2 BGC","5 BGC","10 BGC","50 BGC","10 BGC","0.5 TON","1 USDT","5 BGC"]
+let i=Math.floor(Math.random()*rewards.length)
+let deg=(360/rewards.length)*i
+let final=360*5+(360-deg)
+angle+=final
+wheel.style.transform='rotate('+angle+'deg)'
 setTimeout(()=>{
-let win=Math.floor(Math.random()*50)+10
-bal+=win
-alert('WIN '+win)
-save();update()
+let r=rewards[i]
+if(r.includes('BGC'))bal+=parseInt(r)
+if(r.includes('⭐'))star+=parseInt(r)
+if(r.includes('USDT'))usdt+=1
+if(r.includes('TON'))ton+=0.5
+alert(r)
+lastSpin=Date.now()
+update()
 },4000)
 }
 
-function boost(c,a){
-if(star<c)return alert('star kurang')
-star-=c
-limit+=a
-save();update()
-}
+function boost(c,a){if(star<c)return alert('kurang');star-=c;limit+=a;update()}
+function ads(x){star+=x;update()}
+function join(){star+=10;update()}
 
-function ads(x){star+=x;save();update()}
+function claimInvite(){if(invite>=50)bal+=130
+else if(invite>=30)bal+=75
+else if(invite>=15)bal+=30
+else if(invite>=5)bal+=10
+else return alert('kurang')
+update()}
 
-function nav(p){
-document.querySelectorAll('#home,#task,#wallet').forEach(e=>e.classList.add('hidden'))
-document.getElementById(p).classList.remove('hidden')
-}
+function convert(){if(bal<100)return alert('min');bal-=100;usdt+=1;update()}
 
+function nav(p){document.querySelectorAll('#home,#task,#invite,#nft,#wallet').forEach(e=>e.classList.add('hidden'));document.getElementById(p).classList.remove('hidden')}
+
+setTimeout(()=>loading.style.display='none',5000)
 update()
 </script></body>
 </html>
