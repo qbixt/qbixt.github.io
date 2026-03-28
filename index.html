@@ -2,205 +2,272 @@
 <html>
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <title>BGC Mini App</title>
 
 <style>
-body{margin:0;background:#0b0f14;color:#fff;font-family:system-ui;overflow:hidden}
-.hidden{display:none}
-.page{position:absolute;inset:0;padding:16px}
-.center{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%}
-.avatar{width:70px;height:70px;border-radius:50%}
-#tapLogo{width:110px;animation:float 2s ease-in-out infinite}
-@keyframes float{50%{transform:translateY(-10px)}}
-.spinBtn{position:absolute;right:20px;top:50%;background:#00e0ff;color:#000;padding:10px;border-radius:12px;font-weight:bold}
-.nav{position:absolute;bottom:0;width:100%;display:flex;justify-content:space-around;background:#111;padding:12px 0}
-.nav div{font-size:13px}
-button{background:#00e0ff;border:none;padding:10px 14px;border-radius:10px;margin:6px;font-weight:bold}
+body{
+ margin:0;
+ font-family:Arial,Helvetica,sans-serif;
+ background:radial-gradient(circle at top,#0b0f18,#05070d);
+ color:#fff;
+ overflow:hidden;
+}
 
-/* spin */
-.spinWrap{height:220px;overflow:hidden;position:relative;background:#101826;border-radius:16px}
-.pointer{position:absolute;left:50%;transform:translateX(-50%);font-size:28px}
-.wheel{display:flex;gap:12px;position:absolute;top:80px;left:0}
-.box{min-width:80px;height:80px;background:#152233;border-radius:12px;display:flex;align-items:center;justify-content:center}
+/* LOADING */
+#loading{
+ position:fixed;inset:0;
+ background:#05070d;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ flex-direction:column;
+ font-size:28px;
+ letter-spacing:4px;
+ z-index:999;
+}
+.loader{
+ margin-top:20px;
+ width:60px;height:60px;
+ border-radius:50%;
+ border:6px solid #111;
+ border-top:6px solid #00e0ff;
+ animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* HEADER */
+.header{
+ position:absolute;top:15px;left:15px;right:15px;
+ display:flex;justify-content:space-between;align-items:center;
+}
+.profile{display:flex;gap:10px;align-items:center;}
+.profile img{width:44px;height:44px;border-radius:50%;}
+.spinBtn{
+ padding:8px 16px;
+ border-radius:20px;
+ background:linear-gradient(45deg,#00e0ff,#a100ff);
+ font-weight:bold;
+}
+
+/* TAP */
+.center{
+ position:absolute;top:52%;left:50%;
+ transform:translate(-50%,-50%);
+ text-align:center;
+}
+#tapLogo{
+ width:140px;
+ animation:float 3s ease-in-out infinite;
+ filter:drop-shadow(0 0 20px #00e0ff);
+}
+#tapLogo:active{transform:scale(.9)}
+@keyframes float{50%{transform:translateY(-12px)}}
+
+.coin{
+ position:absolute;
+ color:#00e0ff;
+ font-weight:bold;
+ animation:fly 1s forwards;
+}
+@keyframes fly{to{transform:translateY(-80px);opacity:0}}
+
+/* NAV */
+.nav{
+ position:absolute;bottom:10px;left:0;right:0;
+ display:flex;justify-content:space-around;
+ font-size:14px;
+}
+.nav div{opacity:.5}
+.nav div.active{opacity:1;color:#00e0ff}
+
+/* PAGE */
+.page{
+ position:fixed;inset:0;
+ background:#0b0f18;
+ display:none;
+ padding:20px;
+ overflow:auto;
+}
+button{
+ width:100%;
+ padding:14px;
+ margin:8px 0;
+ border:none;
+ border-radius:14px;
+ background:linear-gradient(45deg,#00e0ff,#a100ff);
+ color:#fff;font-weight:bold;
+}
+
+/* SPIN */
+.spinWrap{
+ position:relative;
+ width:300px;height:300px;
+ margin:40px auto;
+}
+.pointer{
+ position:absolute;
+ top:-10px;left:50%;
+ transform:translateX(-50%);
+ border-left:18px solid transparent;
+ border-right:18px solid transparent;
+ border-bottom:40px solid #fff;
+ filter:drop-shadow(0 0 10px #00e0ff);
+ z-index:10;
+}
+#wheel{
+ width:100%;height:100%;
+ border-radius:50%;
+ border:8px solid #111;
+ transition:transform 5s cubic-bezier(.17,.67,.33,1);
+}
 </style>
 </head>
-
 <body>
 
-<!-- HOME -->
-<div id="home" class="page">
- <div class="center">
-   <img id="ava" class="avatar"/>
-   <div id="name"></div><br>
-   <img src="logo.png" id="tapLogo" onclick="tap()"/>
-   <div>Tap Left: <span id="tapLeft">50</span></div>
-   <div class="spinBtn" onclick="openSpin()">SPIN</div>
+<!-- LOADING -->
+<div id="loading">
+ BGC LOADING
+ <div class="loader"></div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+ <div class="profile">
+  <img id="pp">
+  <div id="name">Player</div>
  </div>
+ <div class="spinBtn" onclick="openSpin()">SPIN</div>
 </div>
 
-<!-- SPIN -->
-<div id="spin" class="page hidden">
- <div class="spinWrap">
-   <div class="pointer">▼</div>
-   <div class="wheel" id="wheel"></div>
- </div>
- <div style="text-align:center;margin-top:20px">
-   <button onclick="freeSpin()">Free Spin</button><br>
-   <button onclick="paidSpin(50,5)">50⭐ = 5 Spin</button>
-   <button onclick="paidSpin(100,15)">100⭐ = 15 Spin</button>
-   <button onclick="paidSpin(300,50)">300⭐ = 50 Spin</button>
-   <button onclick="paidSpin(500,100)">500⭐ = 100 Spin</button><br>
-   <button onclick="backHome()">Back</button>
- </div>
-</div>
-
-<!-- TASK -->
-<div id="task" class="page hidden">
- <h3>Task</h3>
- <button onclick="join()">Join Channel</button><br>
- <button onclick="ads(5)">10 Ads = 5⭐</button>
- <button onclick="ads(13)">20 Ads = 13⭐</button>
- <button onclick="ads(35)">50 Ads = 35⭐</button>
- <button onclick="ads(90)">100 Ads = 90⭐</button>
-</div>
-
-<!-- INVITE -->
-<div id="invite" class="page hidden">
- <h3>Invite Reward</h3>
- <button onclick="invite(10)">5 Invite = 10 BGC</button>
- <button onclick="invite(30)">15 Invite = 30 BGC</button>
- <button onclick="invite(75)">30 Invite = 75 BGC</button>
- <button onclick="invite(130)">50 Invite = 130 BGC</button>
-</div>
-
-<!-- NFT -->
-<div id="nft" class="page hidden">
- <h3>NFT Market</h3>
- <div>NFT #1 🔥</div>
- <div>NFT #2 💎</div>
-</div>
-
-<!-- WALLET -->
-<div id="wallet" class="page hidden">
- <h3>Wallet</h3>
- BGC: <span id="wbgc">0</span><br>
- STAR: <span id="wstar">0</span><br>
- USDT: <span id="wusdt">0</span><br><br>
-
- <h4>Exchange</h4>
- <button onclick="exchange()">100 BGC → $1.3</button><br>
-
- <h4>Boost Tap (12 jam)</h4>
- <button onclick="boost(100,50)">100⭐ +50 Tap</button>
- <button onclick="boost(300,200)">300⭐ +200 Tap</button>
- <button onclick="boost(500,400)">500⭐ +400 Tap</button>
- <button onclick="boost(1000,1200)">1000⭐ +1200 Tap</button><br><br>
-
- <button onclick="window.open('https://t.me/qbitx')">Customer Service</button>
+<!-- TAP -->
+<div class="center" id="tapArea">
+ <img src="logo.png" id="tapLogo" onclick="tap(event)">
+ <div>Tap Left: <span id="tapLeft">50</span></div>
+ <button onclick="openBoost()">BOOST</button>
 </div>
 
 <!-- NAV -->
 <div class="nav">
- <div onclick="show('home')">Home</div>
- <div onclick="show('task')">Task</div>
- <div onclick="show('invite')">Invite</div>
- <div onclick="show('nft')">NFT</div>
- <div onclick="show('wallet')">Wallet</div>
+ <div class="active">Home</div>
+ <div onclick="openTask()">Task</div>
+ <div onclick="openInvite()">Invite</div>
+ <div onclick="openNFT()">NFT</div>
+ <div onclick="openWallet()">Wallet</div>
+</div>
+
+<!-- SPIN PAGE -->
+<div class="page" id="spinPage">
+ <div class="spinWrap">
+  <div class="pointer"></div>
+  <div id="wheel"></div>
+ </div>
+ <button onclick="spinWheel()">SPIN NOW</button>
+ <button onclick="closeSpin()">BACK</button>
+</div>
+
+<!-- BOOST PAGE -->
+<div class="page" id="boostPage">
+ <h3>Boost 12 Jam</h3>
+ <button onclick="buyBoost(100,50)">100⭐ +50 Tap</button>
+ <button onclick="buyBoost(300,200)">300⭐ +200 Tap</button>
+ <button onclick="buyBoost(500,400)">500⭐ +400 Tap</button>
+ <button onclick="closeBoost()">BACK</button>
+</div>
+
+<!-- WALLET PAGE -->
+<div class="page" id="walletPage">
+ <h3>Wallet</h3>
+ <button>Balance</button>
+ <button>Exchange</button>
+ <button>Market</button>
+ <button>Deposit</button>
+ <button>Withdraw</button>
+ <button onclick="window.open('https://t.me/qbitx')">Customer Service</button>
+ <button onclick="closeWallet()">BACK</button>
+</div>
+
+<!-- TASK -->
+<div class="page" id="taskPage">
+ <h3>Task</h3>
+ <button>Join Community</button>
+ <button>Watch Ads</button>
+ <button onclick="closeTask()">BACK</button>
+</div>
+
+<!-- INVITE -->
+<div class="page" id="invitePage">
+ <h3>Invite</h3>
+ <button>Copy Referral</button>
+ <button onclick="closeInvite()">BACK</button>
+</div>
+
+<!-- NFT -->
+<div class="page" id="nftPage">
+ <h3>NFT Market</h3>
+ <button>NFT #1 🔥</button>
+ <button>NFT #2 💎</button>
+ <button onclick="closeNFT()">BACK</button>
 </div>
 
 <script>
-const tg=window.Telegram.WebApp;tg.expand();
-const u=tg.initDataUnsafe.user||{};
-ava.src=u.photo_url||"https://i.imgur.com/6VBx3io.png";
-name.innerText=u.first_name||"User";
+let tg=window.Telegram.WebApp;
+tg.expand();
 
-// STATE
-let S=JSON.parse(localStorage.getItem("bgc")||`{"bgc":0,"star":0,"tap":50,"lastSpin":0,"boost":0}`);
-function save(){localStorage.setItem("bgc",JSON.stringify(S));update()}
-function update(){
+setTimeout(()=>loading.style.display="none",5000);
+
+name.innerText=tg.initDataUnsafe.user.first_name;
+pp.src=`https://t.me/i/userpic/320/${tg.initDataUnsafe.user.username}.jpg`;
+
+let S={tap:50,lastSpin:0,star:0,lastBoost:0};
+
+function tap(e){
+ if(S.tap<=0)return;
+ S.tap--;
  tapLeft.innerText=S.tap;
- wbgc.innerText=S.bgc;
- wstar.innerText=S.star;
- wusdt.innerText=S.usdt||0;
-}
-update();
 
-// TAP anti spam
-let tapLock=false;
-function tap(){
- if(tapLock||S.tap<=0)return;
- tapLock=true;
- S.tap--;S.bgc++;save();
- setTimeout(()=>tapLock=false,200);
+ let c=document.createElement("div");
+ c.className="coin";
+ c.innerText="+1";
+ c.style.left="60px";
+ c.style.top="40px";
+ tapArea.appendChild(c);
+ setTimeout(()=>c.remove(),1000);
 }
 
-// SPIN
-const rewards=["1⭐","3⭐","5⭐","10⭐","2 BGC","5 BGC","10 BGC","50 BGC","0.5 TON","$1 USDT"];
-const wheel=document.getElementById("wheel");
-for(let i=0;i<40;i++){
- rewards.forEach(r=>{
-  const d=document.createElement("div");
-  d.className="box"; d.innerText=r;
-  wheel.appendChild(d);
- });
+function openSpin(){spinPage.style.display="block"}
+function closeSpin(){spinPage.style.display="none"}
+
+function spinWheel(){
+ if(Date.now()-S.lastSpin<86400000)return alert("Free spin sudah dipakai hari ini");
+ S.lastSpin=Date.now();
+
+ let deg=360*6+Math.random()*360;
+ wheel.style.background="conic-gradient(#00e0ff,#a100ff,#00e0ff,#a100ff,#00e0ff,#a100ff,#00e0ff,#a100ff)";
+ wheel.style.transform=`rotate(-${deg}deg)`;
 }
 
-let spinning=false, spinLeft=0;
+function openBoost(){boostPage.style.display="block"}
+function closeBoost(){boostPage.style.display="none"}
 
-function runSpin(){
- if(spinning||spinLeft<=0)return;
- spinning=true; spinLeft--;
-
- const move=-(Math.random()*3000+3000);
- wheel.style.transition="4s cubic-bezier(.17,.67,.24,1)";
- wheel.style.transform=`translateX(${move}px)`;
-
- setTimeout(()=>{
-  S.star+=5; save();
-  spinning=false;
- },4000);
+function buyBoost(cost,add){
+ if(Date.now()-S.lastBoost<43200000)return alert("Boost cooldown 12 jam");
+ S.tap+=add;
+ S.lastBoost=Date.now();
 }
 
-function freeSpin(){
- if(Date.now()-S.lastSpin<86400000)return alert("Sudah spin hari ini");
- S.lastSpin=Date.now(); spinLeft=1; runSpin();
-}
+function openWallet(){walletPage.style.display="block"}
+function closeWallet(){walletPage.style.display="none"}
 
-function paidSpin(cost,qty){
- if(S.star<cost)return;
- S.star-=cost; spinLeft+=qty; save();
- runSpin();
-}
+function openTask(){taskPage.style.display="block"}
+function closeTask(){taskPage.style.display="none"}
 
-// TASK
-function ads(r){S.star+=r;save()}
-function join(){window.open('https://t.me/yourchannel')}
+function openInvite(){invitePage.style.display="block"}
+function closeInvite(){invitePage.style.display="none"}
 
-// INVITE
-function invite(r){S.bgc+=r;save()}
-
-// BOOST
-function boost(cost,add){
- if(S.star<cost)return;
- S.star-=cost; S.tap+=add; save();
-}
-
-// EXCHANGE
-function exchange(){
- if(S.bgc>=100){
-  S.bgc-=100; S.usdt=(S.usdt||0)+1.3; save();
- }
-}
-
-function openSpin(){show('spin')}
-function backHome(){show('home')}
-function show(id){
- ['home','spin','task','invite','nft','wallet'].forEach(x=>document.getElementById(x).classList.add('hidden'));
- document.getElementById(id).classList.remove('hidden');
-}
+function openNFT(){nftPage.style.display="block"}
+function closeNFT(){nftPage.style.display="none"}
 </script>
 
 </body>
-   </html>
+</html>
