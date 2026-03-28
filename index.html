@@ -153,7 +153,9 @@ text-align:center;
 <!-- TASK -->
 <div id="task" class="hidden">
 <div class="card">
-<h3>📋 Tasks</h3>
+<h3 id="balanceText">Balance</h3>
+<p id="tapText">Tap Left</p>
+<button id="spinText">🎁 Spin Reward</button>
 <button class="btn" onclick="window.open('https://t.me/BGC7COMMUNITY')">
 Join Channel (+10)
 </button>
@@ -200,10 +202,11 @@ Join Channel (+10)
 <div class="coin">USDT <span>$1.00</span></div>
 <div class="coin">TON <span>$5.2 📈</span></div>
 <div class="coin">BNB <span>$580 📈</span></div>
+<div class="coin">SOLANA <span>$68 📈</span></div>
 </div>
 
 <div class="card">
-<p>500 BGC = 1 TON</p>
+<p>800 BGC = 1 TON</p>
 <p style="opacity:0.5;">Withdraw Coming Soon 🚀</p>
 </div>
 
@@ -221,6 +224,9 @@ Join Channel (+10)
 </div>
 
 <script>
+<h3 id="balanceText">Balance</h3>
+<p id="tapText">Tap Left</p>
+<button id="spinText">🎁 Spin Reward</button>
 
 let balance = Number(localStorage.getItem("bal"))||0;
 let used = Number(localStorage.getItem("used"))||0;
@@ -286,15 +292,43 @@ update();
 }
 
 function showPage(p){
-document.querySelectorAll("#home,#task,#invite,#nft,#wallet").forEach(el=>el.classList.add("hidden"));
+document.querySelectorAll("#home,#task,#invite,#nft,#wallet,#profil").forEach(el=>el.classList.add("hidden"));
 document.getElementById(p).classList.remove("hidden");
 }
 
-document.getElementById("username").innerText="User_"+Math.floor(Math.random()*9999);
+document.getElementById("username").innerText = name;
+document.getElementById("balanceText").innerText = lang.balance;
+document.getElementById("tapText").innerText = lang.tap;
+document.getElementById("spinText").innerText = "🎁 " + lang.spin;
 
 update();
+let tg = window.Telegram.WebApp;
 
+// ambil data user
+let userData = tg && tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
+
+// USERNAME
+let name = "Guest";
+if (userData) {
+  name = userData.username ? userData.username : userData.first_name;
+}
+
+// BAHASA
+let userLang = userData && userData.language_code ? userData.language_code : "en";
 </script>
+let text = {
+  en: {
+    balance: "Balance",
+    tap: "Tap Left",
+    spin: "Spin Reward"
+  },
+  id: {
+    balance: "Saldo",
+    tap: "Sisa Tap",
+    spin: "Putar Hadiah"
+  }
+};
 
+let lang = text[userLang] || text["en"];
 </body>
   </html>
