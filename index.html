@@ -11,15 +11,15 @@ body{margin:0;font-family:sans-serif;background:#0B0F1A;color:#fff}
 .header{padding:15px}
 .user{display:flex;align-items:center}
 .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#A855F7);display:flex;align-items:center;justify-content:center}
-.username{margin-left:10px;font-size:14px}
+.avatar img{width:100%;height:100%;border-radius:50%}
+.username{margin-left:10px}
 
 .balance{text-align:center}
-.balance h1{background:linear-gradient(90deg,#3B82F6,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.balance h1{margin:5px 0}
 
 /* TAP */
-.tap-area{display:flex;justify-content:center;margin-top:30px}
-.tap-btn{width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,#A855F7,#3B82F6);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 60px rgba(168,85,247,.7)}
-.tap-btn:active{transform:scale(.9)}
+.tap-area{display:flex;justify-content:center;margin-top:20px}
+.tap-btn{width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,#A855F7,#3B82F6);display:flex;align-items:center;justify-content:center;font-size:22px}
 
 /* ENERGY */
 .energy-box{margin:20px}
@@ -27,23 +27,22 @@ body{margin:0;font-family:sans-serif;background:#0B0F1A;color:#fff}
 .energy-fill{height:100%;background:linear-gradient(90deg,#3B82F6,#A855F7)}
 
 /* MINI MENU */
-.mini-menu{display:flex;justify-content:center;gap:15px}
-.mini-btn{padding:10px 15px;border-radius:20px;background:#1F2937}
+.mini-menu{display:flex;justify-content:center;gap:10px}
+.mini-btn{padding:10px 15px;background:#1F2937;border-radius:15px}
 
 /* PAGE */
 .page{display:none;padding:15px}
-.active-page{display:block}
+.active{display:block}
 
 /* NAV */
 .bottom-nav{position:fixed;bottom:10px;left:10px;right:10px;display:flex;background:#111;border-radius:20px}
-.bottom-nav a{flex:1;text-align:center;color:#aaa;padding:10px;font-size:12px}
-.bottom-nav a.active{color:#A855F7}
+.bottom-nav div{flex:1;text-align:center;padding:10px;color:#aaa}
+.bottom-nav .active{color:#A855F7}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="user">
     <div class="avatar" id="avatar">U</div>
@@ -57,90 +56,71 @@ body{margin:0;font-family:sans-serif;background:#0B0F1A;color:#fff}
 </div>
 
 <!-- HOME -->
-<div id="homePage" class="page active-page">
+<div id="homePage" class="page active">
   <div class="tap-area">
     <div class="tap-btn" onclick="tap()">BGC</div>
   </div>
 
   <div class="energy-box">
-    <div id="energyText">1000 / 1000</div>
+    <div id="energyText"></div>
     <div class="energy-bar"><div id="energyFill" class="energy-fill"></div></div>
   </div>
 
   <div class="mini-menu">
-    <div class="mini-btn" onclick="showPage('boost')">⚡ Boost</div>
-    <div class="mini-btn" onclick="showPage('game')">🎮 Game</div>
+    <div class="mini-btn" onclick="openPage('boostPage')">⚡ Boost</div>
+    <div class="mini-btn" onclick="openPage('gamePage')">🎮 Game</div>
   </div>
 </div>
 
 <!-- GAME -->
 <div id="gamePage" class="page">
-  <h2>🎮 Game</h2>
+  <h2>Game</h2>
+  <div id="checkinBox"></div>
+  <button onclick="claimCheckin()">Claim Daily</button>
 
-  <h3>Daily Check-in</h3>
-  <div id="checkinBox" style="display:flex;gap:10px;overflow:auto"></div>
-  <button onclick="claimCheckin()">Claim</button>
-
-  <h3>🎰 Spin</h3>
+  <br><br>
   <button onclick="spin()">SPIN</button>
   <p id="spinResult"></p>
 </div>
 
 <!-- BOOST -->
 <div id="boostPage" class="page">
-  <h2>⚡ Energy Boost</h2>
-  <button onclick="buyBoost(2500,300)">2500 Energy - 300 BGC</button><br><br>
-  <button onclick="buyBoost(5000,500)">5000 Energy - 500 BGC</button><br><br>
-  <button onclick="buyBoost(12000,1000)">12000 Energy - 1000 BGC</button>
-</div>
-
-<!-- TASK -->
-<div id="taskPage" class="page">
-  <h2>📋 Task</h2>
-  <p>Coming soon...</p>
-</div>
-
-<!-- RANK -->
-<div id="rankPage" class="page">
-  <h2>🏆 Rank</h2>
-  <p>Coming soon...</p>
-</div>
-
-<!-- TEAM -->
-<div id="teamPage" class="page">
-  <h2>👥 Team</h2>
-  <p>Coming soon...</p>
-</div>
-
-<!-- WALLET -->
-<div id="walletPage" class="page">
-  <h2>💰 Wallet</h2>
-  <p>Coming soon...</p>
+  <h2>Boost</h2>
+  <button onclick="buyBoost(2500,300)">2500 - 300 BGC</button><br>
+  <button onclick="buyBoost(5000,500)">5000 - 500 BGC</button><br>
+  <button onclick="buyBoost(12000,1000)">12000 - 1000 BGC</button>
 </div>
 
 <!-- NAV -->
 <div class="bottom-nav">
-  <a class="active" onclick="nav('home')">🏠<br>Home</a>
-  <a onclick="nav('task')">📋<br>Task</a>
-  <a onclick="nav('rank')">🏆<br>Rank</a>
-  <a onclick="nav('team')">👥<br>Team</a>
-  <a onclick="nav('wallet')">💰<br>Wallet</a>
+  <div onclick="nav(this,'homePage')" class="active">🏠</div>
+  <div onclick="nav(this,'gamePage')">🎮</div>
+  <div onclick="nav(this,'boostPage')">⚡</div>
 </div>
 
 <script>
 // TELEGRAM
-let tg=window.Telegram.WebApp;tg.expand();
+let tg=window.Telegram.WebApp;
+tg.expand();
+
+let user=tg.initDataUnsafe.user;
+if(user){
+  document.getElementById("username").innerText="@"+(user.username||user.first_name);
+  if(user.photo_url){
+    document.getElementById("avatar").innerHTML="<img src='"+user.photo_url+"'>";
+  }
+}
 
 // DATA
 let balance=parseInt(localStorage.getItem("balance"))||0;
 let maxEnergy=parseInt(localStorage.getItem("maxEnergy"))||1000;
 let energy=parseInt(localStorage.getItem("energy"))||maxEnergy;
 
-// UPDATE UI
+// UPDATE
 function updateUI(){
-  balanceEl.innerText=balance+" BGC";
-  energyText.innerText=energy+" / "+maxEnergy;
-  energyFill.style.width=(energy/maxEnergy*100)+"%";
+  document.getElementById("balance").innerText=balance+" BGC";
+  document.getElementById("energyText").innerText=energy+" / "+maxEnergy;
+  document.getElementById("energyFill").style.width=(energy/maxEnergy*100)+"%";
 }
 
 // SAVE
@@ -153,23 +133,33 @@ function save(){
 // TAP
 function tap(){
   if(energy<=0)return;
-  balance++;energy--;
-  save();updateUI();
+  balance++;
+  energy--;
+  save();
+  updateUI();
 }
 
 // REGEN
 setInterval(()=>{
-  if(energy<maxEnergy){energy++;save();updateUI();}
+  if(energy<maxEnergy){
+    energy++;
+    save();
+    updateUI();
+  }
 },5000);
 
 // NAV
-function nav(p){
-  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active-page"));
-  document.querySelectorAll(".bottom-nav a").forEach(x=>x.classList.remove("active"));
+function nav(el,page){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".bottom-nav div").forEach(p=>p.classList.remove("active"));
+  document.getElementById(page).classList.add("active");
+  el.classList.add("active");
+}
 
-  document.getElementById(p+"Page").classList.add("active-page");
-
-  event.target.classList.add("active");
+// OPEN PAGE
+function openPage(p){
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  document.getElementById(p).classList.add("active");
 }
 
 // BOOST
@@ -178,25 +168,14 @@ function buyBoost(val,price){
   balance-=price;
   maxEnergy=val;
   energy=val;
-  save();updateUI();
+  save();
+  updateUI();
 }
 
 // CHECKIN
 let rewards=[50,150,200,300,400,450,700];
 let day=parseInt(localStorage.getItem("day"))||0;
 let last=localStorage.getItem("lastCheck")||0;
-
-function renderCheckin(){
-  checkinBox.innerHTML="";
-  rewards.forEach((r,i)=>{
-    let d=document.createElement("div");
-    d.innerText="Day "+(i+1)+"\n"+r;
-    d.style.background=i<day?"green":"#1F2937";
-    d.style.padding="10px";
-    checkinBox.appendChild(d);
-  });
-}
-renderCheckin();
 
 function claimCheckin(){
   let now=Date.now();
@@ -205,11 +184,12 @@ function claimCheckin(){
   day=(day+1)%7;
   localStorage.setItem("day",day);
   localStorage.setItem("lastCheck",now);
-  save();updateUI();renderCheckin();
+  save();
+  updateUI();
 }
 
 // SPIN
-let spinList=["50 Star","5 Star","50 BGC","1000 BGC","0.1 TON","5 TON","10 BGC"];
+let spinList=["50 BGC","1000 BGC","10 BGC","5 Star","50 Star","0.1 TON","5 TON"];
 let lastSpin=localStorage.getItem("spin")||0;
 
 function spin(){
@@ -217,12 +197,15 @@ function spin(){
   if(now-lastSpin<86400000)return alert("Already spin");
 
   let r=spinList[Math.floor(Math.random()*spinList.length)];
-  spinResult.innerText="You got "+r;
+  document.getElementById("spinResult").innerText="You got "+r;
 
-  if(r.includes("BGC")) balance+=parseInt(r);
+  if(r.includes("BGC")){
+    balance+=parseInt(r);
+  }
 
   localStorage.setItem("spin",now);
-  save();updateUI();
+  save();
+  updateUI();
 }
 
 // INIT
