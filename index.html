@@ -59,20 +59,19 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* TAP */
+/* TAP AREA */
 .tap-area {
   display: flex;
   justify-content: center;
   margin-top: 40px;
-  overflow: hidden;
+  position: relative;
 }
 
+/* BUTTON */
 .tap-btn {
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  position: relative;
-
   background: radial-gradient(circle at 50% 40%, #A855F7, #3B82F6);
 
   display: flex;
@@ -82,12 +81,10 @@ body {
   cursor: pointer;
 
   box-shadow:
-    0 0 60px rgba(168,85,247,0.6),
-    inset 0 0 25px rgba(255,255,255,0.15);
+    0 0 70px rgba(168,85,247,0.7),
+    inset 0 0 30px rgba(255,255,255,0.15);
 
   transition: transform 0.08s ease;
-
-  overflow: visible; /* FIX UTAMA */
 }
 
 /* PRESS */
@@ -106,15 +103,14 @@ body {
   100% { transform: scale(1); }
 }
 
-/* +1 EFFECT */
+/* +1 EFFECT (DI LUAR BUTTON) */
 .plus {
   position: absolute;
   color: #EC4899;
   font-weight: bold;
-  animation: floatUp 0.8s ease-out forwards;
-
   pointer-events: none;
   user-select: none;
+  animation: floatUp 0.8s ease-out forwards;
 }
 
 @keyframes floatUp {
@@ -159,7 +155,7 @@ body {
   border-radius: 20px;
   background: rgba(20,25,40,0.85);
   backdrop-filter: blur(10px);
-  box-shadow: 0 0 20px rgba(168,85,247,0.2);
+  box-shadow: 0 0 25px rgba(168,85,247,0.25);
 }
 
 .bottom-nav a {
@@ -198,7 +194,7 @@ body {
 </div>
 
 <!-- TAP -->
-<div class="tap-area">
+<div class="tap-area" id="tapArea">
   <div class="tap-btn" id="tapBtn" onclick="tap()">BGC</div>
 </div>
 
@@ -254,16 +250,21 @@ function tap() {
   updateUI();
 
   let btn = document.getElementById("tapBtn");
+  let area = document.getElementById("tapArea");
 
+  // bounce
   btn.classList.add("bounce");
   setTimeout(() => btn.classList.remove("bounce"), 180);
 
+  // +1 keluar (FIX NO KOTAK)
   let plus = document.createElement("div");
   plus.innerText = "+1";
   plus.className = "plus";
-  plus.style.left = Math.random() * 140 + "px";
-  plus.style.top = "100px";
-  btn.appendChild(plus);
+
+  plus.style.left = (btn.offsetLeft + 80 + Math.random() * 60) + "px";
+  plus.style.top = (btn.offsetTop + 100) + "px";
+
+  area.appendChild(plus);
 
   setTimeout(() => plus.remove(), 800);
 }
