@@ -5,65 +5,87 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-body{
-  margin:0;
-  font-family:sans-serif;
-  background:#0B0F1A;
-  color:#fff;
-}
+body{margin:0;font-family:sans-serif;background:#0B0F1A;color:#fff}
 
 /* HEADER */
 .header{padding:15px}
 .user{display:flex;align-items:center}
-.avatar{
-  width:42px;height:42px;border-radius:50%;
-  background:#333;display:flex;align-items:center;justify-content:center;
-  overflow:hidden;
-}
+.avatar{width:40px;height:40px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .avatar img{width:100%;height:100%}
 .username{margin-left:10px}
-
-.balance{text-align:center}
+.balance{text-align:center;font-size:22px}
 
 /* PAGE */
 .page{display:none;padding:15px}
-.page.active{display:block}
+.active{display:block}
 
 /* TAP */
 .tap{display:flex;justify-content:center;margin-top:20px}
 .tap-btn{
-  width:200px;height:200px;border-radius:50%;
-  background:radial-gradient(circle,#A855F7,#3B82F6);
+  width:180px;height:180px;border-radius:50%;
+  background:radial-gradient(circle,#6D28D9,#3B82F6);
   display:flex;align-items:center;justify-content:center;
-  font-size:22px;
-  position:relative;
-  box-shadow:0 0 40px rgba(168,85,247,0.6);
+  font-size:20px;position:relative;
 }
-.tap-btn:active{transform:scale(.9)}
 
-/* TAP EFFECT */
+/* EFFECT */
 .particle{
   position:absolute;
-  font-size:14px;
-  font-weight:bold;
-  pointer-events:none;
-  animation:floatUp 0.8s ease-out forwards;
+  animation:up .8s forwards;
 }
-@keyframes floatUp{
-  0%{opacity:1;transform:translateY(0) scale(1)}
-  100%{opacity:0;transform:translateY(-50px) scale(1.3)}
+@keyframes up{
+  from{opacity:1;transform:translateY(0)}
+  to{opacity:0;transform:translateY(-40px)}
 }
 
 /* ENERGY */
-.energy{margin:20px}
-.bar{height:8px;background:#1F2937;border-radius:10px}
-.fill{height:100%;background:linear-gradient(90deg,#3B82F6,#A855F7)}
+.bar{height:6px;background:#222;border-radius:10px;margin-top:10px}
+.fill{height:100%;background:#A855F7}
 
 /* MINI */
-.mini{display:flex;justify-content:center;gap:15px}
+.mini{display:flex;justify-content:center;gap:10px;margin-top:15px}
 .mini button{
-  padding:10px 20px;border:none;border-radius:20px;
-  background:#1F2937;color:#fff;cursor:pointer
+  background:#1F2937;border:none;color:#fff;
+  padding:10px 15px;border-radius:15px
+}
+
+/* CARD */
+.card{
+  background:#1F2937;
+  padding:15px;
+  border-radius:15px;
+  margin-top:15px;
+}
+
+/* CHECKIN */
+.checkin{display:flex;gap:6px;overflow:auto}
+.checkin div{
+  min-width:60px;
+  background:#111;
+  padding:8px;
+  border-radius:10px;
+  text-align:center;
+}
+
+/* SPIN */
+.spin-box{
+  text-align:center;
+}
+#wheel{
+  width:160px;height:160px;
+  border-radius:50%;
+  margin:auto;
+  border:5px solid #333;
+  transition:transform 2s ease-out;
+  background:conic-gradient(
+    #3B82F6 0 51deg,
+    #A855F7 51 102deg,
+    #EC4899 102 153deg,
+    #22C55E 153 204deg,
+    #F59E0B 204 255deg,
+    #EF4444 255 306deg,
+    #6366F1 306 360deg
+  );
 }
 
 /* NAV */
@@ -73,112 +95,97 @@ body{
 }
 .nav div{
   flex:1;text-align:center;padding:10px;
-  color:#aaa;cursor:pointer
+  color:#aaa;font-size:12px
 }
 .nav .active{color:#A855F7}
-
-/* CHECKIN */
-.checkin{display:flex;gap:8px;overflow-x:auto}
-.checkin div{
-  min-width:70px;padding:10px;border-radius:10px;text-align:center;background:#111;
-}
-
-/* WHEEL */
-#wheel{
-  width:180px;height:180px;border-radius:50%;
-  margin:auto;border:6px solid #1F2937;
-  transition:transform 2s ease-out;
-  background:conic-gradient(
-    #3B82F6 0deg 51deg,
-    #A855F7 51deg 102deg,
-    #EC4899 102deg 153deg,
-    #22C55E 153deg 204deg,
-    #F59E0B 204deg 255deg,
-    #EF4444 255deg 306deg,
-    #6366F1 306deg 360deg
-  );
-}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="user">
     <div class="avatar" id="avatar">U</div>
-    <div class="username" id="username">@Guest</div>
+    <div id="username">@Guest</div>
   </div>
-
-  <div class="balance">
-    <div>Balance</div>
-    <h2 id="balance">0 BGC</h2>
-  </div>
+  <div class="balance" id="balance">0 BGC</div>
 </div>
 
 <!-- HOME -->
 <div id="home" class="page active">
-
   <div class="tap">
-    <div class="tap-btn" id="tapBtn" onclick="tap()">BGC</div>
+    <div class="tap-btn" onclick="tap()" id="tapBtn">BGC</div>
   </div>
 
-  <div class="energy">
-    <div id="energyText"></div>
-    <div class="bar"><div id="energyFill" class="fill"></div></div>
-  </div>
+  <div id="energyText"></div>
+  <div class="bar"><div id="energyFill" class="fill"></div></div>
 
   <div class="mini">
-    <button onclick="goPage('boost')">⚡ Boost</button>
-    <button onclick="goPage('game')">🎮 Game</button>
+    <button onclick="openPage('boost')">⚡ Boost</button>
+    <button onclick="openPage('game')">🎮 Game</button>
   </div>
-
 </div>
 
 <!-- BOOST -->
 <div id="boost" class="page">
-  <button onclick="goPage('home')">⬅ Back</button>
-  <h3>⚡ Energy Boost</h3>
+  <button onclick="openPage('home')">⬅ Back</button>
 
-  <button onclick="buyBoost(2500,300)">2500 Energy - 300 BGC</button><br><br>
-  <button onclick="buyBoost(5000,500)">5000 Energy - 500 BGC</button><br><br>
-  <button onclick="buyBoost(12000,1000)">12000 Energy - 1000 BGC</button>
+  <div class="card">
+    <h3>⚡ Energy Boost</h3>
+    <button onclick="buy(2500,300)">2500 - 300</button><br><br>
+    <button onclick="buy(5000,500)">5000 - 500</button><br><br>
+    <button onclick="buy(12000,1000)">12000 - 1000</button>
+  </div>
 </div>
 
 <!-- GAME -->
 <div id="game" class="page">
-  <button onclick="goPage('home')">⬅ Back</button>
+  <button onclick="openPage('home')">⬅ Back</button>
 
-  <h3>Daily Check-in</h3>
-  <div id="checkinBox" class="checkin"></div>
-  <button onclick="claimCheckin()">Claim</button>
+  <div class="card">
+    <h3>Daily Check-in</h3>
+    <div id="checkin" class="checkin"></div>
+    <button onclick="claim()">Claim</button>
+  </div>
 
-  <h3 style="margin-top:20px;">🎰 Spin</h3>
-
-  <div id="wheel"></div>
-
-  <div style="text-align:center;margin-top:10px">
-    <button onclick="spinWheel()">SPIN</button>
+  <div class="card spin-box">
+    <h3>🎰 Spin</h3>
+    <div id="wheel"></div>
+    <button onclick="spin()">SPIN</button>
     <p id="spinText"></p>
   </div>
 </div>
 
+<!-- TASK -->
+<div id="task" class="page"><h3>📋 Task</h3></div>
+
+<!-- TEAM / INVITE -->
+<div id="team" class="page">
+  <h3>👥 Invite</h3>
+  <p>Share your link</p>
+</div>
+
+<!-- RANK -->
+<div id="rank" class="page"><h3>🏆 Rank</h3></div>
+
+<!-- WALLET -->
+<div id="wallet" class="page"><h3>💰 Wallet</h3></div>
+
 <!-- NAV -->
 <div class="nav">
   <div class="active" onclick="nav(this,'home')">🏠</div>
-  <div onclick="nav(this,'boost')">⚡</div>
-  <div onclick="nav(this,'game')">🎮</div>
+  <div onclick="nav(this,'task')">📋</div>
+  <div onclick="nav(this,'rank')">🏆</div>
+  <div onclick="nav(this,'team')">👥</div>
+  <div onclick="nav(this,'wallet')">💰</div>
 </div>
 
 <script>
-// TELEGRAM
+// USER
 setTimeout(()=>{
   let u=window.Telegram.WebApp.initDataUnsafe?.user;
   if(u){
     username.innerText="@"+(u.username||u.first_name);
-    if(u.photo_url){
-      avatar.innerHTML="<img src='"+u.photo_url+"'>";
-    }
   }
 },500);
 
@@ -189,9 +196,9 @@ let maxEnergy=+localStorage.maxEnergy||1000;
 
 // UPDATE
 function update(){
-  document.getElementById("balance").innerText=balance+" BGC";
-  document.getElementById("energyText").innerText=energy+" / "+maxEnergy;
-  document.getElementById("energyFill").style.width=(energy/maxEnergy*100)+"%";
+  balanceEl.innerText=balance+" BGC";
+  energyText.innerText=energy+"/"+maxEnergy;
+  energyFill.style.width=(energy/maxEnergy*100)+"%";
 }
 update();
 
@@ -202,55 +209,34 @@ function save(){
   localStorage.maxEnergy=maxEnergy;
 }
 
-// TAP + EFFECT
+// TAP
 function tap(){
   if(energy<=0)return;
-
-  balance++;
-  energy--;
-
-  save();
-  update();
-
-  let btn=document.getElementById("tapBtn");
+  balance++;energy--;
+  save();update();
 
   let p=document.createElement("div");
   p.className="particle";
-
-  let effects=["+1","✨","⚡"];
-  p.innerText=effects[Math.floor(Math.random()*effects.length)];
-
-  p.style.left=(Math.random()*120+40)+"px";
+  p.innerText="+1";
+  p.style.left=Math.random()*120+"px";
   p.style.top="80px";
-
-  p.style.color=["#A855F7","#3B82F6","#EC4899"][Math.floor(Math.random()*3)];
-
-  btn.appendChild(p);
+  tapBtn.appendChild(p);
   setTimeout(()=>p.remove(),800);
 }
 
-// REGEN
-setInterval(()=>{
-  if(energy<maxEnergy){
-    energy++;
-    save();
-    update();
-  }
-},5000);
-
-// NAV
-function goPage(id){
+// PAGE
+function openPage(id){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 function nav(el,id){
   document.querySelectorAll(".nav div").forEach(x=>x.classList.remove("active"));
   el.classList.add("active");
-  goPage(id);
+  openPage(id);
 }
 
 // BOOST
-function buyBoost(val,price){
+function buy(val,price){
   if(balance<price)return alert("Not enough");
   balance-=price;
   maxEnergy=val;
@@ -261,66 +247,31 @@ function buyBoost(val,price){
 // DAILY
 let rewards=[50,150,200,300,400,450,700];
 let day=+localStorage.day||0;
-let lastCheck=+localStorage.lastCheck||0;
 
-function renderCheckin(){
-  checkinBox.innerHTML="";
+function renderCheck(){
+  checkin.innerHTML="";
   rewards.forEach((r,i)=>{
     let d=document.createElement("div");
-    d.innerText=i<day?"✓":"D"+(i+1)+"\n"+r;
-    if(i<day)d.style.background="#16a34a";
-    checkinBox.appendChild(d);
+    d.innerText=i<day?"✓":"D"+(i+1);
+    checkin.appendChild(d);
   });
 }
-renderCheckin();
+renderCheck();
 
-function claimCheckin(){
-  let now=Date.now();
-  if(now-lastCheck<86400000)return alert("Already claimed");
+function claim(){
   balance+=rewards[day];
   day=(day+1)%7;
   localStorage.day=day;
-  localStorage.lastCheck=now;
-  save();update();renderCheckin();
+  save();update();renderCheck();
 }
 
 // SPIN
-let spinning=false;
-let rewardsWheel=[
-  {text:"50 BGC",value:50},
-  {text:"5 BGC",value:5},
-  {text:"50 BGC",value:50},
-  {text:"1000 BGC",value:1000},
-  {text:"0.1 TON",value:0},
-  {text:"5 TON",value:0},
-  {text:"10 BGC",value:10}
-];
-
-function spinWheel(){
-  let now=Date.now();
-  let lastSpin=+localStorage.lastSpin||0;
-
-  if(now-lastSpin<86400000)return alert("1x per day");
-  if(spinning)return;
-
-  spinning=true;
-
-  let wheel=document.getElementById("wheel");
-  let i=Math.floor(Math.random()*rewardsWheel.length);
-
-  let deg=360*5+(i*(360/rewardsWheel.length));
-  wheel.style.transform="rotate(-"+deg+"deg)";
-
-  setTimeout(()=>{
-    let r=rewardsWheel[i];
-    spinText.innerText="You got "+r.text;
-    if(r.value>0)balance+=r.value;
-
-    localStorage.lastSpin=Date.now();
-    save();update();
-
-    spinning=false;
-  },2000);
+function spin(){
+  let i=Math.floor(Math.random()*7);
+  let r=[50,10,1000,5,20,100,15][i];
+  balance+=r;
+  spinText.innerText="You got "+r;
+  save();update();
 }
 </script>
 
