@@ -1,245 +1,57 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BGC Empire</title><style>
-:root {
-  --neon-blue: #00F0FF;
-  --neon-purple: #8A2BE2;
-  --neon-pink: #FF00FF;
-}
-
-/* BODY */
+<style>
 body {
   margin: 0;
-  background: radial-gradient(circle at top, #0A0A1F, #050510);
   font-family: Arial;
-  color: white;
 }
 
-/* LOADING */
-#loading {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.logo-img {
-  width: 100px;
-  border-radius: 20px;
-  box-shadow: 0 0 30px var(--neon-blue);
+.content {
+  padding: 20px;
+  padding-bottom: 70px;
 }
 
-/* CONTAINER */
-.container {
-  padding-bottom: 80px;
-}
-
-/* HEADER */
-.header {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-}
-.avatar img {
-  width: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-/* BALANCE */
-.balance {
-  text-align: center;
-}
-.balance-amount {
-  font-size: 28px;
-  color: var(--neon-blue);
-  text-shadow: 0 0 10px var(--neon-blue);
-}
-
-/* TAP */
-#tapArea {
-  display: flex;
-  justify-content: center;
-  margin: 25px 0;
-}
-#tapLogo {
-  width: 130px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: 0.15s;
-  box-shadow: 0 0 20px var(--neon-blue);
-  animation: float 2s infinite alternate;
-}
-@keyframes float {
-  from { transform: translateY(0); }
-  to { transform: translateY(-10px); }
-}
-#tapArea:active #tapLogo {
-  transform: scale(0.85);
-}
-
-/* CARD */
-.card {
-  background: #111133;
-  margin: 10px;
-  padding: 15px;
-  border-radius: 15px;
-  box-shadow: 0 0 15px rgba(0,240,255,0.2);
-}
-
-/* BUTTON */
-.neon-btn {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
-  color: white;
-  font-weight: bold;
-}
-
-/* NAV */
 .bottom-nav {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background: #0F0F2E;
+  height: 60px;
+  background: #fff;
   display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
+  border-top: 1px solid #ccc;
 }
-.nav-item {
+
+.bottom-nav a {
+  flex: 1;
   text-align: center;
+  text-decoration: none;
+  color: black;
   font-size: 12px;
-  color: #888;
-}
-.nav-item.active {
-  color: var(--neon-blue);
+  padding-top: 5px;
 }
 
-.hidden { display:none; }
-
-/* SPIN */
-#wheel {
-  margin: auto;
-  display: block;
-  border-radius: 50%;
-  box-shadow: 0 0 30px var(--neon-blue);
+.bottom-nav a.active {
+  color: blue;
 }
-</style></head><body><!--  LOADING --><div id="loading">
-  <img src="logo.png" class="logo-img">
-  <h2>BGC Loading...</h2>
-</div><!-- APP --><div id="app" class="container hidden">  <!-- HOME -->  <div id="home">
-    <div class="header">
-      <div class="avatar">
-        <img src="logo.png">
-      </div>
-      <div>
-        <p>Halo Player</p>
-        <b>BGC Empire</b>
-      </div>
-    </div><div class="balance">
-  <p>Balance</p>
-  <div id="balance" class="balance-amount">0 BGC</div>
+</style>
+</head>
+
+<body>
+
+<div class="content">
+  <h2>Home</h2>
+  <p>Isi halaman di sini</p>
 </div>
 
-<!-- TAP -->
-<div id="tapArea" onclick="tap()">
-  <img src="logo.png" id="tapLogo">
+<div class="bottom-nav">
+  <a href="#">Home</a>
+  <a href="#">Task</a>
+  <a href="#">Leaderboard</a>
+  <a href="#">Referral</a>
+  <a href="#">Withdraw</a>
 </div>
 
-<p id="taps">50 / 50</p>
-
-<!-- SPIN -->
-<div class="card">
-  <button class="neon-btn" onclick="openSpin()">SPIN</button>
-</div>
-
-<div id="spinBox" class="hidden">
-  <canvas id="wheel" width="250" height="250"></canvas>
-  <button class="neon-btn" onclick="spin()">PUTAR</button>
-</div>
-
-  </div></div><!-- NAV --><div class="bottom-nav">
-  <div class="nav-item active">🏠<br>Home</div>
-</div><script>
-let balance = 0;
-let taps = 50;
-
-setTimeout(()=>{
-  loading.style.display="none";
-  app.classList.remove("hidden");
-},2000);
-
-function tap(){
-  if(taps>0){
-    balance++;
-    taps--;
-    update();
-    effect("+1");
-  } else alert("Habis!");
-}
-
-function update(){
-  balanceEl.innerText = balance + " BGC";
-  tapsEl.innerText = taps + " / 50";
-}
-
-const balanceEl = document.getElementById("balance");
-const tapsEl = document.getElementById("taps");
-
-/* EFFECT */
-function effect(text){
-  let e=document.createElement("div");
-  e.innerText=text;
-  e.style.position="absolute";
-  e.style.left="50%";
-  e.style.top="60%";
-  e.style.color="#00F0FF";
-  document.body.appendChild(e);
-  setTimeout(()=>e.remove(),800);
-}
-
-/* SPIN */
-const canvas = document.getElementById("wheel");
-const ctx = canvas.getContext("2d");
-
-const seg = ["5","10","20","0","3","1"];
-const colors = ["#00F0FF","#8A2BE2","#FF00FF","#222","#00FFFF","#9400D3"];
-
-function draw(){
-  let arc = 2*Math.PI/seg.length;
-  seg.forEach((s,i)=>{
-    ctx.beginPath();
-    ctx.fillStyle = colors[i];
-    ctx.moveTo(125,125);
-    ctx.arc(125,125,125,i*arc,(i+1)*arc);
-    ctx.fill();
-    ctx.fillStyle="#fff";
-    ctx.fillText(s,110,130);
-  });
-}
-draw();
-
-function openSpin(){
-  spinBox.classList.toggle("hidden");
-}
-
-function spin(){
-  let r = Math.floor(Math.random()*seg.length);
-  let val = parseInt(seg[r]);
-
-  setTimeout(()=>{
-    if(val>0){
-      balance+=val;
-      alert("Dapat "+val+" BGC");
-    } else {
-      alert("Zonk 😅");
-    }
-    update();
-  },1000);
-}
-</script></body>
+</body>
 </html>
