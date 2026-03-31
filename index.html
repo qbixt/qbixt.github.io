@@ -17,8 +17,7 @@ body{
 .user{display:flex;align-items:center}
 .avatar{
   width:42px;height:42px;border-radius:50%;
-  background:#333;
-  display:flex;align-items:center;justify-content:center;
+  background:#333;display:flex;align-items:center;justify-content:center;
   overflow:hidden;
 }
 .avatar img{width:100%;height:100%}
@@ -37,43 +36,68 @@ body{
   background:radial-gradient(circle,#A855F7,#3B82F6);
   display:flex;align-items:center;justify-content:center;
   font-size:22px;
+  position:relative;
+  box-shadow:0 0 40px rgba(168,85,247,0.6);
+}
+.tap-btn:active{transform:scale(.9)}
+
+/* TAP EFFECT */
+.particle{
+  position:absolute;
+  font-size:14px;
+  font-weight:bold;
+  pointer-events:none;
+  animation:floatUp 0.8s ease-out forwards;
+}
+@keyframes floatUp{
+  0%{opacity:1;transform:translateY(0) scale(1)}
+  100%{opacity:0;transform:translateY(-50px) scale(1.3)}
 }
 
 /* ENERGY */
 .energy{margin:20px}
-.bar{height:8px;background:#1F2937;border-radius:10px;overflow:hidden}
+.bar{height:8px;background:#1F2937;border-radius:10px}
 .fill{height:100%;background:linear-gradient(90deg,#3B82F6,#A855F7)}
 
-/* MINI MENU */
-.mini{
-  display:flex;
-  justify-content:center;
-  gap:15px;
-}
+/* MINI */
+.mini{display:flex;justify-content:center;gap:15px}
 .mini button{
-  padding:10px 20px;
-  border:none;
-  border-radius:20px;
-  background:#1F2937;
-  color:white;
-  cursor:pointer;
+  padding:10px 20px;border:none;border-radius:20px;
+  background:#1F2937;color:#fff;cursor:pointer
 }
 
 /* NAV */
 .nav{
-  position:fixed;
-  bottom:0;left:0;right:0;
-  display:flex;
-  background:#111;
+  position:fixed;bottom:0;left:0;right:0;
+  display:flex;background:#111
 }
 .nav div{
-  flex:1;
-  text-align:center;
-  padding:10px;
-  color:#aaa;
-  cursor:pointer;
+  flex:1;text-align:center;padding:10px;
+  color:#aaa;cursor:pointer
 }
 .nav .active{color:#A855F7}
+
+/* CHECKIN */
+.checkin{display:flex;gap:8px;overflow-x:auto}
+.checkin div{
+  min-width:70px;padding:10px;border-radius:10px;text-align:center;background:#111;
+}
+
+/* WHEEL */
+#wheel{
+  width:180px;height:180px;border-radius:50%;
+  margin:auto;border:6px solid #1F2937;
+  transition:transform 2s ease-out;
+  background:conic-gradient(
+    #3B82F6 0deg 51deg,
+    #A855F7 51deg 102deg,
+    #EC4899 102deg 153deg,
+    #22C55E 153deg 204deg,
+    #F59E0B 204deg 255deg,
+    #EF4444 255deg 306deg,
+    #6366F1 306deg 360deg
+  );
+}
 </style>
 </head>
 
@@ -96,7 +120,7 @@ body{
 <div id="home" class="page active">
 
   <div class="tap">
-    <div class="tap-btn" onclick="tap()">BGC</div>
+    <div class="tap-btn" id="tapBtn" onclick="tap()">BGC</div>
   </div>
 
   <div class="energy">
@@ -124,64 +148,52 @@ body{
 <!-- GAME -->
 <div id="game" class="page">
   <button onclick="goPage('home')">⬅ Back</button>
-  <h3>🎮 Game</h3>
 
-  <h4>Daily Check-in</h4>
-  <button onclick="claim()">Claim</button>
+  <h3>Daily Check-in</h3>
+  <div id="checkinBox" class="checkin"></div>
+  <button onclick="claimCheckin()">Claim</button>
 
-  <h4>Spin</h4>
-  <button onclick="spin()">Spin</button>
-  <p id="spinText"></p>
+  <h3 style="margin-top:20px;">🎰 Spin</h3>
+
+  <div id="wheel"></div>
+
+  <div style="text-align:center;margin-top:10px">
+    <button onclick="spinWheel()">SPIN</button>
+    <p id="spinText"></p>
+  </div>
 </div>
-
-<!-- TASK -->
-<div id="task" class="page"><h3>Task</h3></div>
-
-<!-- RANK -->
-<div id="rank" class="page"><h3>Rank</h3></div>
-
-<!-- TEAM -->
-<div id="team" class="page"><h3>Team</h3></div>
-
-<!-- WALLET -->
-<div id="wallet" class="page"><h3>Wallet</h3></div>
 
 <!-- NAV -->
 <div class="nav">
-  <div class="active" onclick="navClick(this,'home')">🏠</div>
-  <div onclick="navClick(this,'task')">📋</div>
-  <div onclick="navClick(this,'rank')">🏆</div>
-  <div onclick="navClick(this,'team')">👥</div>
-  <div onclick="navClick(this,'wallet')">💰</div>
+  <div class="active" onclick="nav(this,'home')">🏠</div>
+  <div onclick="nav(this,'boost')">⚡</div>
+  <div onclick="nav(this,'game')">🎮</div>
 </div>
 
 <script>
-// TELEGRAM USER FIX
+// TELEGRAM
 setTimeout(()=>{
-  let tg=window.Telegram.WebApp;
-  let u=tg.initDataUnsafe?.user;
-
+  let u=window.Telegram.WebApp.initDataUnsafe?.user;
   if(u){
-    document.getElementById("username").innerText="@"+(u.username||u.first_name);
+    username.innerText="@"+(u.username||u.first_name);
     if(u.photo_url){
-      document.getElementById("avatar").innerHTML="<img src='"+u.photo_url+"'>";
-    }else{
-      document.getElementById("avatar").innerText=(u.first_name||"U")[0];
+      avatar.innerHTML="<img src='"+u.photo_url+"'>";
     }
   }
 },500);
 
 // DATA
-let balance=parseInt(localStorage.balance)||0;
-let maxEnergy=parseInt(localStorage.maxEnergy)||1000;
-let energy=parseInt(localStorage.energy)||maxEnergy;
+let balance=+localStorage.balance||0;
+let energy=+localStorage.energy||1000;
+let maxEnergy=+localStorage.maxEnergy||1000;
 
-// UPDATE UI
-function updateUI(){
+// UPDATE
+function update(){
   document.getElementById("balance").innerText=balance+" BGC";
   document.getElementById("energyText").innerText=energy+" / "+maxEnergy;
   document.getElementById("energyFill").style.width=(energy/maxEnergy*100)+"%";
 }
+update();
 
 // SAVE
 function save(){
@@ -190,13 +202,31 @@ function save(){
   localStorage.maxEnergy=maxEnergy;
 }
 
-// TAP
+// TAP + EFFECT
 function tap(){
   if(energy<=0)return;
+
   balance++;
   energy--;
+
   save();
-  updateUI();
+  update();
+
+  let btn=document.getElementById("tapBtn");
+
+  let p=document.createElement("div");
+  p.className="particle";
+
+  let effects=["+1","✨","⚡"];
+  p.innerText=effects[Math.floor(Math.random()*effects.length)];
+
+  p.style.left=(Math.random()*120+40)+"px";
+  p.style.top="80px";
+
+  p.style.color=["#A855F7","#3B82F6","#EC4899"][Math.floor(Math.random()*3)];
+
+  btn.appendChild(p);
+  setTimeout(()=>p.remove(),800);
 }
 
 // REGEN
@@ -204,17 +234,16 @@ setInterval(()=>{
   if(energy<maxEnergy){
     energy++;
     save();
-    updateUI();
+    update();
   }
 },5000);
 
-// NAVIGATION
+// NAV
 function goPage(id){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
-
-function navClick(el,id){
+function nav(el,id){
   document.querySelectorAll(".nav div").forEach(x=>x.classList.remove("active"));
   el.classList.add("active");
   goPage(id);
@@ -222,56 +251,77 @@ function navClick(el,id){
 
 // BOOST
 function buyBoost(val,price){
-  if(balance<price){
-    alert("Not enough BGC");
-    return;
-  }
+  if(balance<price)return alert("Not enough");
   balance-=price;
   maxEnergy=val;
   energy=val;
-  save();
-  updateUI();
+  save();update();
 }
 
 // DAILY
-let lastClaim=parseInt(localStorage.lastClaim)||0;
+let rewards=[50,150,200,300,400,450,700];
+let day=+localStorage.day||0;
+let lastCheck=+localStorage.lastCheck||0;
 
-function claim(){
+function renderCheckin(){
+  checkinBox.innerHTML="";
+  rewards.forEach((r,i)=>{
+    let d=document.createElement("div");
+    d.innerText=i<day?"✓":"D"+(i+1)+"\n"+r;
+    if(i<day)d.style.background="#16a34a";
+    checkinBox.appendChild(d);
+  });
+}
+renderCheckin();
+
+function claimCheckin(){
   let now=Date.now();
-  if(now-lastClaim<86400000){
-    alert("Already claimed today");
-    return;
-  }
-
-  balance+=100;
-  localStorage.lastClaim=now;
-  save();
-  updateUI();
+  if(now-lastCheck<86400000)return alert("Already claimed");
+  balance+=rewards[day];
+  day=(day+1)%7;
+  localStorage.day=day;
+  localStorage.lastCheck=now;
+  save();update();renderCheckin();
 }
 
 // SPIN
-let lastSpin=parseInt(localStorage.lastSpin)||0;
+let spinning=false;
+let rewardsWheel=[
+  {text:"50 BGC",value:50},
+  {text:"5 BGC",value:5},
+  {text:"50 BGC",value:50},
+  {text:"1000 BGC",value:1000},
+  {text:"0.1 TON",value:0},
+  {text:"5 TON",value:0},
+  {text:"10 BGC",value:10}
+];
 
-function spin(){
+function spinWheel(){
   let now=Date.now();
-  if(now-lastSpin<86400000){
-    alert("Already spin today");
-    return;
-  }
+  let lastSpin=+localStorage.lastSpin||0;
 
-  let rewards=[50,10,1000,5];
-  let r=rewards[Math.floor(Math.random()*rewards.length)];
+  if(now-lastSpin<86400000)return alert("1x per day");
+  if(spinning)return;
 
-  balance+=r;
-  document.getElementById("spinText").innerText="You got "+r+" BGC";
+  spinning=true;
 
-  localStorage.lastSpin=now;
-  save();
-  updateUI();
+  let wheel=document.getElementById("wheel");
+  let i=Math.floor(Math.random()*rewardsWheel.length);
+
+  let deg=360*5+(i*(360/rewardsWheel.length));
+  wheel.style.transform="rotate(-"+deg+"deg)";
+
+  setTimeout(()=>{
+    let r=rewardsWheel[i];
+    spinText.innerText="You got "+r.text;
+    if(r.value>0)balance+=r.value;
+
+    localStorage.lastSpin=Date.now();
+    save();update();
+
+    spinning=false;
+  },2000);
 }
-
-// INIT
-updateUI();
 </script>
 
 </body>
