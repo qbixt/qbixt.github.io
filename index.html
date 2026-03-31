@@ -28,6 +28,10 @@ body {
   border-radius: 50%;
   overflow: hidden;
   background: linear-gradient(135deg, #3B82F6, #A855F7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 }
 
 .avatar img {
@@ -60,41 +64,45 @@ body {
   display: flex;
   justify-content: center;
   margin-top: 40px;
+  overflow: hidden;
 }
 
 .tap-btn {
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  overflow: hidden;
-  background: radial-gradient(circle, #A855F7, #3B82F6);
+  position: relative;
+
+  background: radial-gradient(circle at 50% 40%, #A855F7, #3B82F6);
+
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 26px;
   cursor: pointer;
-  position: relative;
 
   box-shadow:
-    0 0 40px rgba(168,85,247,0.6),
-    inset 0 0 20px rgba(255,255,255,0.2);
+    0 0 60px rgba(168,85,247,0.6),
+    inset 0 0 25px rgba(255,255,255,0.15);
 
   transition: transform 0.08s ease;
+
+  overflow: visible; /* FIX UTAMA */
 }
 
 /* PRESS */
 .tap-btn:active {
-  transform: scale(0.93);
+  transform: scale(0.92);
 }
 
 /* BOUNCE */
 .tap-btn.bounce {
-  animation: bounce 0.2s;
+  animation: bounce 0.18s;
 }
 
 @keyframes bounce {
   0% { transform: scale(1); }
-  50% { transform: scale(1.12); }
+  50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }
 
@@ -104,11 +112,14 @@ body {
   color: #EC4899;
   font-weight: bold;
   animation: floatUp 0.8s ease-out forwards;
+
+  pointer-events: none;
+  user-select: none;
 }
 
 @keyframes floatUp {
   0% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-50px); }
+  100% { opacity: 0; transform: translateY(-60px); }
 }
 
 /* ENERGY */
@@ -176,7 +187,7 @@ body {
 <!-- HEADER -->
 <div class="header">
   <div class="user">
-    <div class="avatar" id="avatar"></div>
+    <div class="avatar" id="avatar">U</div>
     <div class="username" id="username">@Guest</div>
   </div>
 
@@ -219,7 +230,6 @@ if (user) {
   document.getElementById("username").innerText =
     "@" + (user.username || user.first_name);
 
-  // Avatar
   if (user.photo_url) {
     document.getElementById("avatar").innerHTML =
       "<img src='" + user.photo_url + "'>";
@@ -246,13 +256,13 @@ function tap() {
   let btn = document.getElementById("tapBtn");
 
   btn.classList.add("bounce");
-  setTimeout(() => btn.classList.remove("bounce"), 200);
+  setTimeout(() => btn.classList.remove("bounce"), 180);
 
   let plus = document.createElement("div");
   plus.innerText = "+1";
   plus.className = "plus";
   plus.style.left = Math.random() * 140 + "px";
-  plus.style.top = "90px";
+  plus.style.top = "100px";
   btn.appendChild(plus);
 
   setTimeout(() => plus.remove(), 800);
