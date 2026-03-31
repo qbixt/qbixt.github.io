@@ -5,176 +5,39 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #0B0F1A;
-  color: white;
-}
+body{margin:0;font-family:sans-serif;background:#0B0F1A;color:#fff}
 
 /* HEADER */
-.header {
-  padding: 15px;
-}
+.header{padding:15px}
+.user{display:flex;align-items:center}
+.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#A855F7);display:flex;align-items:center;justify-content:center}
+.username{margin-left:10px;font-size:14px}
 
-.user {
-  display: flex;
-  align-items: center;
-}
+.balance{text-align:center}
+.balance h1{background:linear-gradient(90deg,#3B82F6,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-.avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: linear-gradient(135deg, #3B82F6, #A855F7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-}
-
-.avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.username {
-  margin-left: 10px;
-  font-size: 14px;
-}
-
-/* BALANCE */
-.balance {
-  text-align: center;
-  margin-top: 10px;
-}
-
-.balance h1 {
-  margin: 5px 0;
-  font-size: 30px;
-  background: linear-gradient(90deg, #3B82F6, #A855F7, #EC4899);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* TAP AREA */
-.tap-area {
-  display: flex;
-  justify-content: center;
-  margin-top: 40px;
-  position: relative;
-}
-
-/* BUTTON */
-.tap-btn {
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 50% 40%, #A855F7, #3B82F6);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 26px;
-  cursor: pointer;
-
-  box-shadow:
-    0 0 70px rgba(168,85,247,0.7),
-    inset 0 0 30px rgba(255,255,255,0.15);
-
-  transition: transform 0.08s ease;
-}
-
-/* PRESS */
-.tap-btn:active {
-  transform: scale(0.92);
-}
-
-/* BOUNCE */
-.tap-btn.bounce {
-  animation: bounce 0.18s;
-}
-
-@keyframes bounce {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
-/* +1 EFFECT (DI LUAR BUTTON) */
-.plus {
-  position: absolute;
-  color: #EC4899;
-  font-weight: bold;
-  pointer-events: none;
-  user-select: none;
-  animation: floatUp 0.8s ease-out forwards;
-}
-
-@keyframes floatUp {
-  0% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-60px); }
-}
+/* TAP */
+.tap-area{display:flex;justify-content:center;margin-top:30px}
+.tap-btn{width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,#A855F7,#3B82F6);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 60px rgba(168,85,247,.7)}
+.tap-btn:active{transform:scale(.9)}
 
 /* ENERGY */
-.energy-box {
-  margin: 30px 20px 90px;
-}
+.energy-box{margin:20px}
+.energy-bar{height:8px;background:#1F2937;border-radius:10px;overflow:hidden}
+.energy-fill{height:100%;background:linear-gradient(90deg,#3B82F6,#A855F7)}
 
-.energy-text {
-  font-size: 13px;
-  color: #9CA3AF;
-  margin-bottom: 5px;
-}
+/* MINI MENU */
+.mini-menu{display:flex;justify-content:center;gap:15px}
+.mini-btn{padding:10px 15px;border-radius:20px;background:#1F2937}
 
-.energy-bar {
-  width: 100%;
-  height: 8px;
-  background: #1F2937;
-  border-radius: 10px;
-  overflow: hidden;
-}
+/* PAGE */
+.page{display:none;padding:15px}
+.active-page{display:block}
 
-.energy-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #3B82F6, #A855F7);
-  width: 100%;
-  transition: 0.3s;
-}
-
-/* BOTTOM NAV */
-.bottom-nav {
-  position: fixed;
-  bottom: 15px;
-  left: 10px;
-  right: 10px;
-  height: 65px;
-  display: flex;
-  border-radius: 20px;
-  background: rgba(20,25,40,0.85);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 25px rgba(168,85,247,0.25);
-}
-
-.bottom-nav a {
-  flex: 1;
-  text-align: center;
-  text-decoration: none;
-  color: #9CA3AF;
-  font-size: 12px;
-  padding-top: 8px;
-}
-
-.bottom-nav a.active {
-  color: #A855F7;
-}
-
-.icon {
-  display: block;
-  font-size: 20px;
-}
+/* NAV */
+.bottom-nav{position:fixed;bottom:10px;left:10px;right:10px;display:flex;background:#111;border-radius:20px}
+.bottom-nav a{flex:1;text-align:center;color:#aaa;padding:10px;font-size:12px}
+.bottom-nav a.active{color:#A855F7}
 </style>
 </head>
 
@@ -193,99 +56,177 @@ body {
   </div>
 </div>
 
-<!-- TAP -->
-<div class="tap-area" id="tapArea">
-  <div class="tap-btn" id="tapBtn" onclick="tap()">BGC</div>
+<!-- HOME -->
+<div id="homePage" class="page active-page">
+  <div class="tap-area">
+    <div class="tap-btn" onclick="tap()">BGC</div>
+  </div>
+
+  <div class="energy-box">
+    <div id="energyText">1000 / 1000</div>
+    <div class="energy-bar"><div id="energyFill" class="energy-fill"></div></div>
+  </div>
+
+  <div class="mini-menu">
+    <div class="mini-btn" onclick="showPage('boost')">⚡ Boost</div>
+    <div class="mini-btn" onclick="showPage('game')">🎮 Game</div>
+  </div>
 </div>
 
-<!-- ENERGY -->
-<div class="energy-box">
-  <div class="energy-text" id="energyText">Energy: 1000 / 1000</div>
-  <div class="energy-bar">
-    <div class="energy-fill" id="energyFill"></div>
-  </div>
+<!-- GAME -->
+<div id="gamePage" class="page">
+  <h2>🎮 Game</h2>
+
+  <h3>Daily Check-in</h3>
+  <div id="checkinBox" style="display:flex;gap:10px;overflow:auto"></div>
+  <button onclick="claimCheckin()">Claim</button>
+
+  <h3>🎰 Spin</h3>
+  <button onclick="spin()">SPIN</button>
+  <p id="spinResult"></p>
+</div>
+
+<!-- BOOST -->
+<div id="boostPage" class="page">
+  <h2>⚡ Energy Boost</h2>
+  <button onclick="buyBoost(2500,300)">2500 Energy - 300 BGC</button><br><br>
+  <button onclick="buyBoost(5000,500)">5000 Energy - 500 BGC</button><br><br>
+  <button onclick="buyBoost(12000,1000)">12000 Energy - 1000 BGC</button>
+</div>
+
+<!-- TASK -->
+<div id="taskPage" class="page">
+  <h2>📋 Task</h2>
+  <p>Coming soon...</p>
+</div>
+
+<!-- RANK -->
+<div id="rankPage" class="page">
+  <h2>🏆 Rank</h2>
+  <p>Coming soon...</p>
+</div>
+
+<!-- TEAM -->
+<div id="teamPage" class="page">
+  <h2>👥 Team</h2>
+  <p>Coming soon...</p>
+</div>
+
+<!-- WALLET -->
+<div id="walletPage" class="page">
+  <h2>💰 Wallet</h2>
+  <p>Coming soon...</p>
 </div>
 
 <!-- NAV -->
 <div class="bottom-nav">
-  <a class="active"><span class="icon">🏠</span>Home</a>
-  <a><span class="icon">📋</span>Task</a>
-  <a><span class="icon">🏆</span>Rank</a>
-  <a><span class="icon">👥</span>Team</a>
-  <a><span class="icon">💰</span>Wallet</a>
+  <a class="active" onclick="nav('home')">🏠<br>Home</a>
+  <a onclick="nav('task')">📋<br>Task</a>
+  <a onclick="nav('rank')">🏆<br>Rank</a>
+  <a onclick="nav('team')">👥<br>Team</a>
+  <a onclick="nav('wallet')">💰<br>Wallet</a>
 </div>
 
 <script>
-let tg = window.Telegram.WebApp;
-tg.expand();
+// TELEGRAM
+let tg=window.Telegram.WebApp;tg.expand();
 
-// USER
-let user = tg.initDataUnsafe.user;
+// DATA
+let balance=parseInt(localStorage.getItem("balance"))||0;
+let maxEnergy=parseInt(localStorage.getItem("maxEnergy"))||1000;
+let energy=parseInt(localStorage.getItem("energy"))||maxEnergy;
 
-if (user) {
-  document.getElementById("username").innerText =
-    "@" + (user.username || user.first_name);
-
-  if (user.photo_url) {
-    document.getElementById("avatar").innerHTML =
-      "<img src='" + user.photo_url + "'>";
-  } else {
-    document.getElementById("avatar").innerText =
-      user.first_name.charAt(0);
-  }
+// UPDATE UI
+function updateUI(){
+  balanceEl.innerText=balance+" BGC";
+  energyText.innerText=energy+" / "+maxEnergy;
+  energyFill.style.width=(energy/maxEnergy*100)+"%";
 }
 
-// SYSTEM
-let balance = 0;
-let energy = 1000;
-let maxEnergy = 1000;
+// SAVE
+function save(){
+  localStorage.setItem("balance",balance);
+  localStorage.setItem("energy",energy);
+  localStorage.setItem("maxEnergy",maxEnergy);
+}
 
 // TAP
-function tap() {
-  if (energy <= 0) return;
-
-  balance++;
-  energy--;
-
-  updateUI();
-
-  let btn = document.getElementById("tapBtn");
-  let area = document.getElementById("tapArea");
-
-  // bounce
-  btn.classList.add("bounce");
-  setTimeout(() => btn.classList.remove("bounce"), 180);
-
-  // +1 keluar (FIX NO KOTAK)
-  let plus = document.createElement("div");
-  plus.innerText = "+1";
-  plus.className = "plus";
-
-  plus.style.left = (btn.offsetLeft + 80 + Math.random() * 60) + "px";
-  plus.style.top = (btn.offsetTop + 100) + "px";
-
-  area.appendChild(plus);
-
-  setTimeout(() => plus.remove(), 800);
-}
-
-// UPDATE
-function updateUI() {
-  document.getElementById("balance").innerText = balance + " BGC";
-  document.getElementById("energyText").innerText =
-    "Energy: " + energy + " / " + maxEnergy;
-
-  let percent = (energy / maxEnergy) * 100;
-  document.getElementById("energyFill").style.width = percent + "%";
+function tap(){
+  if(energy<=0)return;
+  balance++;energy--;
+  save();updateUI();
 }
 
 // REGEN
-setInterval(() => {
-  if (energy < maxEnergy) {
-    energy++;
-    updateUI();
-  }
-}, 1500);
+setInterval(()=>{
+  if(energy<maxEnergy){energy++;save();updateUI();}
+},5000);
+
+// NAV
+function nav(p){
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active-page"));
+  document.querySelectorAll(".bottom-nav a").forEach(x=>x.classList.remove("active"));
+
+  document.getElementById(p+"Page").classList.add("active-page");
+
+  event.target.classList.add("active");
+}
+
+// BOOST
+function buyBoost(val,price){
+  if(balance<price)return alert("Not enough BGC");
+  balance-=price;
+  maxEnergy=val;
+  energy=val;
+  save();updateUI();
+}
+
+// CHECKIN
+let rewards=[50,150,200,300,400,450,700];
+let day=parseInt(localStorage.getItem("day"))||0;
+let last=localStorage.getItem("lastCheck")||0;
+
+function renderCheckin(){
+  checkinBox.innerHTML="";
+  rewards.forEach((r,i)=>{
+    let d=document.createElement("div");
+    d.innerText="Day "+(i+1)+"\n"+r;
+    d.style.background=i<day?"green":"#1F2937";
+    d.style.padding="10px";
+    checkinBox.appendChild(d);
+  });
+}
+renderCheckin();
+
+function claimCheckin(){
+  let now=Date.now();
+  if(now-last<86400000)return alert("Already claimed");
+  balance+=rewards[day];
+  day=(day+1)%7;
+  localStorage.setItem("day",day);
+  localStorage.setItem("lastCheck",now);
+  save();updateUI();renderCheckin();
+}
+
+// SPIN
+let spinList=["50 Star","5 Star","50 BGC","1000 BGC","0.1 TON","5 TON","10 BGC"];
+let lastSpin=localStorage.getItem("spin")||0;
+
+function spin(){
+  let now=Date.now();
+  if(now-lastSpin<86400000)return alert("Already spin");
+
+  let r=spinList[Math.floor(Math.random()*spinList.length)];
+  spinResult.innerText="You got "+r;
+
+  if(r.includes("BGC")) balance+=parseInt(r);
+
+  localStorage.setItem("spin",now);
+  save();updateUI();
+}
+
+// INIT
+updateUI();
 </script>
 
 </body>
