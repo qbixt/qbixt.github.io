@@ -7,176 +7,140 @@
 <style>
 body{
   margin:0;
-  font-family:-apple-system, BlinkMacSystemFont, sans-serif;
-  background:#0A0F1C;
+  font-family:sans-serif;
+  background:linear-gradient(180deg,#0B0F1A,#111827);
   color:#fff;
 }
 
 /* HEADER */
-.header{
-  padding:15px;
-}
-.user{
-  display:flex;
-  align-items:center;
-}
+.header{padding:15px}
+.user{display:flex;align-items:center}
 .avatar{
-  width:40px;height:40px;
-  border-radius:50%;
-  background:#1C2333;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,#3B82F6,#A855F7);
 }
-.avatar img{width:100%}
-.username{margin-left:10px;color:#9CA3AF;font-size:13px}
+.username{margin-left:10px;font-size:14px}
 
-.balance{
-  text-align:center;
-  margin-top:10px;
-}
+.balance{text-align:center}
 .balance h1{
-  margin:0;
+  margin:5px 0;
   font-size:28px;
-  letter-spacing:1px;
+  background:linear-gradient(90deg,#3B82F6,#A855F7);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
-/* PAGE */
-.page{display:none;padding:15px}
-.active{display:block}
-
-/* TAP BUTTON */
+/* TAP */
 .tap{
   display:flex;
   justify-content:center;
-  margin-top:25px;
+  margin-top:30px;
 }
 .tap-btn{
-  width:180px;height:180px;
+  width:200px;height:200px;
   border-radius:50%;
-  background:#111827;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
-  border:2px solid #1F2937;
-  box-shadow:0 0 30px rgba(0,0,0,0.5);
+  background:radial-gradient(circle,#A855F7,#3B82F6);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
   position:relative;
-  transition:.1s;
+
+  box-shadow:
+    0 0 40px rgba(168,85,247,0.5),
+    inset 0 0 20px rgba(255,255,255,0.2);
+
+  transition:transform .1s;
 }
-.tap-btn:active{
-  transform:scale(.95);
-}
+.tap-btn:active{transform:scale(.9)}
 
 /* TAP EFFECT */
 .particle{
   position:absolute;
-  font-size:13px;
-  color:#A855F7;
-  animation:float .7s forwards;
+  font-weight:bold;
+  animation:up .8s forwards;
 }
-@keyframes float{
+@keyframes up{
   from{opacity:1;transform:translateY(0)}
-  to{opacity:0;transform:translateY(-40px)}
+  to{opacity:0;transform:translateY(-60px)}
 }
 
 /* ENERGY */
-.energy{
-  margin-top:20px;
-}
-.energy-text{
-  font-size:12px;
-  color:#6B7280;
-}
+.energy{margin:20px}
 .bar{
-  height:6px;
+  height:8px;
   background:#1F2937;
   border-radius:10px;
-  margin-top:5px;
 }
 .fill{
   height:100%;
-  background:#6366F1;
-  border-radius:10px;
+  background:linear-gradient(90deg,#3B82F6,#A855F7);
 }
 
-/* MINI BUTTON */
+/* MINI */
 .mini{
   display:flex;
-  gap:10px;
-  margin-top:20px;
+  justify-content:center;
+  gap:15px;
 }
 .mini button{
-  flex:1;
-  padding:12px;
+  padding:10px 18px;
   border:none;
-  border-radius:12px;
-  background:#111827;
-  color:#E5E7EB;
-  font-size:13px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.05);
+  color:white;
+  backdrop-filter:blur(10px);
 }
 
 /* CARD */
 .card{
-  background:#111827;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
   padding:15px;
   border-radius:15px;
   margin-top:15px;
 }
 
 /* CHECKIN */
-.checkin{
-  display:flex;
-  gap:6px;
-  overflow:auto;
-}
+.checkin{display:flex;gap:8px;overflow:auto}
 .checkin div{
-  min-width:55px;
-  padding:8px;
-  background:#1F2937;
+  min-width:60px;
+  padding:10px;
   border-radius:10px;
-  font-size:11px;
+  text-align:center;
+  background:#111;
 }
 
 /* SPIN */
 #wheel{
-  width:140px;height:140px;
+  width:160px;height:160px;
   border-radius:50%;
   margin:auto;
-  background:#1F2937;
-  border:3px solid #374151;
-}
-.spin-btn{
-  margin-top:10px;
-  padding:10px;
-  width:100%;
-  border:none;
-  border-radius:10px;
-  background:#6366F1;
-  color:white;
+  border:5px solid rgba(255,255,255,0.1);
+  transition:transform 2s ease-out;
+  background:conic-gradient(
+    #3B82F6 0 51deg,
+    #A855F7 51 102deg,
+    #EC4899 102 153deg,
+    #22C55E 153 204deg,
+    #F59E0B 204 255deg,
+    #EF4444 255 306deg,
+    #6366F1 306 360deg
+  );
 }
 
 /* NAV */
 .nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
+  position:fixed;bottom:0;left:0;right:0;
   display:flex;
-  background:#0F172A;
-  border-top:1px solid #1F2937;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(10px);
 }
 .nav div{
   flex:1;
   text-align:center;
   padding:10px;
-  font-size:12px;
-  color:#6B7280;
+  color:#aaa;
 }
-.nav .active{
-  color:#6366F1;
-}
+.nav .active{color:#A855F7}
 </style>
 </head>
 
@@ -184,155 +148,64 @@ body{
 
 <div class="header">
   <div class="user">
-    <div class="avatar" id="avatar">U</div>
-    <div id="username">@Guest</div>
+    <div class="avatar"></div>
+    <div class="username">@Player</div>
   </div>
 
   <div class="balance">
-    <h1 id="balance">0</h1>
-    <div style="font-size:12px;color:#6B7280">BGC</div>
+    <div>Balance</div>
+    <h1 id="balance">0 BGC</h1>
   </div>
 </div>
 
-<!-- HOME -->
-<div id="home" class="page active">
-
-  <div class="tap">
-    <div class="tap-btn" onclick="tap()" id="tapBtn">TAP</div>
-  </div>
-
-  <div class="energy">
-    <div class="energy-text" id="energyText"></div>
-    <div class="bar"><div id="energyFill" class="fill"></div></div>
-  </div>
-
-  <div class="mini">
-    <button onclick="openPage('boost')">Boost</button>
-    <button onclick="openPage('game')">Game</button>
-  </div>
-
+<div class="tap">
+  <div class="tap-btn" id="tapBtn" onclick="tap()">BGC</div>
 </div>
 
-<!-- BOOST -->
-<div id="boost" class="page">
-  <button onclick="openPage('home')">← Back</button>
-
-  <div class="card">
-    <b>Energy Upgrade</b><br><br>
-    <button onclick="buy(2500,300)">2500 Energy</button><br><br>
-    <button onclick="buy(5000,500)">5000 Energy</button><br><br>
-    <button onclick="buy(12000,1000)">12000 Energy</button>
-  </div>
+<div class="energy">
+  <div id="energyText"></div>
+  <div class="bar"><div id="energyFill" class="fill"></div></div>
 </div>
 
-<!-- GAME -->
-<div id="game" class="page">
-  <button onclick="openPage('home')">← Back</button>
-
-  <div class="card">
-    <b>Daily Check-in</b>
-    <div id="checkin" class="checkin"></div>
-    <button onclick="claim()">Claim</button>
-  </div>
-
-  <div class="card">
-    <b>Spin</b>
-    <div id="wheel"></div>
-    <button class="spin-btn" onclick="spin()">Spin</button>
-    <div id="spinText"></div>
-  </div>
-</div>
-
-<!-- NAV -->
-<div class="nav">
-  <div class="active" onclick="nav(this,'home')">Home</div>
-  <div onclick="nav(this,'boost')">Boost</div>
-  <div onclick="nav(this,'game')">Game</div>
+<div class="mini">
+  <button onclick="alert('Boost page')">⚡ Boost</button>
+  <button onclick="alert('Game page')">🎮 Game</button>
 </div>
 
 <script>
-// DATA
-let balance=+localStorage.balance||0;
-let energy=+localStorage.energy||1000;
-let maxEnergy=+localStorage.maxEnergy||1000;
+let balance=0;
+let energy=1000;
+let maxEnergy=1000;
 
 function update(){
-  balanceEl.innerText=balance;
+  balanceEl.innerText=balance+" BGC";
   energyText.innerText=energy+" / "+maxEnergy;
   energyFill.style.width=(energy/maxEnergy*100)+"%";
 }
 update();
 
-function save(){
-  localStorage.balance=balance;
-  localStorage.energy=energy;
-  localStorage.maxEnergy=maxEnergy;
-}
-
-// TAP
 function tap(){
   if(energy<=0)return;
-  balance++;energy--;
-  save();update();
+
+  balance++;
+  energy--;
+  update();
+
+  let btn=document.getElementById("tapBtn");
+
+  btn.style.transform="scale(0.9)";
+  setTimeout(()=>btn.style.transform="scale(1)",100);
 
   let p=document.createElement("div");
   p.className="particle";
   p.innerText="+1";
-  p.style.left=Math.random()*100+"px";
+  p.style.left=Math.random()*120+"px";
   p.style.top="80px";
-  tapBtn.appendChild(p);
-  setTimeout(()=>p.remove(),700);
-}
 
-// NAV
-function openPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-function nav(el,id){
-  document.querySelectorAll(".nav div").forEach(x=>x.classList.remove("active"));
-  el.classList.add("active");
-  openPage(id);
-}
-
-// BOOST
-function buy(val,price){
-  if(balance<price)return alert("Not enough");
-  balance-=price;
-  maxEnergy=val;
-  energy=val;
-  save();update();
-}
-
-// DAILY
-let rewards=[50,150,200,300,400,450,700];
-let day=+localStorage.day||0;
-
-function render(){
-  checkin.innerHTML="";
-  rewards.forEach((r,i)=>{
-    let d=document.createElement("div");
-    d.innerText=i<day?"✓":"D"+(i+1);
-    checkin.appendChild(d);
-  });
-}
-render();
-
-function claim(){
-  balance+=rewards[day];
-  day=(day+1)%7;
-  localStorage.day=day;
-  save();update();render();
-}
-
-// SPIN
-function spin(){
-  let r=[10,50,100,500][Math.floor(Math.random()*4)];
-  balance+=r;
-  spinText.innerText="+"+r;
-  save();update();
+  btn.appendChild(p);
+  setTimeout(()=>p.remove(),800);
 }
 </script>
 
 </body>
-  </html>
+</html>
