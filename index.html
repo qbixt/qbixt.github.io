@@ -26,11 +26,14 @@ body {
   width: 42px;
   height: 42px;
   border-radius: 50%;
+  overflow: hidden;
   background: linear-gradient(135deg, #3B82F6, #A855F7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .username {
@@ -52,7 +55,7 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* TAP AREA */
+/* TAP */
 .tap-area {
   display: flex;
   justify-content: center;
@@ -60,23 +63,28 @@ body {
 }
 
 .tap-btn {
-  width: 210px;
-  height: 210px;
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
+  overflow: hidden;
   background: radial-gradient(circle, #A855F7, #3B82F6);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 26px;
   cursor: pointer;
-  box-shadow: 0 0 50px rgba(168,85,247,0.7);
-  transition: 0.1s;
   position: relative;
+
+  box-shadow:
+    0 0 40px rgba(168,85,247,0.6),
+    inset 0 0 20px rgba(255,255,255,0.2);
+
+  transition: transform 0.08s ease;
 }
 
-/* PRESS EFFECT */
+/* PRESS */
 .tap-btn:active {
-  transform: scale(0.9);
+  transform: scale(0.93);
 }
 
 /* BOUNCE */
@@ -86,11 +94,11 @@ body {
 
 @keyframes bounce {
   0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
+  50% { transform: scale(1.12); }
   100% { transform: scale(1); }
 }
 
-/* +1 FLOAT */
+/* +1 EFFECT */
 .plus {
   position: absolute;
   color: #EC4899;
@@ -105,7 +113,7 @@ body {
 
 /* ENERGY */
 .energy-box {
-  margin: 30px 20px;
+  margin: 30px 20px 90px;
 }
 
 .energy-text {
@@ -114,7 +122,6 @@ body {
   margin-bottom: 5px;
 }
 
-/* BAR */
 .energy-bar {
   width: 100%;
   height: 8px;
@@ -129,15 +136,48 @@ body {
   width: 100%;
   transition: 0.3s;
 }
+
+/* BOTTOM NAV */
+.bottom-nav {
+  position: fixed;
+  bottom: 15px;
+  left: 10px;
+  right: 10px;
+  height: 65px;
+  display: flex;
+  border-radius: 20px;
+  background: rgba(20,25,40,0.85);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(168,85,247,0.2);
+}
+
+.bottom-nav a {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  color: #9CA3AF;
+  font-size: 12px;
+  padding-top: 8px;
+}
+
+.bottom-nav a.active {
+  color: #A855F7;
+}
+
+.icon {
+  display: block;
+  font-size: 20px;
+}
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
 <div class="header">
   <div class="user">
-    <div class="avatar" id="avatar">U</div>
-    <div class="username" id="username">Loading...</div>
+    <div class="avatar" id="avatar"></div>
+    <div class="username" id="username">@Guest</div>
   </div>
 
   <div class="balance">
@@ -146,17 +186,26 @@ body {
   </div>
 </div>
 
+<!-- TAP -->
 <div class="tap-area">
-  <div class="tap-btn" id="tapBtn" onclick="tap()">
-    BGC
-  </div>
+  <div class="tap-btn" id="tapBtn" onclick="tap()">BGC</div>
 </div>
 
+<!-- ENERGY -->
 <div class="energy-box">
   <div class="energy-text" id="energyText">Energy: 1000 / 1000</div>
   <div class="energy-bar">
     <div class="energy-fill" id="energyFill"></div>
   </div>
+</div>
+
+<!-- NAV -->
+<div class="bottom-nav">
+  <a class="active"><span class="icon">🏠</span>Home</a>
+  <a><span class="icon">📋</span>Task</a>
+  <a><span class="icon">🏆</span>Rank</a>
+  <a><span class="icon">👥</span>Team</a>
+  <a><span class="icon">💰</span>Wallet</a>
 </div>
 
 <script>
@@ -170,8 +219,14 @@ if (user) {
   document.getElementById("username").innerText =
     "@" + (user.username || user.first_name);
 
-  document.getElementById("avatar").innerText =
-    user.first_name.charAt(0);
+  // Avatar
+  if (user.photo_url) {
+    document.getElementById("avatar").innerHTML =
+      "<img src='" + user.photo_url + "'>";
+  } else {
+    document.getElementById("avatar").innerText =
+      user.first_name.charAt(0);
+  }
 }
 
 // SYSTEM
@@ -188,12 +243,11 @@ function tap() {
 
   updateUI();
 
-  // Bounce
   let btn = document.getElementById("tapBtn");
+
   btn.classList.add("bounce");
   setTimeout(() => btn.classList.remove("bounce"), 200);
 
-  // +1 efek
   let plus = document.createElement("div");
   plus.innerText = "+1";
   plus.className = "plus";
@@ -204,7 +258,7 @@ function tap() {
   setTimeout(() => plus.remove(), 800);
 }
 
-// UPDATE UI
+// UPDATE
 function updateUI() {
   document.getElementById("balance").innerText = balance + " BGC";
   document.getElementById("energyText").innerText =
@@ -214,7 +268,7 @@ function updateUI() {
   document.getElementById("energyFill").style.width = percent + "%";
 }
 
-// ENERGY REGEN
+// REGEN
 setInterval(() => {
   if (energy < maxEnergy) {
     energy++;
