@@ -3,66 +3,68 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mini App Pro</title>
+<title>Mini App Premium</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 body {
   margin: 0;
-  font-family: sans-serif;
-  background: radial-gradient(circle at top, #0a1a2f, #000);
+  font-family: Arial;
+  background: radial-gradient(circle at top, #071a2d, #000);
   color: white;
 }
 
 /* HEADER */
 .header {
   padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .profile {
   display: flex;
-  align-items: center;
   gap: 10px;
+  align-items: center;
 }
 
 .profile img {
-  width: 45px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  border: 2px solid #f5c542;
+  border: 2px solid gold;
 }
 
-/* PAGE */
-.page {
-  display: none;
-  text-align: center;
-  padding-bottom: 80px;
-}
-.active {
-  display: block;
-}
+.username { font-weight: bold; }
+.userid { font-size: 12px; color: #aaa; }
 
-/* BALANCE */
-.balance {
-  font-size: 26px;
-  font-weight: bold;
-  color: #f5c542;
-  margin-top: 10px;
+.balanceBox {
+  color: gold;
+  font-size: 20px;
 }
 
 /* CIRCLE */
+.circleWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 .circle {
   width: 260px;
   height: 260px;
-  margin: 30px auto;
   border-radius: 50%;
-  background: conic-gradient(#f5c542 0deg, #1a2a40 0deg);
-  box-shadow: 0 0 25px rgba(245,197,66,0.5);
+  background: conic-gradient(gold 0deg, #1a2a40 0deg);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.3s;
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 20px rgba(255,200,0,0.4); }
+  to { box-shadow: 0 0 45px rgba(255,200,0,0.9); }
 }
 
 .inner {
@@ -76,32 +78,32 @@ body {
 }
 
 #timer {
-  font-size: 42px;
+  font-size: 48px;
+  color: gold;
   font-weight: bold;
-  color: #f5c542;
 }
 
 #earn {
   color: #aaa;
 }
 
-/* BUTTON */
-button {
-  padding: 12px 20px;
-  margin: 10px;
-  border-radius: 15px;
+/* BOOST */
+.boostBtn {
+  display: block;
+  margin: 25px auto;
+  padding: 14px 30px;
+  border-radius: 20px;
   border: none;
-  background: linear-gradient(45deg, #f5c542, #ffb300);
-  color: black;
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+  color: white;
+  font-size: 16px;
   font-weight: bold;
-  box-shadow: 0 0 10px rgba(255,200,0,0.6);
+  box-shadow: 0 0 20px rgba(0,150,255,0.7);
+  transition: 0.2s;
 }
 
-/* BOOST */
-.boost {
-  background: linear-gradient(45deg, #00c3ff, #0077ff);
-  color: white;
-  box-shadow: 0 0 15px rgba(0,150,255,0.7);
+.boostBtn:active {
+  transform: scale(0.9);
 }
 
 /* MENU */
@@ -109,74 +111,63 @@ button {
   position: fixed;
   bottom: 0;
   width: 100%;
+  background: #071a2d;
   display: flex;
   justify-content: space-around;
-  background: #081522;
-  padding: 12px;
-  border-top: 1px solid #222;
+  padding: 12px 0;
 }
 
-.menu div {
-  color: #888;
+.menuItem {
+  color: #777;
+  font-size: 12px;
+  text-align: center;
+  transition: 0.2s;
 }
 
-.menu .activeTab {
-  color: #f5c542;
+.menuItem.active {
+  color: gold;
+  transform: scale(1.1);
+}
+
+.menuItem span {
+  display: block;
+  font-size: 18px;
 }
 </style>
 
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="profile">
     <img id="avatar" src="https://i.pravatar.cc/100">
     <div>
-      <div id="name">User</div>
-      <div id="userid">ID: -</div>
+      <div class="username" id="username">User</div>
+      <div class="userid" id="userid">ID: -</div>
     </div>
+  </div>
+
+  <div class="balanceBox">
+    ⭐ <span id="saldo">0.00000</span>
   </div>
 </div>
 
-<!-- HOME ❌❌-->
-<div id="home" class="page active">
-  <div class="balance">⭐ <span id="saldo">0.00000</span></div>
-
+<div class="circleWrap">
   <div class="circle" id="circle">
     <div class="inner">
       <div id="earn">+0.00001</div>
       <div id="timer">10s</div>
     </div>
   </div>
-
-  <button onclick="boost()" class="boost">⚡ BOOST</button>
 </div>
 
-<!-- EARN -->
-<div id="earnPage" class="page">
-  <h2>Earn</h2>
-  <p>Auto mining berjalan tiap 10 detik</p>
-</div>
+<button class="boostBtn" onclick="boost()">⚡ BOOST</button>
 
-<!-- EXCHANGE -->
-<div id="exchange" class="page">
-  <h2>Exchange</h2>
-  <p>Coming soon...</p>
-</div>
-
-<!-- PROFILE -->
-<div id="profilePage" class="page">
-  <h2>Profile</h2>
-  <p id="profileInfo"></p>
-</div>
-
-<!-- MENU -->
 <div class="menu">
-  <div onclick="nav('home',this)" class="activeTab">Home</div>
-  <div onclick="nav('earnPage',this)">Earn</div>
-  <div onclick="nav('exchange',this)">Exchange</div>
-  <div onclick="nav('profilePage',this)">Profile</div>
+  <div class="menuItem active" onclick="nav(this)"><span>🏠</span>Home</div>
+  <div class="menuItem" onclick="nav(this)"><span>💰</span>Earn</div>
+  <div class="menuItem" onclick="nav(this)"><span>🔄</span>Exchange</div>
+  <div class="menuItem" onclick="nav(this)"><span>👤</span>Profile</div>
 </div>
 
 <script>
@@ -186,62 +177,57 @@ tg.expand();
 // USER
 let user = tg.initDataUnsafe.user;
 if (user) {
-  name.innerText = user.first_name;
+  username.innerText = user.username ? "@" + user.username : user.first_name;
   userid.innerText = "ID: " + user.id;
-  profileInfo.innerText = "Nama: " + user.first_name + " | ID: " + user.id;
-
   if (user.photo_url) avatar.src = user.photo_url;
 }
 
 // DATA
-let saldo = localStorage.getItem("saldo") ? parseFloat(localStorage.getItem("saldo")) : 0;
+let saldo = 0;
 let waktu = 10;
 let max = 10;
 let speed = 1;
 
-// UPDATE
+// UPDATE UI
 function updateUI() {
   saldoEl.innerText = saldo.toFixed(5);
-  timer.innerText = waktu + "s";
+  timer.innerText = Math.ceil(waktu) + "s";
 }
 
-// TIMER
-setInterval(() => {
-  waktu -= speed;
+// SMOOTH LOOP (60fps)
+function loop() {
+  waktu -= 0.05 * speed;
 
   let deg = ((max - waktu) / max) * 360;
   circle.style.background =
-    `conic-gradient(#f5c542 ${deg}deg, #1a2a40 ${deg}deg)`;
+    `conic-gradient(gold ${deg}deg, #1a2a40 ${deg}deg)`;
 
   if (waktu <= 0) {
     let earn = 0.00001 * speed;
     saldo += earn;
-    localStorage.setItem("saldo", saldo);
-
     earnEl.innerText = "+" + earn.toFixed(5);
     waktu = max;
   }
 
   updateUI();
-}, 1000);
+  requestAnimationFrame(loop);
+}
+loop();
 
 // BOOST
 function boost() {
   speed = 2;
-  alert("Boost aktif 10 detik!");
-
+  circle.style.boxShadow = "0 0 60px cyan";
   setTimeout(() => {
     speed = 1;
+    circle.style.boxShadow = "";
   }, 10000);
 }
 
-// NAVIGASI
-function nav(id, el) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-
-  document.querySelectorAll(".menu div").forEach(m => m.classList.remove("activeTab"));
-  el.classList.add("activeTab");
+// MENU
+function nav(el) {
+  document.querySelectorAll(".menuItem").forEach(m => m.classList.remove("active"));
+  el.classList.add("active");
 }
 
 // INIT
