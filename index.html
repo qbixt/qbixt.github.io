@@ -6,60 +6,77 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-* { box-sizing: border-box; margin:0; padding:0; }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-body {
-  font-family: sans-serif;
-  background: linear-gradient(to bottom, #0a1f38, #000814);
-  color: white;
+body{
+  font-family:sans-serif;
+  background: radial-gradient(circle at top, #0f2a44, #020b16 80%);
+  color:white;
 }
 
 /* HEADER */
-.header {
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(0,0,0,0.5);
+.header{
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
 }
 
-.profile { display:flex; gap:10px; align-items:center; }
-
-.profile img {
-  width:45px; height:45px;
+.profile{display:flex;gap:10px;align-items:center;}
+.profile img{
+  width:45px;height:45px;
   border-radius:50%;
   border:2px solid #00d4ff;
 }
 
-.balance { color: gold; }
+.balance{color:gold;font-size:18px;}
 
 /* COIN */
-.wrap { display:flex; justify-content:center; margin-top:40px; }
+.wrap{display:flex;justify-content:center;margin-top:40px;}
+.coin-container{position:relative;width:260px;height:260px;}
 
-.coin-container { position:relative; width:260px; height:260px; }
-
-.coin {
+.coin{
   position:absolute;
-  top:50%; left:50%;
+  top:50%;left:50%;
   transform:translate(-50%,-50%);
-  width:160px; height:160px;
-  background: radial-gradient(circle,#fff,#ffd700);
+  width:160px;height:160px;
+  background:radial-gradient(circle,#fff,#ffd700);
   border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
+  display:flex;align-items:center;justify-content:center;
   font-size:70px;
-  box-shadow:0 0 40px gold;
+  animation:pulse 1.5s infinite;
 }
 
-.centerText {
+@keyframes pulse{
+  0%{transform:translate(-50%,-50%) scale(1);box-shadow:0 0 20px gold;}
+  100%{transform:translate(-50%,-50%) scale(1.05);box-shadow:0 0 60px gold;}
+}
+
+.centerText{
   position:absolute;
-  top:50%; left:50%;
+  top:50%;left:50%;
   transform:translate(-50%,-50%);
   text-align:center;
 }
 
-#timer { font-size:40px; color:#00ffcc; }
+#timer{font-size:40px;color:#00ffcc;}
 
-button {
+/* FLOATING TEXT */
+.floating{
+  position:absolute;
+  color:#00ffcc;
+  font-weight:bold;
+  animation:floatUp 1s forwards;
+}
+
+@keyframes floatUp{
+  0%{opacity:1;transform:translate(-50%,-50%);}
+  100%{opacity:0;transform:translate(-50%,-120px);}
+}
+
+button{
   margin:30px auto;
   display:block;
   padding:12px 40px;
@@ -70,7 +87,7 @@ button {
 }
 
 /* MENU */
-.menu {
+.menu{
   position:fixed;
   bottom:0;
   width:100%;
@@ -79,14 +96,24 @@ button {
   border-top:1px solid #1e3a6b;
 }
 
-.menuItem {
+.menuItem{
   flex:1;
   text-align:center;
-  padding:10px;
-  color:#888;
+  padding:8px 0;
+  color:#7f8fa6;
+  font-size:12px;
+  transition:0.2s;
 }
 
-.menuItem.active { color:#00ffcc; }
+.menuItem svg{
+  width:24px;height:24px;
+  display:block;
+  margin:0 auto 3px;
+  fill:currentColor;
+}
+
+.menuItem.active{color:#00ffcc;}
+.menuItem:active{transform:scale(0.9);}
 </style>
 </head>
 
@@ -95,7 +122,7 @@ button {
 <!-- HEADER -->
 <div class="header">
   <div class="profile">
-    <img id="avatar" src="">
+    <img id="avatar">
     <div>
       <h3 id="username">User</h3>
       <p id="userid">ID: 0000</p>
@@ -111,14 +138,9 @@ button {
 
       <svg width="260" height="260">
         <circle cx="130" cy="130" r="115"
-          fill="none"
-          stroke="#1e3a6b"
-          stroke-width="18"/>
-
+          fill="none" stroke="#1e3a6b" stroke-width="18"/>
         <circle cx="130" cy="130" r="115"
-          fill="none"
-          stroke="#ffd700"
-          stroke-width="18"
+          fill="none" stroke="#ffd700" stroke-width="18"
           stroke-linecap="round"
           transform="rotate(-90 130 130)"
           id="progress"/>
@@ -138,89 +160,121 @@ button {
 </div>
 
 <!-- TASK -->
-<div id="taskPage" style="display:none; text-align:center; margin-top:100px;">
+<div id="taskPage" style="display:none;text-align:center;margin-top:80px;">
   <h2>🚀 Task</h2>
-  <p>Coming Soon...</p>
+
+  <div style="margin-top:20px;">
+    <div style="background:#0f2a44;padding:15px;border-radius:10px;margin:10px;">
+      📢 Join Channel +0.001
+    </div>
+    <div style="background:#0f2a44;padding:15px;border-radius:10px;margin:10px;">
+      👥 Invite Friend +0.005
+    </div>
+  </div>
 </div>
 
 <!-- WALLET -->
-<div id="walletPage" style="display:none; text-align:center; margin-top:100px;">
+<div id="walletPage" style="display:none;text-align:center;margin-top:80px;">
   <h2>💰 Wallet</h2>
-  <p>Coming Soon...</p>
+  <p>Balance kamu tersimpan di sini</p>
 </div>
 
 <!-- MENU -->
 <div class="menu">
-  <div class="menuItem active" onclick="nav(this)">Home</div>
-  <div class="menuItem" onclick="nav(this)">Task</div>
-  <div class="menuItem" onclick="nav(this)">Wallet</div>
+  <div class="menuItem active" onclick="nav(this)">
+    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    Home
+  </div>
+  <div class="menuItem" onclick="nav(this)">
+    <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7H3V3h11"/></svg>
+    Task
+  </div>
+  <div class="menuItem" onclick="nav(this)">
+    <svg viewBox="0 0 24 24"><path d="M3 7h18v10H3z"/><path d="M17 11a2 2 0 100 4 2 2 0 000-4z"/></svg>
+    Wallet
+  </div>
 </div>
 
 <script>
-/* TELEGRAM USER */
+/* TELEGRAM */
 let tg = window.Telegram.WebApp;
 tg.expand();
 
 let user = tg.initDataUnsafe.user || {};
-
 document.getElementById("username").innerText = user.first_name || "User";
 document.getElementById("userid").innerText = "ID: " + (user.id || "0000");
 
-if (user.photo_url) {
+if(user.photo_url){
   document.getElementById("avatar").src = user.photo_url;
 }
 
 /* SYSTEM */
-let saldo = 0;
-let waktu = 10;
-let speed = 1;
+let saldo=0;
+let waktu=10;
+let speed=1;
 
-const saldoEl = document.getElementById("saldo");
-const timerEl = document.getElementById("timer");
-const progress = document.getElementById("progress");
+const saldoEl=document.getElementById("saldo");
+const timerEl=document.getElementById("timer");
+const progress=document.getElementById("progress");
 
-const radius = 115;
-const circumference = 2 * Math.PI * radius;
-progress.style.strokeDasharray = circumference;
+const radius=115;
+const circumference=2*Math.PI*radius;
+progress.style.strokeDasharray=circumference;
 
-setInterval(() => {
-  waktu -= 0.1 * speed;
+setInterval(()=>{
+  waktu-=0.1*speed;
 
-  if (waktu <= 0) {
-    saldo += 0.00001;
-    waktu = 10;
+  if(waktu<=0){
+    saldo+=0.00001;
+    waktu=10;
   }
 
-  let percent = waktu / 10;
-  progress.style.strokeDashoffset = circumference * percent;
+  let percent=waktu/10;
+  progress.style.strokeDashoffset=circumference*percent;
 
-  saldoEl.innerText = saldo.toFixed(5);
-  timerEl.innerText = Math.ceil(waktu) + "s";
+  saldoEl.innerText=saldo.toFixed(5);
+  timerEl.innerText=Math.ceil(waktu)+"s";
 
-}, 100);
+},100);
 
-function tapCoin() {
-  saldo += 0.00005;
+function tapCoin(){
+  saldo+=0.00005;
+
+  const el=document.createElement("div");
+  el.className="floating";
+  el.innerText="+0.00005";
+
+  const parent=document.querySelector(".coin-container");
+  el.style.left="50%";
+  el.style.top="50%";
+
+  parent.appendChild(el);
+  setTimeout(()=>el.remove(),1000);
 }
 
-function boost() {
-  speed = 2.5;
-  setTimeout(() => speed = 1, 8000);
+function boost(){
+  speed=3;
+  document.querySelector(".coin").style.boxShadow="0 0 100px #00ffff";
+
+  setTimeout(()=>{
+    speed=1;
+    document.querySelector(".coin").style.boxShadow="0 0 40px gold";
+  },8000);
 }
 
-function nav(el) {
-  document.querySelectorAll(".menuItem").forEach(m => m.classList.remove("active"));
+function nav(el){
+  document.querySelectorAll(".menuItem").forEach(m=>m.classList.remove("active"));
   el.classList.add("active");
 
-  let name = el.innerText;
+  let name=el.innerText;
 
-  document.getElementById("homePage").style.display = "none";
-  document.getElementById("taskPage").style.display = "none";
-  document.getElementById("walletPage").style.display = "none";
+  document.getElementById("homePage").style.display="none";
+  document.getElementById("taskPage").style.display="none";
+  document.getElementById("walletPage").style.display="none";
 
-  if (name === "Home") document.getElementById("homePage").style.display = "block";
-  if (name === "Task") document.getElementById("taskPage").style.display = "block";
-  if (name === "Wallet") document.getElementById("walletPage").style.display = "block";
+  if(name.includes("Home")) document.getElementById("homePage").style.display="block";
+  if(name.includes("Task")) document.getElementById("taskPage").style.display="block";
+  if(name.includes("Wallet")) document.getElementById("walletPage").style.display="block";
 }
 </script>
 
