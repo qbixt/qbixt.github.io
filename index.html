@@ -9,10 +9,15 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body {
   font-family: sans-serif;
-  background: 
-    linear-gradient(rgba(10, 20, 40, 0.85), rgba(2, 11, 22, 0.9)),
-    url('https://picsum.photos/id/1015/1080/1920') center/cover no-repeat fixed;
-  color: white;
+  background: #02070f;
+  background-image: 
+    /* Stars */
+    url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-size='24' text-anchor='middle' dominant-baseline='middle' fill='%23ffd700' opacity='0.25'%3E★%3C/text%3E%3C/svg%3E"),
+    /* Gift */
+    url("data:image/svg+xml,%3Csvg width='110' height='110' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-size='36' text-anchor='middle' dominant-baseline='middle' fill='%23ffcc00' opacity='0.22'%3E%F0%9F%8E%81%3C/text%3E%3C/svg%3E");
+  
+  background-size: 85px 85px, 130px 130px;
+  background-position: 0 0, 45px 35px;
 }
 
 /* Optional: tambah noise/tekstur halus biar makin mirip Telegram */
