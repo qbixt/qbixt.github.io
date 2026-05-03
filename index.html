@@ -10,10 +10,11 @@
 
 body{
   font-family:sans-serif;
-  background:linear-gradient(160deg,#020b16,#061a2b,#020b16);
+  background: radial-gradient(circle at 20% 20%, #0a2a43, transparent 40%),
+              radial-gradient(circle at 80% 80%, #001a2f, transparent 40%),
+              #020b16;
   color:white;
 }
-
 /* HEADER */
 .header{
   padding:15px;
@@ -111,27 +112,39 @@ button{
   font-size:13px;
 }
 
-/* MENU */
 .menu{
   position:fixed;
-  bottom:0;
-  width:100%;
+  bottom:15px;
+  left:10px;
+  right:10px;
   display:flex;
-  background:#0a1f38;
+  justify-content:space-around;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(12px);
+  border-radius:20px;
+  padding:10px 0;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
 }
-
 .menuItem{
   flex:1;
   text-align:center;
-  padding:8px;
   color:#7f8fa6;
+  font-size:12px;
+  transition:0.2s;
+}
+
+.menuItem.active{
+  color:#00ffcc;
+  transform:scale(1.1);
 }
 
 .menuItem svg{
-  width:22px;height:22px;
+  width:22px;
+  height:22px;
   display:block;
   margin:auto;
-  fill:currentColor;
+  margin-bottom:3px;
+}
 }
 
 .menuItem.active{color:#00ffcc;}
