@@ -1,56 +1,6 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="id">
-<script>
-window.addEventListener("DOMContentLoaded", () => {
 
-  const loading = document.getElementById("loadingScreen");
-  const container = document.getElementById("iconsContainer");
-
-  if (!loading || !container) return;
-
-  const icons = ['💎','👑','🏆','💰','🌹','💍','🎁','✨','🔥','💖'];
-
-  let delay = 0;
-
-  icons.forEach((icon) => {
-    setTimeout(() => {
-      const el = document.createElement("div");
-      el.textContent = icon;
-
-      el.style.position = "absolute";
-      el.style.fontSize = "40px";
-      el.style.left = Math.random() * 80 + "%";
-      el.style.top = "80%";
-      el.style.transition = "4s ease";
-      el.style.opacity = "1";
-
-      container.appendChild(el);
-
-      const x = (Math.random() - 0.5) * 300;
-      const y = -300;
-
-      setTimeout(() => {
-        el.style.transform = `translate(${x}px, ${y}px)`;
-        el.style.opacity = "0";
-      }, 100);
-
-    }, delay);
-
-    delay += 300;
-  });
-
-  // ⬇️ JANGAN langsung hilang
-  setTimeout(() => {
-    loading.style.opacity = "0";
-
-    setTimeout(() => {
-      loading.style.display = "none";
-    }, 500);
-
-  }, 4500);
-
-});
-</script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,286 +11,223 @@ window.addEventListener("DOMContentLoaded", () => {
 
 body {
   font-family: sans-serif;
-  background: linear-gradient(135deg, #c0ffe8 0%, #8ce8ff 50%, #7ab8ff 100%);
-  
-  background-image: 
-    /* Gift kecil & banyak */
-    url("data:image/svg+xml,%3Csvg width='55' height='55' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-size='24' text-anchor='middle' dominant-baseline='middle' fill='%23224466' opacity='0.28'%3E%F0%9F%8E%81%3C/text%3E%3C/svg%3E"),
-    /* Star kecil */
-    url("data:image/svg+xml,%3Csvg width='45' height='45' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dominant-baseline='middle' fill='%23225588' opacity='0.25'%3E★%3C/text%3E%3C/svg%3E"),
-    /* Wallet kecil */
-    url("data:image/svg+xml,%3Csvg width='52' height='52' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='52%25' font-size='22' text-anchor='middle' dominant-baseline='middle' fill='%23226699' opacity='0.22'%3E%F0%9F%92%B0%3C/text%3E%3C/svg%3E"),
-    /* TON/Coin kecil */
-    url("data:image/svg+xml,%3Csvg width='48' height='48' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-size='20' text-anchor='middle' dominant-baseline='middle' fill='%232277aa' opacity='0.20'%3E%F0%9F%AA%99%3C/text%3E%3C/svg%3E");
-
-  background-size: 65px 65px, 55px 55px, 70px 70px, 60px 60px;
-  background-position: 5px 10px, 35px 30px, 15px 55px, 45px 8px;
+  background: linear-gradient(135deg,#c0ffe8,#8ce8ff,#7ab8ff);
 }
+
+/* LOADING */
+#loadingScreen{
+  position:fixed;
+  inset:0;
+  background:#0a0f1f;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:9999;
+}
+
+#iconsContainer{
+  position:relative;
+  width:100%;
+  height:100%;
+  max-width:450px;
+  max-height:450px;
+}
+
 /* HEADER */
 .header{
   padding:15px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(12px);
 }
 
 .profile{display:flex;gap:10px;align-items:center;}
-.profile img{
-  width:45px;height:45px;
-  border-radius:50%;
-  border:2px solid #00d4ff;
-}
+.profile img{width:45px;height:45px;border-radius:50%;}
 
-.balance{color:#ffd700;font-size:18px;}
+.balance{color:#ffd700}
 
-/* COIN AREA */
+/* PAGE */
 .wrap{display:flex;justify-content:center;margin-top:40px;}
+
 .coin-container{position:relative;width:260px;height:260px;}
 
 .coin{
   position:absolute;
   top:50%;left:50%;
   transform:translate(-50%,-50%);
-  width:160px;height:160px;
-  background:radial-gradient(circle,#fff,#ffd700);
+  width:150px;height:150px;
   border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:70px;
-  box-shadow:0 0 40px gold,0 0 80px rgba(255,215,0,0.5);
-  animation:pulse 1.5s infinite;
+  background:gold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:50px;
 }
 
-@keyframes pulse{
-  0%{transform:translate(-50%,-50%) scale(1);}
-  100%{transform:translate(-50%,-50%) scale(1.05);}
-}
-
-.centerText{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  text-align:center;
-}
-
-#timer{font-size:40px;color:#00ffcc;}
-
-/* FLOAT TEXT */
-.floating{
-  position:absolute;
-  color:#00ffcc;
-  font-weight:bold;
-  animation:floatUp 1s forwards;
-}
-
-@keyframes floatUp{
-  0%{opacity:1;transform:translate(-50%,-50%);}
-  100%{opacity:0;transform:translate(-50%,-120px);}
-}
-
-/* BUTTON */
 button{
-  margin:30px auto;
   display:block;
-  padding:12px 40px;
+  margin:20px auto;
+  padding:10px 30px;
   border:none;
-  border-radius:30px;
-  background:linear-gradient(90deg,#00d4ff,#0077ff);
-  color:white;
-}
-
-/* CARD */
-.card{
-  background:#0f2a44;
-  padding:15px;
-  border-radius:12px;
-  margin-bottom:10px;
-}
-
-/* WALLET */
-.walletCard{
-  background:linear-gradient(135deg,#00d4ff,#0077ff);
-  padding:20px;
   border-radius:20px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.5);
+  background:#0077ff;
+  color:#fff;
 }
 
-/* HISTORY */
-.historyItem{
-  background:#0f2a44;
-  padding:10px;
-  border-radius:10px;
-  margin-bottom:8px;
-}
-
-/* MENU FLOAT */
+/* MENU */
 .menu{
   position:fixed;
-  bottom:15px;
+  bottom:10px;
   left:10px;
   right:10px;
   display:flex;
   justify-content:space-around;
-  background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(12px);
-  border-radius:20px;
-  padding:10px 0;
 }
+.menuItem{padding:10px;}
+.menuItem.active{color:#00ffcc;}
 
-.menuItem{
-  text-align:center;
-  flex:1;
-  color:#7f8fa6;
-}
-
-.menuItem.active{
-  color:#00ffcc;
-  transform:scale(1.1);
-}
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  <div class="profile">
-    <img id="avatar">
-    <div>
-      <h3 id="username">User</h3>
-      <p id="userid">ID: 0000</p>
-    </div>
-  </div>
-  <div class="balance">⭐ <span id="saldo">0.00000</span></div>
+<!-- LOADING -->
+<div id="loadingScreen">
+  <div id="iconsContainer"></div>
+  <h3 style="color:#a0f0ff">Loading...</h3>
 </div>
 
-<!-- HOME -->
-<div id="homePage">
-  <div class="wrap">
-    <div class="coin-container" onclick="tapCoin()">
+<!-- APP -->
+<div id="app">
 
-      <svg width="260" height="260">
-        <circle cx="130" cy="130" r="115"
-          fill="none" stroke="#1e3a6b" stroke-width="18"/>
-        <circle cx="130" cy="130" r="115"
-          fill="none" stroke="#00ffcc" stroke-width="18"
-          stroke-linecap="round"
-          transform="rotate(-90 130 130)"
-          id="progress"/>
-      </svg>
-
-      <div class="coin">🔥</div>
-
-      <div class="centerText">
-        <div>+0.00005</div>
-        <div id="timer">10s</div>
+  <div class="header">
+    <div class="profile">
+      <img id="avatar">
+      <div>
+        <div id="username">User</div>
+        <div id="userid">ID</div>
       </div>
-
     </div>
+    <div class="balance">⭐ <span id="saldo">0</span></div>
   </div>
 
-  <button onclick="boost()">BOOST 🚀</button>
-</div>
-
-<!-- TASK -->
-<div id="taskPage" style="display:none;padding:20px;">
-  <div class="card" onclick="claimTask('Join',0.001)">🚀 Join Channel +0.001</div>
-  <div class="card" onclick="claimTask('Invite',0.005)">👥 Invite Friend +0.005</div>
-</div>
-
-<!-- WALLET -->
-<div id="walletPage" style="display:none;padding:20px;">
-  <div class="walletCard">
-    ⭐ <span id="saldo2">0.00000</span>
+  <!-- HOME -->
+  <div id="homePage">
+    <div class="wrap">
+      <div class="coin-container" onclick="tapCoin()">
+        <div class="coin">🔥</div>
+      </div>
+    </div>
+    <button onclick="boost()">BOOST</button>
   </div>
 
-  <h3 style="margin-top:15px;">History</h3>
-  <div id="history"></div>
+  <!-- TASK -->
+  <div id="taskPage" style="display:none;padding:20px;">
+    <div onclick="claim(0.001)">Task 1 +0.001</div>
+  </div>
+
+  <!-- WALLET -->
+  <div id="walletPage" style="display:none;padding:20px;">
+    History
+    <div id="history"></div>
+  </div>
+
 </div>
 
 <!-- MENU -->
 <div class="menu">
-  <div class="menuItem active" onclick="nav(this)">🏠</div>
-  <div class="menuItem" onclick="nav(this)">📋</div>
-  <div class="menuItem" onclick="nav(this)">💰</div>
+  <div class="menuItem active" onclick="nav(0)">🏠</div>
+  <div class="menuItem" onclick="nav(1)">📋</div>
+  <div class="menuItem" onclick="nav(2)">💰</div>
 </div>
 
 <script>
 let tg = window.Telegram.WebApp;
 tg.expand();
 
+// USER
 let user = tg.initDataUnsafe.user || {};
-username.innerText=user.first_name||"User";
-userid.innerText="ID:"+ (user.id||"0");
-if(user.photo_url) avatar.src=user.photo_url;
+document.getElementById("username").innerText = user.first_name || "User";
+document.getElementById("userid").innerText = "ID: " + (user.id || "0");
+if(user.photo_url) document.getElementById("avatar").src = user.photo_url;
 
-let saldo=parseFloat(localStorage.getItem("saldo"))||0;
-let history=JSON.parse(localStorage.getItem("history"))||[];
-let claimed=JSON.parse(localStorage.getItem("claimed"))||{};
+// DATA
+let saldo = 0;
+let history = [];
 
-function save(){
-  localStorage.setItem("saldo",saldo);
-  localStorage.setItem("history",JSON.stringify(history));
-  localStorage.setItem("claimed",JSON.stringify(claimed));
-}
-
+// UPDATE
 function update(){
-  document.getElementById("saldo").innerText=saldo.toFixed(5);
-  document.getElementById("saldo2").innerText=saldo.toFixed(5);
+  document.getElementById("saldo").innerText = saldo.toFixed(5);
 
-  let h="";
-  history.slice().reverse().forEach(i=>h+=`<div class="historyItem">${i}</div>`);
-  document.getElementById("history").innerHTML=h;
+  let h = "";
+  history.forEach(i => h += `<div>${i}</div>`);
+  document.getElementById("history").innerHTML = h;
 }
-update();
 
+// ACTION
 function tapCoin(){
-  saldo+=0.00005;
+  saldo += 0.00005;
   history.push("Tap +0.00005");
-  save();update();
-}
-
-function claimTask(n,a){
-  if(claimed[n]) return alert("Sudah claim");
-  saldo+=a;
-  claimed[n]=true;
-  history.push(n+" +"+a);
-  save();update();
+  update();
 }
 
 function boost(){
-  saldo+=0.001;
+  saldo += 0.001;
   history.push("Boost +0.001");
-  save();update();
+  update();
 }
 
-function nav(el){
-  document.querySelectorAll(".menuItem").forEach(m=>m.classList.remove("active"));
-  el.classList.add("active");
-
-  homePage.style.display="none";
-  taskPage.style.display="none";
-  walletPage.style.display="none";
-
-  let i=[...el.parentNode.children].indexOf(el);
-  if(i==0) homePage.style.display="block";
-  if(i==1) taskPage.style.display="block";
-  if(i==2) walletPage.style.display="block";
+function claim(a){
+  saldo += a;
+  history.push("Task +" + a);
+  update();
 }
 
-/* PROGRESS MUTER */
-const progress=document.getElementById("progress");
-const r=115;
-const c=2*Math.PI*r;
-progress.style.strokeDasharray=c;
+// NAV
+function nav(i){
+  homePage.style.display = i==0?"block":"none";
+  taskPage.style.display = i==1?"block":"none";
+  walletPage.style.display = i==2?"block":"none";
+}
 
-let t=10;
-setInterval(()=>{
-  t-=0.1;
-  if(t<=0) t=10;
-  progress.style.strokeDashoffset=c*(t/10);
-  document.getElementById("timer").innerText=Math.ceil(t)+"s";
-},100);
+// LOADING ANIMASI
+window.addEventListener("DOMContentLoaded", () => {
+
+  const loading = document.getElementById("loadingScreen");
+  const container = document.getElementById("iconsContainer");
+
+  const icons = ['💎','👑','🏆','💰','🎁','✨','🔥'];
+
+  let delay = 0;
+
+  icons.forEach(icon => {
+    setTimeout(() => {
+      const el = document.createElement("div");
+      el.textContent = icon;
+      el.style.position = "absolute";
+      el.style.fontSize = "35px";
+      el.style.left = Math.random()*80 + "%";
+      el.style.top = "80%";
+      container.appendChild(el);
+
+      setTimeout(() => {
+        el.style.transform = "translateY(-300px)";
+        el.style.opacity = "0";
+      }, 100);
+
+    }, delay);
+
+    delay += 300;
+  });
+
+  // masuk app
+  setTimeout(() => {
+    loading.style.display = "none";
+  }, 3500);
+
+  update();
+});
 </script>
 
 </body>
