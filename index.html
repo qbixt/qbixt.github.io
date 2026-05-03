@@ -10,18 +10,11 @@
 
 body{
   font-family:sans-serif;
-  background:#0c0f14;
+  background:
+    radial-gradient(circle at 20% 20%, #0a2a43, transparent 40%),
+    radial-gradient(circle at 80% 80%, #001a2f, transparent 40%),
+    #020b16;
   color:white;
-}
-
-/* glow halus */
-body::before{
-  content:"";
-  position:fixed;
-  width:100%;
-  height:100%;
-  background: radial-gradient(circle at 50% 0%, rgba(255,215,0,0.08), transparent 60%);
-  pointer-events:none;
 }
 
 /* HEADER */
@@ -30,73 +23,77 @@ body::before{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  background:#11161f;
-  border-bottom:1px solid rgba(255,255,255,0.05);
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(12px);
 }
 
-.profile{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
+.profile{display:flex;gap:10px;align-items:center;}
 .profile img{
-  width:45px;
-  height:45px;
+  width:45px;height:45px;
   border-radius:50%;
-  border:2px solid #ffd700;
+  border:2px solid #00d4ff;
 }
 
-.balance{
-  color:#ffd700;
-  font-size:18px;
-}
+.balance{color:#ffd700;font-size:18px;}
 
-/* COIN */
-.wrap{
-  display:flex;
-  justify-content:center;
-  margin-top:40px;
-}
-
-.coin-container{
-  position:relative;
-  width:260px;
-  height:260px;
-}
+/* COIN AREA */
+.wrap{display:flex;justify-content:center;margin-top:40px;}
+.coin-container{position:relative;width:260px;height:260px;}
 
 .coin{
   position:absolute;
-  top:50%;
-  left:50%;
+  top:50%;left:50%;
   transform:translate(-50%,-50%);
-  width:160px;
-  height:160px;
+  width:160px;height:160px;
+  background:radial-gradient(circle,#fff,#ffd700);
   border-radius:50%;
-  background: radial-gradient(circle,#fff,#ffd700,#b8860b);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display:flex;align-items:center;justify-content:center;
   font-size:70px;
-  box-shadow:0 0 40px #ffd700,0 0 80px rgba(255,215,0,0.4);
+  box-shadow:0 0 40px gold,0 0 80px rgba(255,215,0,0.5);
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  0%{transform:translate(-50%,-50%) scale(1);}
+  100%{transform:translate(-50%,-50%) scale(1.05);}
 }
 
 .centerText{
   position:absolute;
-  top:50%;
-  left:50%;
+  top:50%;left:50%;
   transform:translate(-50%,-50%);
   text-align:center;
 }
 
-#timer{
-  font-size:40px;
+#timer{font-size:40px;color:#00ffcc;}
+
+/* FLOAT TEXT */
+.floating{
+  position:absolute;
   color:#00ffcc;
+  font-weight:bold;
+  animation:floatUp 1s forwards;
+}
+
+@keyframes floatUp{
+  0%{opacity:1;transform:translate(-50%,-50%);}
+  100%{opacity:0;transform:translate(-50%,-120px);}
+}
+
+/* BUTTON */
+button{
+  margin:30px auto;
+  display:block;
+  padding:12px 40px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(90deg,#00d4ff,#0077ff);
+  color:white;
 }
 
 /* CARD */
 .card{
-  background:#151b26;
+  background:#0f2a44;
   padding:15px;
   border-radius:12px;
   margin-bottom:10px;
@@ -104,32 +101,43 @@ body::before{
 
 /* WALLET */
 .walletCard{
-  background:linear-gradient(135deg,#ffd700,#b8860b);
+  background:linear-gradient(135deg,#00d4ff,#0077ff);
   padding:20px;
   border-radius:20px;
-  color:black;
-  font-weight:bold;
+  box-shadow:0 10px 40px rgba(0,0,0,0.5);
 }
 
-/* MENU */
+/* HISTORY */
+.historyItem{
+  background:#0f2a44;
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:8px;
+}
+
+/* MENU FLOAT */
 .menu{
   position:fixed;
-  bottom:0;
-  width:100%;
+  bottom:15px;
+  left:10px;
+  right:10px;
   display:flex;
-  background:#11161f;
-  border-top:1px solid rgba(255,255,255,0.05);
+  justify-content:space-around;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(12px);
+  border-radius:20px;
+  padding:10px 0;
 }
 
 .menuItem{
-  flex:1;
   text-align:center;
-  padding:10px;
+  flex:1;
   color:#7f8fa6;
 }
 
 .menuItem.active{
-  color:#ffd700;
+  color:#00ffcc;
+  transform:scale(1.1);
 }
 </style>
 </head>
