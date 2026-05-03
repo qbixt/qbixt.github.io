@@ -1,36 +1,25 @@
 <!DOCTYPE html>
 <html lang="id">
-  <div id="loadingScreen" style="position:fixed; inset:0; background:#0a0f1f; display:flex; align-items:center; justify-content:center; z-index:9999; overflow:hidden; flex-direction:column;">
-
-  <div id="iconsContainer" style="position:relative; width:100%; height:100%; max-width:450px; max-height:450px;"></div>
-
-  <h3 style="margin-top:35px; color:#a0f0ff; font-size:22px; text-shadow: 0 0 15px #44ddff;">Loading Premium Gifts...</h3>
-</div>
-
 <script>
-const iconsList = ['💎', '👑', '🏆', '💰', '🌹', '💍', '🎁', '✨', '🔥', '💖'];
+const iconsList = ['💎','👑','🏆','💰','🌹','💍','🎁','✨','🔥','💖'];
 
 const container = document.getElementById('iconsContainer');
 let delay = 0;
 
-iconsList.forEach((icon) => {
+iconsList.forEach((icon, index) => {
   setTimeout(() => {
     const el = document.createElement('div');
     el.textContent = icon;
     el.style.position = 'absolute';
     el.style.fontSize = '40px';
-    
-    // Posisi awal SUPER menyebar
     el.style.left = (10 + Math.random() * 80) + '%';
     el.style.top = '80%';
-    
     el.style.transition = 'all 4.8s cubic-bezier(0.2, 0.95, 0.3, 1)';
     el.style.opacity = '0';
     el.style.filter = 'drop-shadow(0 0 18px #ffd700) drop-shadow(0 0 35px #ff44ff)';
-    
+
     container.appendChild(el);
 
-    // Gerakan X jauh lebih lebar biar mencar
     const randomX = (Math.random() - 0.5) * 320;
     const randomY = - (360 + Math.random() * 140);
 
@@ -39,15 +28,33 @@ iconsList.forEach((icon) => {
       el.style.opacity = '0.95';
     }, 100);
 
-    // Hilang lebih cepat setelah sampai atas
     setTimeout(() => {
       el.style.opacity = '0';
       el.style.transform = `translate(${randomX}px, ${randomY - 80}px) scale(0.9)`;
     }, 4100);
+
+    // 🔥 Kalau icon terakhir → tutup loading
+    if (index === iconsList.length - 1) {
+      setTimeout(() => {
+        closeLoading();
+      }, 4800); // tunggu animasi terakhir selesai
+    }
+
   }, delay);
 
-  delay += 450; // jeda lebih panjang biar tidak berdesakan
+  delay += 450;
 });
+
+function closeLoading(){
+  const loading = document.getElementById("loadingScreen");
+
+  loading.style.transition = "opacity 0.5s ease";
+  loading.style.opacity = "0";
+
+  setTimeout(()=>{
+    loading.style.display = "none";
+  }, 500);
+}
 </script>
 <head>
 <meta charset="UTF-8">
