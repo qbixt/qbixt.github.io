@@ -1,61 +1,50 @@
 <!DOCTYPE html>
 <html lang="id">
 <script>
-const iconsList = ['💎','👑','🏆','💰','🌹','💍','🎁','✨','🔥','💖'];
+document.addEventListener("DOMContentLoaded", () => {
 
-const container = document.getElementById('iconsContainer');
-let delay = 0;
+  const iconsList = ['💎','👑','🏆','💰','🌹','💍','🎁','✨','🔥','💖'];
+  const container = document.getElementById('iconsContainer');
 
-iconsList.forEach((icon, index) => {
-  setTimeout(() => {
-    const el = document.createElement('div');
-    el.textContent = icon;
-    el.style.position = 'absolute';
-    el.style.fontSize = '40px';
-    el.style.left = (10 + Math.random() * 80) + '%';
-    el.style.top = '80%';
-    el.style.transition = 'all 4.8s cubic-bezier(0.2, 0.95, 0.3, 1)';
-    el.style.opacity = '0';
-    el.style.filter = 'drop-shadow(0 0 18px #ffd700) drop-shadow(0 0 35px #ff44ff)';
+  if (!container) return; // biar aman
 
-    container.appendChild(el);
+  let delay = 0;
 
-    const randomX = (Math.random() - 0.5) * 320;
-    const randomY = - (360 + Math.random() * 140);
-
+  iconsList.forEach((icon, index) => {
     setTimeout(() => {
-      el.style.transform = `translate(${randomX}px, ${randomY}px) scale(1.18)`;
-      el.style.opacity = '0.95';
-    }, 100);
 
-    setTimeout(() => {
-      el.style.opacity = '0';
-      el.style.transform = `translate(${randomX}px, ${randomY - 80}px) scale(0.9)`;
-    }, 4100);
+      const el = document.createElement('div');
+      el.textContent = icon;
+      el.style.position = 'absolute';
+      el.style.fontSize = '40px';
+      el.style.left = (10 + Math.random() * 80) + '%';
+      el.style.top = '80%';
+      el.style.transition = 'all 4s ease';
+      el.style.opacity = '0.9';
 
-    // 🔥 Kalau icon terakhir → tutup loading
-    if (index === iconsList.length - 1) {
+      container.appendChild(el);
+
+      const randomX = (Math.random() - 0.5) * 300;
+      const randomY = -300 - Math.random() * 150;
+
       setTimeout(() => {
-        closeLoading();
-      }, 4800); // tunggu animasi terakhir selesai
-    }
+        el.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        el.style.opacity = '1';
+      }, 100);
 
-  }, delay);
+    }, delay);
 
-  delay += 450;
+    delay += 400;
+  });
+
+  // ⬇️ AUTO MASUK APP
+  setTimeout(() => {
+    const loading = document.getElementById("loadingScreen");
+    if (loading) loading.style.display = "none";
+  }, 4500);
+
 });
-
-function closeLoading(){
-  const loading = document.getElementById("loadingScreen");
-
-  loading.style.transition = "opacity 0.5s ease";
-  loading.style.opacity = "0";
-
-  setTimeout(()=>{
-    loading.style.display = "none";
-  }, 500);
-}
-</script>
+      </script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
