@@ -12,7 +12,6 @@ body {
   font-family: Arial;
   background: radial-gradient(circle at top, #071a2d, #000);
   color: white;
-  text-align: center;
 }
 
 /* HEADER */
@@ -24,52 +23,62 @@ body {
 
 .profile {
   display: flex;
-  gap: 10px;
   align-items: center;
+  gap: 8px;
 }
 
 .profile img {
-  width: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: 2px solid gold;
+}
+
+.nameBox { line-height: 1.2; }
+.username { font-size: 14px; font-weight: bold; }
+.userid { font-size: 11px; color: #aaa; }
+
+.balance {
+  color: gold;
+  font-size: 18px;
 }
 
 /* CIRCLE */
 .wrap {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 30px;
+  position: relative;
 }
 
-svg {
-  transform: rotate(-90deg);
-}
+svg { transform: rotate(-90deg); }
 
-.circle-bg {
+.bg {
   fill: none;
   stroke: #1a2a40;
   stroke-width: 12;
 }
 
-.circle-progress {
+.progress {
   fill: none;
   stroke: gold;
   stroke-width: 12;
   stroke-linecap: round;
-  transition: stroke-dashoffset 0.1s linear;
   filter: drop-shadow(0 0 10px gold);
 }
 
-/* INNER */
+/* TEXT */
 .centerText {
   position: absolute;
-  margin-top: -160px;
-  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
 }
 
 #timer {
-  font-size: 50px;
+  font-size: 48px;
   color: gold;
+  font-weight: bold;
 }
 
 #earn {
@@ -78,12 +87,19 @@ svg {
 
 /* BUTTON */
 button {
-  margin-top: 20px;
-  padding: 12px 25px;
-  border-radius: 15px;
+  display: block;
+  margin: 25px auto;
+  padding: 12px 30px;
+  border-radius: 20px;
   border: none;
   background: linear-gradient(45deg, #00c6ff, #0072ff);
   color: white;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+button:active {
+  transform: scale(0.9);
 }
 
 /* MENU */
@@ -95,12 +111,30 @@ button {
   display: flex;
   justify-content: space-around;
   padding: 10px 0;
+  border-top: 1px solid #111;
 }
-.menu div {
+
+.menuItem {
+  text-align: center;
+  font-size: 11px;
   color: #777;
+  transition: 0.2s;
 }
-.menu .active {
+
+.menuItem svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  margin: auto;
+}
+
+.menuItem.active {
   color: gold;
+  transform: scale(1.1);
+}
+
+.menuItem:active {
+  transform: scale(0.9);
 }
 </style>
 
@@ -110,33 +144,58 @@ button {
 <div class="header">
   <div class="profile">
     <img id="avatar" src="https://i.pravatar.cc/100">
-    <div>
-      <div id="username">User</div>
-      <div id="userid">ID</div>
+    <div class="nameBox">
+      <div class="username" id="username">User</div>
+      <div class="userid" id="userid">ID</div>
     </div>
   </div>
-  <div>⭐ <span id="saldo">0.00000</span></div>
+
+  <div class="balance">⭐ <span id="saldo">0.00000</span></div>
 </div>
 
 <div class="wrap">
   <svg width="260" height="260">
-    <circle cx="130" cy="130" r="110" class="circle-bg"/>
-    <circle cx="130" cy="130" r="110" class="circle-progress" id="progress"/>
+    <circle cx="130" cy="130" r="110" class="bg"/>
+    <circle cx="130" cy="130" r="110" class="progress" id="progress"/>
   </svg>
+
+  <div class="centerText">
+    <div id="earn">+0.00001</div>
+    <div id="timer">10s</div>
+  </div>
 </div>
 
-<div class="centerText">
-  <div id="earn">+0.00001</div>
-  <div id="timer">10s</div>
-</div>
+<button onclick="boost()">⚡ BOOST</button>
 
-<button onclick="boost()">BOOST</button>
-
+<!-- MENU PREMIUM -->
 <div class="menu">
-  <div class="active">Home</div>
-  <div>Earn</div>
-  <div>Exchange</div>
-  <div>Profile</div>
+  <div class="menuItem active" onclick="nav(this)">
+    <svg fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 3l9 9h-3v9h-12v-9h-3z"/>
+    </svg>
+    Home
+  </div>
+
+  <div class="menuItem" onclick="nav(this)">
+    <svg fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 1l3 7h7l-5.5 4.5 2 7-6.5-4-6.5 4 2-7-5.5-4.5h7z"/>
+    </svg>
+    Earn
+  </div>
+
+  <div class="menuItem" onclick="nav(this)">
+    <svg fill="currentColor" viewBox="0 0 24 24">
+      <path d="M7 7h10v4h-10zM7 13h10v4h-10z"/>
+    </svg>
+    Exchange
+  </div>
+
+  <div class="menuItem" onclick="nav(this)">
+    <svg fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+    </svg>
+    Profile
+  </div>
 </div>
 
 <script>
@@ -153,8 +212,8 @@ if (user) {
 
 // DATA
 let saldo = 0;
-let waktu = 10;
 let max = 10;
+let waktu = max;
 let speed = 1;
 
 // SVG SETUP
@@ -165,30 +224,33 @@ let progress = document.getElementById("progress");
 progress.style.strokeDasharray = keliling;
 progress.style.strokeDashoffset = keliling;
 
-// LOOP
-function loop() {
-  waktu -= 0.03 * speed;
-
-  let persen = waktu / max;
-  let offset = keliling * persen;
-
-  progress.style.strokeDashoffset = offset;
+// TIMER NORMAL
+setInterval(() => {
+  waktu -= 1 * speed;
 
   if (waktu <= 0) {
     saldo += 0.00001;
     waktu = max;
   }
 
+  let persen = waktu / max;
+  progress.style.strokeDashoffset = keliling * persen;
+
   saldoEl.innerText = saldo.toFixed(5);
-  timer.innerText = Math.ceil(waktu) + "s";
+  timer.innerText = waktu + "s";
 
-  requestAnimationFrame(loop);
-}
-loop();
+}, 1000);
 
+// BOOST
 function boost() {
   speed = 2;
   setTimeout(() => speed = 1, 8000);
+}
+
+// MENU CLICK
+function nav(el) {
+  document.querySelectorAll(".menuItem").forEach(m => m.classList.remove("active"));
+  el.classList.add("active");
 }
 
 // ELEMENT
