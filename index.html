@@ -1,290 +1,208 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    * { box-sizing: border-box; margin:0; padding:0; }
-    
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(to bottom, #0a1f38, #000814);
-      color: white;
-      height: 100vh;
-      overflow: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    .header {
-      padding: 15px 20px;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #1e3a6b;
-    }
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
 
-    .profile {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+body{
+  font-family:sans-serif;
+  background:linear-gradient(to bottom,#0a1f38,#000814);
+  color:white;
+}
 
-    .profile img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: 3px solid #00d4ff;
-    }
+/* HEADER */
+.header{
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(0,0,0,0.5);
+}
 
-    .balance {
-      text-align: right;
-      font-size: 20px;
-      color: #ffd700;
-    }
+.profile{display:flex;gap:10px;align-items:center;}
+.profile img{width:45px;height:45px;border-radius:50%;border:2px solid cyan;}
 
-    /* Coin Area */
-    .wrap {
-      display: flex;
-      justify-content: center;
-      margin: 40px 0 30px;
-    }
+.balance{color:gold;font-size:18px;}
 
-    .coin-container {
-      position: relative;
-      width: 260px;
-      height: 260px;
-    }
+/* COIN */
+.wrap{display:flex;justify-content:center;margin-top:40px;}
 
-    .coin {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 170px;
-      height: 170px;
-      background: radial-gradient(circle at 40% 40%, #fff, #ffd700);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 85px;
-      box-shadow: 0 0 50px #ffd700;
-      transition: transform 0.2s;
-    }
+.coin-container{position:relative;width:260px;height:260px;}
 
-    .coin:active { transform: translate(-50%, -50%) scale(0.95); }
+.coin{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:160px;height:160px;
+  background:radial-gradient(circle,#fff,#ffd700);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:70px;
+  box-shadow:0 0 40px gold;
+}
 
-    .centerText { 
-      position: absolute; 
-      top: 50%; left: 50%; 
-      transform: translate(-50%, -50%); 
-      text-align: center; 
-      z-index: 2; 
-    }
+.centerText{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+}
 
-    #timer { font-size: 48px; font-weight: bold; color: #00ffcc; }
-    #earn { color: #88eeff; font-size: 15px; }
+#timer{font-size:40px;color:#00ffcc;}
 
-    button {
-      display: block;
-      margin: 20px auto;
-      padding: 14px 40px;
-      background: linear-gradient(90deg, #00d4ff, #0077ff);
-      border: none;
-      border-radius: 50px;
-      color: white;
-      font-weight: bold;
-      font-size: 16px;
-    }
+button{
+  margin:30px auto;
+  display:block;
+  padding:12px 40px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(90deg,#00d4ff,#0077ff);
+  color:white;
+}
 
-    /* Bottom Menu Premium */
-    .menu {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #0a1f38;
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 0 12px;
-      border-top: 1px solid #1e3a6b;
-    }
+/* MENU */
+.menu{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  display:flex;
+  background:#0a1f38;
+  border-top:1px solid #1e3a6b;
+}
 
-    .menuItem {
-      text-align: center;
-      color: #8a9eb8;
-      font-size: 12px;
-      flex: 1;
-    }
+.menuItem{
+  flex:1;
+  text-align:center;
+  padding:10px;
+  color:#888;
+}
 
-    .menuItem.active {
-      color: #00ffcc;
-    }
-
-    .menuItem svg {
-      width: 26px;
-      height: 26px;
-      margin-bottom: 3px;
-      fill: currentColor;
-    }
-
-    /* Language Bar */
-    .lang-bar {
-      position: fixed;
-      top: 70px;
-      left: 0;
-      right: 0;
-      background: rgba(255,255,255,0.08);
-      padding: 8px 0;
-      text-align: center;
-      font-size: 13px;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
-
-    .lang-bar span {
-      margin: 0 12px;
-      padding: 4px 12px;
-      border-radius: 20px;
-      display: inline-block;
-    }
-
-    .lang-bar .active-lang {
-      background: #00d4ff;
-      color: black;
-      font-weight: bold;
-    }
-  </style>
+.menuItem.active{color:#00ffcc;}
+</style>
 </head>
+
 <body>
 
-  <div class="header">
-    <div class="profile">
-      <img id="avatar" src="https://i.pravatar.cc/150" alt="">
-      <div>
-        <h3 id="username" style="font-size:16px;">User</h3>
-        <p id="userid" style="color:#aaa; font-size:12px;">ID: 000000</p>
-      </div>
+<div class="header">
+  <div class="profile">
+    <img src="https://i.pravatar.cc/150">
+    <div>
+      <div>User</div>
+      <small>ID: 0000</small>
     </div>
-    <div class="balance">⭐ <span id="saldo">0.00000</span></div>
   </div>
+  <div class="balance">⭐ <span id="saldo">0.00000</span></div>
+</div>
 
-
-  <div id="homePage">
+<!-- HOME -->
+<div id="homePage">
   <div class="wrap">
-    start
-  </div>
-  <div id="taskPage" style="display:none; text-align:center; margin-top:100px;">
-  <h2>🚀 Task</h2>
-  <p>Coming Soon...</p>
-</div>
-
-<div id="walletPage" style="display:none; text-align:center; margin-top:100px;">
-  <h2>💰 Wallet</h2>
-  <p>Coming Soon...</p>
-</div>
-  <button onclick="boost()"> BOOST 🚀 </button>
-  </div>
     <div class="coin-container" onclick="tapCoin()">
-      <svg width="260" height="260" style="filter: drop-shadow(0 0 20px gold);">
-        <circle cx="130" cy="130" r="115" fill="none" stroke="#1e3a6b" stroke-width="18"
-          <circle cx="130" cy="130" r="115"
-  fill="none"
-  stroke="#ffd700"
-  stroke-width="18"
-  stroke-linecap="round"
-  transform="rotate(-90 130 130)"
-  id="progress"/>
+
+      <svg width="260" height="260">
+        <circle cx="130" cy="130" r="115"
+          fill="none"
+          stroke="#1e3a6b"
+          stroke-width="18"/>
+
+        <circle cx="130" cy="130" r="115"
+          fill="none"
+          stroke="#ffd700"
+          stroke-width="18"
+          stroke-linecap="round"
+          transform="rotate(-90 130 130)"
+          id="progress"/>
       </svg>
-      <div class="coin" id="coin">🔥</div>
+
+      <div class="coin">🔥</div>
+
       <div class="centerText">
-        <div id="earn">+0.00005 / tap</div>
+        <div>+0.00005</div>
         <div id="timer">10s</div>
       </div>
+
     </div>
   </div>
 
-  <button onclick="boost()"> BOOST 🚀 </button>
-
-  <!-- Bottom Menu -->
-
-<div class="menuItem" onclick="nav(this)">
-  <svg viewBox="0 0 24 24">
-    <path d="M9 11l3 3L22 4"/>
-    <path d="M21 12v7H3V3h11"/>
-  </svg>
-  <div>Task</div>
+  <button onclick="boost()">BOOST 🚀</button>
 </div>
 
-<div class="menuItem" onclick="nav(this)">
-  <svg viewBox="0 0 24 24">
-    <path d="M3 7h18v10H3z"/>
-    <path d="M17 11a2 2 0 100 4 2 2 0 000-4z"/>
-  </svg>
-  <div>Wallet</div>
+<!-- TASK -->
+<div id="taskPage" style="display:none;text-align:center;margin-top:100px;">
+  <h2>🚀 Task</h2>
+  <p>Nanti isi misi di sini</p>
 </div>
-  <script>
-    let tg = window.Telegram.WebApp;
-    tg.expand();
 
-    let user = tg.initDataUnsafe.user || {};
-    document.getElementById("username").innerText = user.first_name || "User";
-    document.getElementById("userid").innerText = "ID: " + (user.id || "000000");
-    if (user.photo_url) document.getElementById("avatar").src = user.photo_url;
+<!-- WALLET -->
+<div id="walletPage" style="display:none;text-align:center;margin-top:100px;">
+  <h2>💰 Wallet</h2>
+  <p>Nanti isi saldo / withdraw</p>
+</div>
 
-    let saldo = 0;
-    let maxTime = 10;
-    let waktu = maxTime;
-    let speed = 1;
+<!-- MENU -->
+<div class="menu">
+  <div class="menuItem active" onclick="nav(this)">Home</div>
+  <div class="menuItem" onclick="nav(this)">Task</div>
+  <div class="menuItem" onclick="nav(this)">Wallet</div>
+</div>
 
-    const saldoEl = document.getElementById("saldo");
-    const timerEl = document.getElementById("timer");
-    const progress = document.getElementById("progress");
+<script>
+let saldo=0;
+let waktu=10;
+let speed=1;
 
-    const radius = 115;
-    const circumference = 2 * Math.PI * radius;
-    progress.style.strokeDasharray = circumference;
-    progress.style.strokeDashoffset = circumference;
+const saldoEl=document.getElementById("saldo");
+const timerEl=document.getElementById("timer");
+const progress=document.getElementById("progress");
 
-    setInterval(() => {
-      waktu -= speed;
-      if (waktu <= 0) {
-        saldo += 0.00001;
-        waktu = maxTime;
-      }
-      let percent = waktu / maxTime;
-      progress.style.strokeDashoffset = circumference * percent;
+const radius=115;
+const circumference=2*Math.PI*radius;
+progress.style.strokeDasharray=circumference;
 
-      saldoEl.innerText = saldo.toFixed(5);
-      timerEl.innerText = Math.ceil(waktu) + "s";
-    }, 1000);
+setInterval(()=>{
+  waktu-=0.1*speed;
 
-    function tapCoin() {
-      saldo += 0.00005;
-      saldoEl.innerText = saldo.toFixed(5);
-    }
+  if(waktu<=0){
+    saldo+=0.00001;
+    waktu=10;
+  }
 
-    function boost() {
-      speed = 2.5;
-      setTimeout(() => speed = 1, 8000);
-    }
-    function nav(el) {
-  document.querySelectorAll(".menuItem").forEach(m => m.classList.remove("active"));
+  let percent=waktu/10;
+  progress.style.strokeDashoffset=circumference*percent;
+
+  saldoEl.innerText=saldo.toFixed(5);
+  timerEl.innerText=Math.ceil(waktu)+"s";
+
+},100);
+
+function tapCoin(){
+  saldo+=0.00005;
+}
+
+function boost(){
+  speed=2.5;
+  setTimeout(()=>speed=1,8000);
+}
+
+function nav(el){
+  document.querySelectorAll(".menuItem").forEach(m=>m.classList.remove("active"));
   el.classList.add("active");
 
-  let name = el.innerText;
+  let name=el.innerText;
 
-  document.getElementById("homePage").style.display = "none";
-  document.getElementById("taskPage").style.display = "none";
-  document.getElementById("walletPage").style.display = "none";
+  document.getElementById("homePage").style.display="none";
+  document.getElementById("taskPage").style.display="none";
+  document.getElementById("walletPage").style.display="none";
 
-  if (name === "Home") document.getElementById("homePage").style.display = "block";
-  if (name === "Task") document.getElementById("taskPage").style.display = "block";
-  if (name === "Wallet") document.getElementById("walletPage").style.display = "block";
-    }
-    }
-  </script>
+  if(name==="Home") document.getElementById("homePage").style.display="block";
+  if(name==="Task") document.getElementById("taskPage").style.display="block";
+  if(name==="Wallet") document.getElementById("walletPage").style.display="block";
+}
+</script>
+
 </body>
 </html>
