@@ -5,7 +5,59 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">  
 <script src="https://telegram.org/js/telegram-web-app.js"></script>  <style>  
 *{margin:0;padding:0;box-sizing:border-box;}  
-  
+  <div id="loadingScreen" style="position:fixed; inset:0; background:#0a1325; display:flex; align-items:center; justify-content:center; z-index:9999; overflow:hidden; flex-direction:column;">
+
+  <div id="iconsContainer" style="position:relative; width:380px; height:380px;"></div>
+
+  <h3 style="margin-top:30px; color:#88ddff; font-size:21px;">Loading Rewards...</h3>
+</div>
+
+<script>
+const iconsList = ['🎁','❤️','🌹','🕯️','🎄','🔮','💖','🎩','💍','🕸️','🕊️','🧸','🚀','🏆','💎','🍭','🌸','🎂'];
+
+const container = document.getElementById('iconsContainer');
+let delay = 0;
+
+iconsList.forEach((icon, index) => {
+  setTimeout(() => {
+    const el = document.createElement('div');
+    el.textContent = icon;
+    el.style.position = 'absolute';
+    el.style.fontSize = '52px';
+    
+    // Penyebaran yang lebih terkontrol
+    const startX = 20 + (index % 6) * 10 + (Math.random() * 8 - 4);
+    el.style.left = startX + '%';
+    el.style.top = '78%';
+    
+    el.style.transition = 'all 3.2s cubic-bezier(0.23, 1, 0.32, 1)';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(0) scale(0.5)';
+    
+    container.appendChild(el);
+
+    // Terbang naik dengan gerakan halus
+    setTimeout(() => {
+      const endY = - (280 + Math.random() * 80);
+      el.style.transform = `translateY(${endY}px) scale(1.1)`;
+      el.style.opacity = '0.95';
+    }, 100);
+
+    // Hilang
+    setTimeout(() => el.style.opacity = '0', 2900);
+  }, delay);
+
+  delay += 380;
+});
+
+// Hilangkan loading setelah 8 detik
+setTimeout(() => {
+  const screen = document.getElementById('loadingScreen');
+  screen.style.transition = 'opacity 1.2s';
+  screen.style.opacity = '0';
+  setTimeout(() => screen.remove(), 1200);
+}, 8000);
+</script>
 body {  
   font-family: sans-serif;  
   background: linear-gradient(135deg, #c0ffe8 0%, #8ce8ff 50%, #7ab8ff 100%);  
