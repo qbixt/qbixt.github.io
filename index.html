@@ -1,50 +1,56 @@
 <!DOCTYPE html>
 <html lang="id">
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", () => {
 
-  const iconsList = ['💎','👑','🏆','💰','🌹','💍','🎁','✨','🔥','💖'];
-  const container = document.getElementById('iconsContainer');
+  const loading = document.getElementById("loadingScreen");
+  const container = document.getElementById("iconsContainer");
 
-  if (!container) return; // biar aman
+  if (!loading || !container) return;
+
+  const icons = ['💎','👑','🏆','💰','🌹','💍','🎁','✨','🔥','💖'];
 
   let delay = 0;
 
-  iconsList.forEach((icon, index) => {
+  icons.forEach((icon) => {
     setTimeout(() => {
-
-      const el = document.createElement('div');
+      const el = document.createElement("div");
       el.textContent = icon;
-      el.style.position = 'absolute';
-      el.style.fontSize = '40px';
-      el.style.left = (10 + Math.random() * 80) + '%';
-      el.style.top = '80%';
-      el.style.transition = 'all 4s ease';
-      el.style.opacity = '0.9';
+
+      el.style.position = "absolute";
+      el.style.fontSize = "40px";
+      el.style.left = Math.random() * 80 + "%";
+      el.style.top = "80%";
+      el.style.transition = "4s ease";
+      el.style.opacity = "1";
 
       container.appendChild(el);
 
-      const randomX = (Math.random() - 0.5) * 300;
-      const randomY = -300 - Math.random() * 150;
+      const x = (Math.random() - 0.5) * 300;
+      const y = -300;
 
       setTimeout(() => {
-        el.style.transform = `translate(${randomX}px, ${randomY}px)`;
-        el.style.opacity = '1';
+        el.style.transform = `translate(${x}px, ${y}px)`;
+        el.style.opacity = "0";
       }, 100);
 
     }, delay);
 
-    delay += 400;
+    delay += 300;
   });
 
-  // ⬇️ AUTO MASUK APP
+  // ⬇️ JANGAN langsung hilang
   setTimeout(() => {
-    const loading = document.getElementById("loadingScreen");
-    if (loading) loading.style.display = "none";
+    loading.style.opacity = "0";
+
+    setTimeout(() => {
+      loading.style.display = "none";
+    }, 500);
+
   }, 4500);
 
 });
-      </script>
+</script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
