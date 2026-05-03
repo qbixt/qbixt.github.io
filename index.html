@@ -7,29 +7,21 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body {
-  font-family: sans-serif;
-  background: #02070f;
-  background-image: 
-    /* Stars */
-    url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-size='24' text-anchor='middle' dominant-baseline='middle' fill='%23ffd700' opacity='0.25'%3E★%3C/text%3E%3C/svg%3E"),
-    /* Gift */
-    url("data:image/svg+xml,%3Csvg width='110' height='110' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-size='36' text-anchor='middle' dominant-baseline='middle' fill='%23ffcc00' opacity='0.22'%3E%F0%9F%8E%81%3C/text%3E%3C/svg%3E");
-  
-  background-size: 85px 85px, 130px 130px;
-  background-position: 0 0, 45px 35px;
-}
 
-/* Optional: tambah noise/tekstur halus biar makin mirip Telegram */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle, transparent 40%, rgba(255,255,255,0.03) 41%, transparent 70%);
-  background-size: 80px 80px;
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0.6;
+body {
+  background: #0a0f1c;
+  background-image: 
+    /* Gift */
+    url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-size='34' text-anchor='middle' dominant-baseline='middle' fill='%23ffcc00' opacity='0.28'%3E%F0%9F%8E%81%3C/text%3E%3C/svg%3E"),
+    /* Star */
+    url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-size='26' text-anchor='middle' dominant-baseline='middle' fill='%23ffd700' opacity='0.25'%3E%E2%AD%90%3C/text%3E%3C/svg%3E"),
+    /* Wallet */
+    url("data:image/svg+xml,%3Csvg width='75' height='75' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-size='28' text-anchor='middle' dominant-baseline='middle' fill='%2300d4ff' opacity='0.22'%3E%F0%9F%92%B0%3C/text%3E%3C/svg%3E"),
+    /* TON / Coin */
+    url("data:image/svg+xml,%3Csvg width='65' height='65' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-size='26' text-anchor='middle' dominant-baseline='middle' fill='%23ffcc00' opacity='0.20'%3E%F0%9F%AA%99%3C/text%3E%3C/svg%3E");
+  
+  background-size: 85px 85px, 55px 55px, 90px 90px, 70px 70px;
+  background-position: 0 0, 30px 40px, 50px 10px, 20px 60px;
 }
 
 /* HEADER */
