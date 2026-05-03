@@ -2,10 +2,128 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Mini App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini App Pro</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="style.css">
+
+<style>
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: radial-gradient(circle at top, #0a1a2f, #000);
+  color: white;
+}
+
+/* HEADER */
+.header {
+  padding: 15px;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid #f5c542;
+}
+
+/* PAGE */
+.page {
+  display: none;
+  text-align: center;
+  padding-bottom: 80px;
+}
+.active {
+  display: block;
+}
+
+/* BALANCE */
+.balance {
+  font-size: 26px;
+  font-weight: bold;
+  color: #f5c542;
+  margin-top: 10px;
+}
+
+/* CIRCLE */
+.circle {
+  width: 260px;
+  height: 260px;
+  margin: 30px auto;
+  border-radius: 50%;
+  background: conic-gradient(#f5c542 0deg, #1a2a40 0deg);
+  box-shadow: 0 0 25px rgba(245,197,66,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.inner {
+  width: 190px;
+  height: 190px;
+  background: #020d1a;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#timer {
+  font-size: 42px;
+  font-weight: bold;
+  color: #f5c542;
+}
+
+#earn {
+  color: #aaa;
+}
+
+/* BUTTON */
+button {
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 15px;
+  border: none;
+  background: linear-gradient(45deg, #f5c542, #ffb300);
+  color: black;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(255,200,0,0.6);
+}
+
+/* BOOST */
+.boost {
+  background: linear-gradient(45deg, #00c3ff, #0077ff);
+  color: white;
+  box-shadow: 0 0 15px rgba(0,150,255,0.7);
+}
+
+/* MENU */
+.menu {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background: #081522;
+  padding: 12px;
+  border-top: 1px solid #222;
+}
+
+.menu div {
+  color: #888;
+}
+
+.menu .activeTab {
+  color: #f5c542;
+}
+</style>
 
 </head>
 <body>
@@ -21,33 +139,33 @@
   </div>
 </div>
 
-<!-- PAGES -->
+<!-- HOME -->
 <div id="home" class="page active">
   <div class="balance">⭐ <span id="saldo">0.00000</span></div>
 
-  <div class="circle">
+  <div class="circle" id="circle">
     <div class="inner">
       <div id="earn">+0.00001</div>
       <div id="timer">10s</div>
     </div>
   </div>
 
-  <div class="buttons">
-    <button onclick="topup()">Top Up</button>
-    <button onclick="withdraw()">Withdraw</button>
-  </div>
+  <button onclick="boost()" class="boost">⚡ BOOST</button>
 </div>
 
+<!-- EARN -->
 <div id="earnPage" class="page">
   <h2>Earn</h2>
-  <p>Kumpulin saldo otomatis tiap 10 detik</p>
+  <p>Auto mining berjalan tiap 10 detik</p>
 </div>
 
+<!-- EXCHANGE -->
 <div id="exchange" class="page">
   <h2>Exchange</h2>
-  <p>Fitur belum aktif</p>
+  <p>Coming soon...</p>
 </div>
 
+<!-- PROFILE -->
 <div id="profilePage" class="page">
   <h2>Profile</h2>
   <p id="profileInfo"></p>
@@ -55,150 +173,85 @@
 
 <!-- MENU -->
 <div class="menu">
-  <div onclick="showPage('home')">Home</div>
-  <div onclick="showPage('earnPage')">Earn</div>
-  <div onclick="showPage('exchange')">Exchange</div>
-  <div onclick="showPage('profilePage')">Profile</div>
+  <div onclick="nav('home',this)" class="activeTab">Home</div>
+  <div onclick="nav('earnPage',this)">Earn</div>
+  <div onclick="nav('exchange',this)">Exchange</div>
+  <div onclick="nav('profilePage',this)">Profile</div>
 </div>
 
-<script src="script.js"></script>
-
-</body>
-  body {
-  margin: 0;
-  font-family: sans-serif;
-  background: #0f0f0f;
-  color: white;
-  text-align: center;
-}
-
-.header {
-  padding: 10px;
-}
-
-.profile {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.profile img {
-  width: 40px;
-  border-radius: 50%;
-}
-
-.page {
-  display: none;
-  padding-bottom: 80px;
-}
-
-.page.active {
-  display: block;
-}
-
-.balance {
-  font-size: 24px;
-  margin: 20px 0;
-}
-
-.circle {
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  border: 8px solid orange;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.inner {
-  text-align: center;
-}
-
-#timer {
-  font-size: 30px;
-}
-
-button {
-  padding: 10px 20px;
-  margin: 5px;
-  border: none;
-  border-radius: 10px;
-  background: orange;
-  color: black;
-}
-
-.menu {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  background: #111;
-  padding: 10px;
-}
-  let tg = window.Telegram.WebApp;
+<script>
+let tg = window.Telegram.WebApp;
 tg.expand();
 
-// ===== USER =====
+// USER
 let user = tg.initDataUnsafe.user;
-
 if (user) {
-  document.getElementById("name").innerText = user.first_name;
-  document.getElementById("userid").innerText = "ID: " + user.id;
-  document.getElementById("profileInfo").innerText =
-    "Nama: " + user.first_name + "\nID: " + user.id;
+  name.innerText = user.first_name;
+  userid.innerText = "ID: " + user.id;
+  profileInfo.innerText = "Nama: " + user.first_name + " | ID: " + user.id;
 
-  if (user.photo_url) {
-    document.getElementById("avatar").src = user.photo_url;
-  }
+  if (user.photo_url) avatar.src = user.photo_url;
 }
 
-// ===== SALDO (SAVE LOCAL) =====
-let saldo = localStorage.getItem("saldo")
-  ? parseFloat(localStorage.getItem("saldo"))
-  : 0;
-
+// DATA
+let saldo = localStorage.getItem("saldo") ? parseFloat(localStorage.getItem("saldo")) : 0;
 let waktu = 10;
+let max = 10;
+let speed = 1;
 
+// UPDATE
 function updateUI() {
-  document.getElementById("saldo").innerText = saldo.toFixed(5);
-  document.getElementById("timer").innerText = waktu + "s";
+  saldoEl.innerText = saldo.toFixed(5);
+  timer.innerText = waktu + "s";
 }
 
-// ===== TIMER =====
+// TIMER
 setInterval(() => {
-  waktu--;
+  waktu -= speed;
+
+  let deg = ((max - waktu) / max) * 360;
+  circle.style.background =
+    `conic-gradient(#f5c542 ${deg}deg, #1a2a40 ${deg}deg)`;
 
   if (waktu <= 0) {
-    let earn = 0.00001;
+    let earn = 0.00001 * speed;
     saldo += earn;
-
     localStorage.setItem("saldo", saldo);
-    document.getElementById("earn").innerText = "+" + earn;
 
-    waktu = 10;
+    earnEl.innerText = "+" + earn.toFixed(5);
+    waktu = max;
   }
 
   updateUI();
 }, 1000);
 
-// ===== NAVIGASI =====
-function showPage(id) {
+// BOOST
+function boost() {
+  speed = 2;
+  alert("Boost aktif 10 detik!");
+
+  setTimeout(() => {
+    speed = 1;
+  }, 10000);
+}
+
+// NAVIGASI
+function nav(id, el) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll(".menu div").forEach(m => m.classList.remove("activeTab"));
+  el.classList.add("activeTab");
 }
 
-// ===== BUTTON =====
-function topup() {
-  alert("Top Up belum tersedia");
-}
+// INIT
+let saldoEl = document.getElementById("saldo");
+let timer = document.getElementById("timer");
+let earnEl = document.getElementById("earn");
+let circle = document.getElementById("circle");
 
-function withdraw() {
-  alert("Withdraw belum tersedia");
-}
-
-// init
 updateUI();
-</html
+</script>
+
+</body>
+</html>
