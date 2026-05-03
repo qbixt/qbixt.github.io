@@ -6,55 +6,60 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
+* { box-sizing: border-box; margin:0; padding:0; }
 
-body{
-  font-family:sans-serif;
-  background:linear-gradient(to bottom,#0a1f38,#000814);
-  color:white;
+body {
+  font-family: sans-serif;
+  background: linear-gradient(to bottom, #0a1f38, #000814);
+  color: white;
 }
 
 /* HEADER */
-.header{
-  padding:15px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:rgba(0,0,0,0.5);
+.header {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.5);
 }
 
-.profile{display:flex;gap:10px;align-items:center;}
-.profile img{width:45px;height:45px;border-radius:50%;border:2px solid cyan;}
+.profile { display:flex; gap:10px; align-items:center; }
 
-.balance{color:gold;font-size:18px;}
+.profile img {
+  width:45px; height:45px;
+  border-radius:50%;
+  border:2px solid #00d4ff;
+}
+
+.balance { color: gold; }
 
 /* COIN */
-.wrap{display:flex;justify-content:center;margin-top:40px;}
+.wrap { display:flex; justify-content:center; margin-top:40px; }
 
-.coin-container{position:relative;width:260px;height:260px;}
+.coin-container { position:relative; width:260px; height:260px; }
 
-.coin{
+.coin {
   position:absolute;
-  top:50%;left:50%;
+  top:50%; left:50%;
   transform:translate(-50%,-50%);
-  width:160px;height:160px;
-  background:radial-gradient(circle,#fff,#ffd700);
+  width:160px; height:160px;
+  background: radial-gradient(circle,#fff,#ffd700);
   border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
+  display:flex; align-items:center; justify-content:center;
   font-size:70px;
   box-shadow:0 0 40px gold;
 }
 
-.centerText{
+.centerText {
   position:absolute;
-  top:50%;left:50%;
+  top:50%; left:50%;
   transform:translate(-50%,-50%);
   text-align:center;
 }
 
-#timer{font-size:40px;color:#00ffcc;}
+#timer { font-size:40px; color:#00ffcc; }
 
-button{
+button {
   margin:30px auto;
   display:block;
   padding:12px 40px;
@@ -65,7 +70,7 @@ button{
 }
 
 /* MENU */
-.menu{
+.menu {
   position:fixed;
   bottom:0;
   width:100%;
@@ -74,25 +79,26 @@ button{
   border-top:1px solid #1e3a6b;
 }
 
-.menuItem{
+.menuItem {
   flex:1;
   text-align:center;
   padding:10px;
   color:#888;
 }
 
-.menuItem.active{color:#00ffcc;}
+.menuItem.active { color:#00ffcc; }
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
 <div class="header">
   <div class="profile">
-    <img src="https://i.pravatar.cc/150">
+    <img id="avatar" src="">
     <div>
-      <div>User</div>
-      <small>ID: 0000</small>
+      <h3 id="username">User</h3>
+      <p id="userid">ID: 0000</p>
     </div>
   </div>
   <div class="balance">⭐ <span id="saldo">0.00000</span></div>
@@ -132,15 +138,15 @@ button{
 </div>
 
 <!-- TASK -->
-<div id="taskPage" style="display:none;text-align:center;margin-top:100px;">
+<div id="taskPage" style="display:none; text-align:center; margin-top:100px;">
   <h2>🚀 Task</h2>
-  <p>Nanti isi misi di sini</p>
+  <p>Coming Soon...</p>
 </div>
 
 <!-- WALLET -->
-<div id="walletPage" style="display:none;text-align:center;margin-top:100px;">
+<div id="walletPage" style="display:none; text-align:center; margin-top:100px;">
   <h2>💰 Wallet</h2>
-  <p>Nanti isi saldo / withdraw</p>
+  <p>Coming Soon...</p>
 </div>
 
 <!-- MENU -->
@@ -151,56 +157,70 @@ button{
 </div>
 
 <script>
-let saldo=0;
-let waktu=10;
-let speed=1;
+/* TELEGRAM USER */
+let tg = window.Telegram.WebApp;
+tg.expand();
 
-const saldoEl=document.getElementById("saldo");
-const timerEl=document.getElementById("timer");
-const progress=document.getElementById("progress");
+let user = tg.initDataUnsafe.user || {};
 
-const radius=115;
-const circumference=2*Math.PI*radius;
-progress.style.strokeDasharray=circumference;
+document.getElementById("username").innerText = user.first_name || "User";
+document.getElementById("userid").innerText = "ID: " + (user.id || "0000");
 
-setInterval(()=>{
-  waktu-=0.1*speed;
+if (user.photo_url) {
+  document.getElementById("avatar").src = user.photo_url;
+}
 
-  if(waktu<=0){
-    saldo+=0.00001;
-    waktu=10;
+/* SYSTEM */
+let saldo = 0;
+let waktu = 10;
+let speed = 1;
+
+const saldoEl = document.getElementById("saldo");
+const timerEl = document.getElementById("timer");
+const progress = document.getElementById("progress");
+
+const radius = 115;
+const circumference = 2 * Math.PI * radius;
+progress.style.strokeDasharray = circumference;
+
+setInterval(() => {
+  waktu -= 0.1 * speed;
+
+  if (waktu <= 0) {
+    saldo += 0.00001;
+    waktu = 10;
   }
 
-  let percent=waktu/10;
-  progress.style.strokeDashoffset=circumference*percent;
+  let percent = waktu / 10;
+  progress.style.strokeDashoffset = circumference * percent;
 
-  saldoEl.innerText=saldo.toFixed(5);
-  timerEl.innerText=Math.ceil(waktu)+"s";
+  saldoEl.innerText = saldo.toFixed(5);
+  timerEl.innerText = Math.ceil(waktu) + "s";
 
-},100);
+}, 100);
 
-function tapCoin(){
-  saldo+=0.00005;
+function tapCoin() {
+  saldo += 0.00005;
 }
 
-function boost(){
-  speed=2.5;
-  setTimeout(()=>speed=1,8000);
+function boost() {
+  speed = 2.5;
+  setTimeout(() => speed = 1, 8000);
 }
 
-function nav(el){
-  document.querySelectorAll(".menuItem").forEach(m=>m.classList.remove("active"));
+function nav(el) {
+  document.querySelectorAll(".menuItem").forEach(m => m.classList.remove("active"));
   el.classList.add("active");
 
-  let name=el.innerText;
+  let name = el.innerText;
 
-  document.getElementById("homePage").style.display="none";
-  document.getElementById("taskPage").style.display="none";
-  document.getElementById("walletPage").style.display="none";
+  document.getElementById("homePage").style.display = "none";
+  document.getElementById("taskPage").style.display = "none";
+  document.getElementById("walletPage").style.display = "none";
 
-  if(name==="Home") document.getElementById("homePage").style.display="block";
-  if(name==="Task") document.getElementById("taskPage").style.display="block";
-  if(name==="Wallet") document.getElementById("walletPage").style.display="block";
+  if (name === "Home") document.getElementById("homePage").style.display = "block";
+  if (name === "Task") document.getElementById("taskPage").style.display = "block";
+  if (name === "Wallet") document.getElementById("walletPage").style.display = "block";
 }
 </script>
 
